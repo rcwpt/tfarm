@@ -329,4 +329,199 @@ const App = () => {
 
                    {/* Lorong Labels */}
                    <text x="70" y="145" fill="white" fontSize="4" textAnchor="middle" opacity="0.5">Jalan</text>
-    
+                   <text x="170" y="145" fill="white" fontSize="4" textAnchor="middle" opacity="0.5">Jalan</text>
+
+                   {/* Keterangan */}
+                   <text x="120" y="15" fill="#fdba74" fontSize="5" textAnchor="middle">Rak Dibuat Lebar Memenuhi Layout (Efisiensi Tinggi)</text>
+                   <text x="120" y="100" fill="white" fontSize="4" textAnchor="middle">Rak Tengah Gabung (Double Width)</text>
+
+                 </svg>
+              </div>
+              <p className="mt-3 text-sm text-blue-200 italic text-center">*Rak dimaksimalkan lebarnya untuk kapasitas maksimal dengan 2 lorong servis.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Construction Journey Section */}
+      <section id="construction" className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-10 border-b border-gray-200 pb-5">
+            <div className="w-full md:w-auto">
+              <h2 className="text-3xl font-extrabold text-gray-900">Jurnal Pembangunan</h2>
+              <p className="mt-2 text-gray-500">Dokumentasi proses konstruksi dari nol hingga siap beroperasi.</p>
+            </div>
+            
+            {/* Filter Tabs */}
+            <div className="mt-4 md:mt-0 w-full md:w-auto flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
+              {[
+                { id: 'all', label: 'Semua' },
+                { id: 'tahap1', label: 'Struktur Awal' },
+                { id: 'tahap2', label: 'Bangunan' },
+                { id: 'tahap3', label: 'Instalasi Rak' },
+                { id: 'tahap4', label: 'Finishing' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${
+                    activeTab === tab.id
+                      ? 'bg-orange-600 text-white shadow-md'
+                      : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {constructionData
+              .filter(item => activeTab === 'all' || item.category === activeTab)
+              .map((item) => (
+              <div key={item.id} className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col">
+                <div className="relative h-48 overflow-hidden bg-gray-200">
+                   <img
+                    src={baseUrl + item.img}
+                    alt={item.desc}
+                    loading="lazy"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {e.target.src = "https://via.placeholder.com/400x300?text=Loading+Image"}}
+                  />
+                  <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
+                    #{item.id}
+                  </div>
+                </div>
+                <div className="p-4 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
+                      <p className="text-sm font-medium text-gray-700">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Operational Gallery Section */}
+      <section id="gallery" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-extrabold text-gray-900">Galeri Operasional</h2>
+            <p className="mt-4 text-lg text-gray-500">TFARM dalam keadaan beroperasi penuh.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {operationsData.map((op, idx) => (
+              <div key={idx} className="relative rounded-2xl overflow-hidden shadow-lg group h-64 sm:h-80">
+                <img
+                  src={baseUrl + op.img}
+                  alt={op.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+                  <h3 className="text-white text-2xl font-bold">{op.title}</h3>
+                  <p className="text-gray-300 mt-1">{op.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Map Section */}
+      <section id="location" className="py-16 bg-orange-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1">
+              <h2 className="text-3xl font-extrabold text-gray-900 mb-6">Lokasi Kami</h2>
+              <div className="space-y-4">
+                <div className="flex items-start">
+                  <div className="bg-white p-2 rounded-full shadow-sm text-orange-600 mr-4">
+                    <MapPin className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-gray-900">Alamat</h4>
+                    <p className="text-gray-600">Timika, Papua, Indonesia</p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Lokasi mudah dijangkau. Gunakan Google Maps untuk panduan rute presisi.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="bg-white p-2 rounded-full shadow-sm text-orange-600 mr-4">
+                    <Home className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-gray-900">Fasilitas Lengkap</h4>
+                    <p className="text-gray-600">
+                      Kandang 2 Lantai (24x8m), Mess Karyawan (5x12m), Kamar Tamu, Ruang Rapat.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <a
+                    href={mapLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center w-full justify-center lg:w-auto px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-blue-600 hover:bg-blue-700 transition transform hover:-translate-y-1"
+                  >
+                    Buka Navigasi Google Maps
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Embed Map */}
+            <div className="relative w-full h-80 lg:h-96 bg-gray-200 rounded-2xl overflow-hidden shadow-lg border-4 border-white order-1 lg:order-2 group">
+              <iframe
+                title="TFARM Location"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                scrolling="no"
+                marginHeight="0"
+                marginWidth="0"
+                src="https://maps.google.com/maps?q=Timika+Papua&t=k&z=12&ie=UTF8&iwloc=&output=embed"
+                className="w-full h-full filter group-hover:brightness-75 transition duration-300"
+              ></iframe>
+              
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                 <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-xl text-center transform scale-100 group-hover:scale-105 transition duration-300 pointer-events-auto">
+                    <p className="font-bold text-gray-800 mb-2">Lihat Lokasi Presisi</p>
+                    <a href={mapLink} target="_blank" rel="noopener noreferrer" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700">
+                       Buka di Aplikasi Maps
+                    </a>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+          <div className="flex items-center space-x-2 mb-4 md:mb-0">
+             <ChickenIcon className="h-6 w-6 text-orange-500" />
+             <span className="font-bold text-xl">TFARM</span>
+          </div>
+          <div className="text-gray-400 text-sm">
+            &copy; {new Date().getFullYear()} TFARM Timika. All rights reserved.
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+
