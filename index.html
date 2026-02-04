@@ -1,0 +1,332 @@
+import React, { useState } from 'react';
+import { MapPin, Layers, ArrowRight, CheckCircle, Home, Menu, X, Users, PenTool, Ruler } from 'lucide-react';
+
+// Custom Chicken Icon Component
+const ChickenIcon = ({ className }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M12 2a3 3 0 0 1 3 3v1a2 2 0 0 1-2 2h-1" />
+    <path d="M16.5 6.5c1 0 1.5.5 2 1.5C19 9 20 11 20 11c0 2-2 3-4 3" />
+    <path d="M12 22c-3 0-5-2-5-5 0-1.5.5-3 2-4l1-4h4l1 4c1.5 1 2 2.5 2 4 0 3-2 5-5 5Z" />
+    <path d="M12 13h.01" />
+    <path d="M9 7l-1 2" />
+  </svg>
+);
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('all');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Base URL for images
+  const baseUrl = "https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/";
+
+  // Data Construction Progress
+  const constructionData = [
+    { id: 1, desc: "Leveling lahan menggunakan laser presisi", img: "(1).jpg", category: "tahap1" },
+    { id: 2, desc: "Pembuatan aliran air / drainase untuk sanitasi", img: "(2).jpg", category: "tahap1" },
+    { id: 3, desc: "Menaikkan tiang utama bangunan", img: "(3).jpg", category: "tahap1" },
+    { id: 4, desc: "Proses pemasangan tiang ke tingkat 2", img: "(4).jpg", category: "tahap1" },
+    { id: 5, desc: "Pemasangan tulang struktur Lantai 2", img: "(5).jpg", category: "tahap1" },
+    { id: 6, desc: "Kedatangan perlengkapan kandang (Victor)", img: "(6).jpg", category: "tahap1" },
+    { id: 7, desc: "Proses menaikkan atap kandang", img: "(7).jpg", category: "tahap2" },
+    { id: 8, desc: "Pemasangan lantai 2", img: "(8).jpg", category: "tahap2" },
+    { id: 9, desc: "Progress bangunan mencapai 50%", img: "(9).jpg", category: "tahap2" },
+    { id: 10, desc: "Tampak luar bangunan (50%)", img: "(10).jpg", category: "tahap2" },
+    { id: 11, desc: "Pemasangan dinding bangunan lantai 1", img: "(11).jpg", category: "tahap2" },
+    { id: 12, desc: "Instalasi rak baterai dimulai", img: "(12).jpg", category: "tahap3" },
+    { id: 13, desc: "Penyusunan rak presisi dengan laser", img: "(13).jpg", category: "tahap3" },
+    { id: 14, desc: "Pemasangan slat alas rak", img: "(14).jpg", category: "tahap3" },
+    { id: 15, desc: "Detail pemasangan slat rak", img: "(15).jpg", category: "tahap3" },
+    { id: 16, desc: "Rak baterai hampir selesai", img: "(16).jpg", category: "tahap3" },
+    { id: 17, desc: "Rak baterai selesai terpasang", img: "(17).jpg", category: "tahap3" },
+    { id: 18, desc: "Pemasangan plafon untuk suhu stabil", img: "(18).jpg", category: "tahap4" },
+    { id: 19, desc: "Plafon hampir selesai", img: "(19).jpg", category: "tahap4" },
+    { id: 20, desc: "Bangunan mencapai 80%", img: "(20).jpg", category: "tahap4" },
+    { id: 21, desc: "Rak siap untuk Chick-In", img: "(21).jpg", category: "tahap4" },
+    { id: 22, desc: "Rak terisi ayam (Chick-In)", img: "(22).jpg", category: "tahap4" },
+    { id: 23, desc: "Kondisi kandang dalam fully operational", img: "(23).jpg", category: "tahap4" },
+  ];
+
+  // Data Operations Gallery
+  const operationsData = [
+    { title: "Pemasukan DOC", img: "pemasukan%20doc.jpeg", desc: "Bibit ayam berkualitas masuk kandang" },
+    { title: "Masa Chick-In", img: "chckin.jpeg", desc: "Fase awal pemeliharaan intensif" },
+    { title: "Kandang Rak Baterai", img: "kandang%20rak%20baterai.jpeg", desc: "Sistem modern higienis" },
+    { title: "Ayam Siap Panen", img: "ayam%20siap%20panen.jpeg", desc: "Hasil panen berkualitas tinggi" },
+  ];
+
+  const mapLink = "https://maps.app.goo.gl/9bsQuqhotEgjAspY6";
+
+  return (
+    <div className="font-sans text-gray-800 bg-gray-50 min-h-screen">
+      
+      {/* Navbar */}
+      <nav className="bg-orange-600 text-white shadow-lg sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-2">
+              <div className="bg-white p-1 rounded-full">
+                <ChickenIcon className="h-7 w-7 text-orange-600" />
+              </div>
+              <span className="font-bold text-xl sm:text-2xl tracking-tight">TFARM TIMIKA</span>
+            </div>
+            
+            {/* Desktop Menu */}
+            <div className="hidden md:block">
+              <div className="ml-10 flex items-baseline space-x-4">
+                <a href="#about" className="hover:bg-orange-700 px-3 py-2 rounded-md text-sm font-medium transition">Tentang</a>
+                <a href="#blueprint" className="hover:bg-orange-700 px-3 py-2 rounded-md text-sm font-medium transition">Sketsa</a>
+                <a href="#construction" className="hover:bg-orange-700 px-3 py-2 rounded-md text-sm font-medium transition">Pembangunan</a>
+                <a href="#gallery" className="hover:bg-orange-700 px-3 py-2 rounded-md text-sm font-medium transition">Galeri</a>
+                <a href="#location" className="bg-white text-orange-600 hover:bg-gray-100 px-4 py-2 rounded-full text-sm font-bold shadow-md transition">Lokasi</a>
+              </div>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="bg-orange-700 inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-orange-800 focus:outline-none"
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu Panel */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-orange-700 shadow-xl">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-orange-600">Tentang</a>
+              <a href="#blueprint" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-orange-600">Sketsa</a>
+              <a href="#construction" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-orange-600">Pembangunan</a>
+              <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-orange-600">Galeri</a>
+              <a href="#location" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-orange-600">Lokasi</a>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Hero Section */}
+      <div className="relative bg-gray-900 text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-40">
+           <img src={baseUrl + "kandang%20rak%20baterai.jpeg"} className="w-full h-full object-cover" alt="Background" />
+        </div>
+        <div className="relative max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+          <div className="bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 animate-bounce">
+            KAPASITAS 7.000 EKOR
+          </div>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 leading-tight">
+            Peternakan Modern di <span className="text-orange-400 block sm:inline">Tanah Papua</span>
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg sm:text-xl text-gray-200 px-4">
+            TFARM menghadirkan kualitas ayam broiler terbaik dengan sistem kandang rak baterai 2 tingkat, didukung fasilitas lengkap.
+          </p>
+          <div className="mt-8 flex gap-4">
+             <a href="#about" className="px-6 py-3 sm:px-8 border border-transparent text-base font-medium rounded-full text-white bg-orange-600 hover:bg-orange-700 md:text-lg shadow-lg transition transform hover:scale-105">
+              Lihat Fasilitas
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* About / Specs Section */}
+      <section id="about" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Spesifikasi & Fasilitas
+            </h2>
+            <p className="mt-4 text-lg text-gray-500">
+              Infrastruktur lengkap untuk mendukung operasional dan kesejahteraan karyawan.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Feature 1: Sistem Rak */}
+            <div className="bg-orange-50 rounded-2xl p-6 border border-orange-100 shadow-sm hover:shadow-md transition">
+              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-4 text-orange-600">
+                <Layers className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Rak Baterai 2 Tingkat</h3>
+              <p className="text-sm text-gray-600">
+                Sistem rak 2 level dengan pakan bulat internal untuk efisiensi pakan maksimal.
+              </p>
+            </div>
+
+            {/* Feature 2: Dimensi */}
+            <div className="bg-orange-50 rounded-2xl p-6 border border-orange-100 shadow-sm hover:shadow-md transition">
+              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-4 text-orange-600">
+                <Ruler className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Closed House 24x8m</h3>
+              <p className="text-sm text-gray-600">
+                Bangunan kandang utama 2 lantai presisi tinggi, sirkulasi udara terkontrol.
+              </p>
+            </div>
+
+            {/* Feature 3: Fasilitas Karyawan */}
+            <div className="bg-orange-50 rounded-2xl p-6 border border-orange-100 shadow-sm hover:shadow-md transition">
+              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-4 text-orange-600">
+                <Users className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Mess & Office</h3>
+              <p className="text-sm text-gray-600">
+                Bangunan 2 lantai (5x12m) menempel di sisi kiri kandang.
+              </p>
+            </div>
+
+            {/* Feature 4: Operasional */}
+            <div className="bg-orange-50 rounded-2xl p-6 border border-orange-100 shadow-sm hover:shadow-md transition">
+              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-4 text-orange-600">
+                <Home className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Fasilitas Rapat</h3>
+              <p className="text-sm text-gray-600">
+                Ruang pertemuan representatif untuk koordinasi tim dan manajemen.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Blueprint / Sketch Section */}
+      <section id="blueprint" className="py-16 bg-blue-900 text-white overflow-hidden relative">
+        {/* Decorative Grid Background */}
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex flex-col md:flex-row items-center justify-between mb-10">
+            <div>
+              <h2 className="text-3xl font-extrabold flex items-center gap-3">
+                <PenTool className="w-8 h-8 text-orange-400" />
+                Sketsa Teknis
+              </h2>
+              <p className="mt-2 text-blue-200">Denah layout kawasan dan detail sistem kandang.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Sketch 1: Top View Layout */}
+            <div className="bg-blue-800/50 p-6 rounded-xl border border-blue-700/50 backdrop-blur-sm">
+              <h3 className="text-xl font-bold mb-4 text-orange-300">Layout Kawasan (Tampak Atas)</h3>
+              <div className="w-full aspect-video bg-blue-900 rounded-lg border-2 border-dashed border-blue-400 p-4 flex items-center justify-center relative overflow-hidden">
+                {/* SVG Drawing for Layout */}
+                <svg viewBox="0 0 320 200" className="w-full h-full drop-shadow-lg">
+                  {/* Grid Pattern */}
+                  <defs>
+                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5"/>
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#grid)" />
+                  
+                  {/* === KANDANG UTAMA === */}
+                  {/* Digeser ke bawah (Y=70) agar ada ruang untuk Mess di "Atasnya Bagian Kiri" */}
+                  <rect x="50" y="70" width="220" height="80" fill="rgba(59, 130, 246, 0.1)" stroke="white" strokeWidth="2" />
+                  
+                  {/* Main Building Dimensions */}
+                  <text x="160" y="60" fill="white" fontSize="8" textAnchor="middle">KANDANG CLOSED HOUSE (24m x 8m)</text>
+                  <text x="160" y="165" fill="white" fontSize="8" textAnchor="middle">Panjang: 24 Meter</text>
+                  <text x="40" y="110" fill="white" fontSize="8" textAnchor="middle" transform="rotate(-90, 40, 110)">Lebar</text>
+                  
+                  {/* Merged Label */}
+                  <text x="160" y="110" fill="#93c5fd" fontSize="12" textAnchor="middle" fontWeight="bold" opacity="0.8">FULL KANDANG</text>
+                  <text x="160" y="125" fill="#93c5fd" fontSize="10" textAnchor="middle" opacity="0.8">(LANTAI 1 & 2)</text>
+
+                  {/* === MESS & OFFICE (ATAS KIRI & NEMPEL) === */}
+                  {/* Posisi: Menempel di dinding ATAS kandang, rata KIRI */}
+                  {/* Kandang mulai X=50, Y=70. Maka Mess harus berakhir di Y=70. */}
+                  {/* Mess: X=50, Y=20 (tinggi 50 agar nempel ke Y=70) */}
+                  <rect x="50" y="20" width="50" height="50" fill="rgba(249, 115, 22, 0.2)" stroke="#fdba74" strokeWidth="2" />
+                   
+                  {/* Mess Label */}
+                  <text x="75" y="35" fill="#fdba74" fontSize="6" textAnchor="middle" fontWeight="bold">MESS & OFFICE</text>
+                  <text x="75" y="45" fill="#fdba74" fontSize="5" textAnchor="middle">2 Lantai</text>
+                  <text x="75" y="55" fill="#fdba74" fontSize="4" textAnchor="middle">5m x 12m</text>
+
+                  {/* Connection Point Marker */}
+                  <circle cx="75" cy="70" r="2" fill="red" />
+                  <text x="90" y="72" fill="white" fontSize="6" textAnchor="start">Akses</text>
+
+                </svg>
+              </div>
+              <p className="mt-3 text-sm text-blue-200 italic text-center">*Mess/Office menempel di bagian atas-kiri (hulu) kandang utama.</p>
+            </div>
+
+            {/* Sketch 2: Building Elevation & Cage System */}
+            <div className="bg-blue-800/50 p-6 rounded-xl border border-blue-700/50 backdrop-blur-sm">
+              <h3 className="text-xl font-bold mb-4 text-orange-300">Potongan Melintang (Cross Section)</h3>
+              <div className="w-full aspect-video bg-blue-900 rounded-lg border-2 border-dashed border-blue-400 p-4 flex items-center justify-center relative">
+                 {/* SVG Drawing for Cage Cross Section */}
+                 <svg viewBox="0 0 240 160" className="w-full h-full drop-shadow-lg">
+                   
+                   {/* --- BANGUNAN --- */}
+                   {/* Lantai Dasar */}
+                   <line x1="10" y1="150" x2="230" y2="150" stroke="white" strokeWidth="2" />
+                   {/* Lantai 2 */}
+                   <line x1="10" y1="80" x2="230" y2="80" stroke="white" strokeWidth="2" />
+                   {/* Atap */}
+                   <path d="M 10 150 L 10 30 L 120 10 L 230 30 L 230 150" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+
+                   <text x="235" y="75" fill="white" fontSize="6" opacity="0.7">Lt 2</text>
+                   <text x="235" y="145" fill="white" fontSize="6" opacity="0.7">Lt 1</text>
+
+                   {/* --- DETAIL RAK PER LANTAI (Reused component logic) --- */}
+                   {/* Konfigurasi: Rak(1) | Lorong | Rak(2+3 Gabung) | Lorong | Rak(4) */}
+                   {/* LEBAR RAK DITAMBAH AGAR MEMENUHI LAYOUT */}
+                   
+                   {/* Function to draw a row of cages at a specific Y */}
+                   {[150, 80].map((floorY, i) => (
+                     <g key={i} transform={`translate(0, ${floorY - 40})`}> 
+                        {/* 1. Rak Kiri (2 Tingkat) - Lebar: 40 */}
+                        <g transform="translate(20, 0)">
+                          <rect x="0" y="0" width="40" height="35" fill="rgba(253, 186, 116, 0.1)" stroke="#fdba74" strokeWidth="1" />
+                          <line x1="0" y1="17.5" x2="40" y2="17.5" stroke="#fdba74" strokeWidth="0.5" />
+                          {/* Pakan */}
+                          <circle cx="20" cy="8.75" r="5" fill="#f97316" />
+                          <circle cx="20" cy="26.25" r="5" fill="#f97316" />
+                        </g>
+
+                        {/* Lorong 1 (Sempit, 20px) */}
+                        {/* Space starts at x=60, ends at x=80 */}
+
+                        {/* 2. Rak Tengah Gabung (Back to Back) (2 Tingkat) - Lebar: 80 (Besar) */}
+                        <g transform="translate(80, 0)">
+                          <rect x="0" y="0" width="80" height="35" fill="rgba(253, 186, 116, 0.1)" stroke="#fdba74" strokeWidth="1" />
+                          <line x1="0" y1="17.5" x2="80" y2="17.5" stroke="#fdba74" strokeWidth="0.5" />
+                          <line x1="40" y1="0" x2="40" y2="35" stroke="#fdba74" strokeWidth="0.5" strokeDasharray="2" /> {/* Pembatas */}
+                          {/* Pakan Kiri */}
+                          <circle cx="20" cy="8.75" r="5" fill="#f97316" />
+                          <circle cx="20" cy="26.25" r="5" fill="#f97316" />
+                          {/* Pakan Kanan */}
+                          <circle cx="60" cy="8.75" r="5" fill="#f97316" />
+                          <circle cx="60" cy="26.25" r="5" fill="#f97316" />
+                        </g>
+
+                        {/* Lorong 2 (Sempit, 20px) */}
+                        {/* Space starts at x=160, ends at x=180 */}
+
+                        {/* 3. Rak Kanan (2 Tingkat) - Lebar: 40 */}
+                        <g transform="translate(180, 0)">
+                          <rect x="0" y="0" width="40" height="35" fill="rgba(253, 186, 116, 0.1)" stroke="#fdba74" strokeWidth="1" />
+                          <line x1="0" y1="17.5" x2="40" y2="17.5" stroke="#fdba74" strokeWidth="0.5" />
+                          {/* Pakan */}
+                          <circle cx="20" cy="8.75" r="5" fill="#f97316" />
+                          <circle cx="20" cy="26.25" r="5" fill="#f97316" />
+                        </g>
+                     </g>
+                   ))}
+
+                   {/* Lorong Labels */}
+                   <text x="70" y="145" fill="white" fontSize="4" textAnchor="middle" opacity="0.5">Jalan</text>
+    
