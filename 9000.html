@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueprint Kandang Baterai Broiler 12x50m</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; }
+        
+        .blueprint-bg {
+            background-color: #0f172a; 
+            background-image: 
+                linear-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.15) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .svg-element { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: crosshair; }
+        .svg-element:hover {
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+            stroke-width: 1.5px;
+        }
+        
+        .tooltip {
+            visibility: hidden;
+            position: fixed;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #38bdf8;
+            font-size: 0.875rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            max-width: 300px;
+            line-height: 1.5;
+        }
+
+        .tab-btn { position: relative; overflow: hidden; }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .tab-btn.active {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+            border-color: #bfdbfe;
+        }
+        .tab-btn.active::after { width: 100%; }
+        
+        .tab-content { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .tab-content.active { display: flex; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .zoom-container {
+            overflow: hidden;
+            position: relative;
+            cursor: grab;
+        }
+        .zoom-container:active { cursor: grabbing; }
+        .zoom-content {
+            transform-origin: 0 0;
+            transition: transform 0.1s ease-out;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        #canvas-wrapper:fullscreen {
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            border: none;
+        }
+
+        /* Print Media Queries */
+        @media print {
+            body { background: white; padding: 0; margin: 0; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            #canvas-wrapper { 
+                height: 100vh !important; 
+                border: none !important; 
+                box-shadow: none !important; 
+                page-break-inside: avoid;
+            }
+            .blueprint-bg {
+                background-color: #0f172a !important; /* Keep blueprint dark mode for print */
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            /* Reset zoom for printing */
+            .zoom-content { transform: none !important; width: 100% !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 p-4 md:p-6 lg:p-8 min-h-screen">
+
+    <div class="max-w-[1400px] mx-auto">
+        <!-- Header Section (Hide on Print) -->
+        <header class="no-print mb-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <div class="flex items-center gap-3 mb-1">
+                    <div class="bg-blue-600 text-white p-2 rounded-lg shadow-md">
+                        <i class="fa-solid fa-industry text-xl"></i>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Cetak Biru Kandang Broiler</h1>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 text-sm font-medium text-slate-500 ml-12">
+                    <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-ruler mr-1"></i>12m x 50m</span>
+                    <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full"><i class="fa-solid fa-layer-group mr-1"></i>Baterai 2 Tingkat</span>
+                    <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full"><i class="fa-solid fa-tree mr-1"></i>Struktur Kayu</span>
+                </div>
+            </div>
+            
+            <div class="flex gap-4 items-center">
+                <div class="bg-blue-50 px-4 py-2 rounded-xl border border-blue-100 text-center">
+                    <p class="text-xs text-blue-500 font-bold uppercase tracking-wider">Kepadatan Efektif</p>
+                    <p class="text-xl font-black text-blue-700">11 Ekor / m²</p>
+                </div>
+                <div class="text-right hidden md:block px-4 py-2 border-l border-slate-200">
+                    <p class="text-sm text-slate-500 font-medium">Estimasi Populasi</p>
+                    <p class="text-2xl font-black text-slate-800">9.000 Ekor</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Print Header (Only visible on print) -->
+        <div class="hidden print-only text-center mb-4">
+            <h1 class="text-2xl font-bold font-sans">BLUEPRINT KANDANG CLOSED HOUSE (12x50m)</h1>
+            <p class="text-sm">Populasi: 9.000 Ekor | Sistem: Rak Baterai 2 Tingkat | Densitas: 11 Ekor/m²</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+            
+            <!-- Canvas Area -->
+            <div class="xl:col-span-3 flex flex-col h-[750px] relative">
+                
+                <!-- Tab Navigation (Hide on Print) -->
+                <div class="no-print flex flex-wrap bg-white rounded-t-2xl border-t border-x border-slate-200 p-2 gap-2 justify-between shadow-sm z-10">
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="switchTab('top-view')" class="tab-btn active px-4 py-2.5 text-sm font-semibold rounded-lg border border-transparent text-slate-600 hover:bg-slate-50 transition flex items-center">
+                            <i class="fa-solid fa-map text-blue-500 mr-2"></i>Denah (Top)
+                        </button>
+                        <button onclick="switchTab('inside-view')" class="tab-btn px-4 py-2.5 text-sm font-semibold rounded-lg border border-transparent text-slate-600 hover:bg-slate-50 transition flex items-center">
+                            <i class="fa-solid fa-cube text-purple-500 mr-2"></i>Potongan Dalam (Cross-Section)
+                        </button>
+                        <button onclick="switchTab('front-view')" class="tab-btn px-4 py-2.5 text-sm font-semibold rounded-lg border border-transparent text-slate-600 hover:bg-slate-50 transition flex items-center">
+                            <i class="fa-solid fa-wind text-sky-500 mr-2"></i>Tampak Depan
+                        </button>
+                        <button onclick="switchTab('back-view')" class="tab-btn px-4 py-2.5 text-sm font-semibold rounded-lg border border-transparent text-slate-600 hover:bg-slate-50 transition flex items-center">
+                            <i class="fa-solid fa-fan text-rose-500 mr-2"></i>Tampak Belakang
+                        </button>
+                    </div>
+                    <!-- Print Button -->
+                    <button onclick="window.print()" class="px-4 py-2.5 text-sm font-bold rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white transition flex items-center">
+                        <i class="fa-solid fa-print mr-2"></i>Cetak PDF
+                    </button>
+                </div>
+                
+                <!-- SVG Wrapper -->
+                <div id="canvas-wrapper" class="relative blueprint-bg flex-grow rounded-b-2xl border-b border-x border-slate-200 shadow-inner overflow-hidden">
+                    
+                    <!-- Floating Controls (Hide on Print) -->
+                    <div class="no-print absolute top-4 right-4 z-40 bg-white/95 backdrop-blur shadow-lg border border-slate-200 rounded-xl p-1.5 flex items-center space-x-1">
+                        <button onclick="setZoom(0.8)" class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 transition" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+                        <span id="zoom-level" class="w-12 text-center text-xs font-mono font-bold text-slate-700">100%</span>
+                        <button onclick="setZoom(1.2)" class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 transition" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+                        <div class="w-px h-5 bg-slate-300 mx-1"></div>
+                        <button onclick="resetZoom()" class="px-3 h-8 flex items-center justify-center bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg text-xs font-bold transition">RESET</button>
+                        <div class="w-px h-5 bg-slate-300 mx-1"></div>
+                        <button onclick="toggleFullScreen()" class="w-8 h-8 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition shadow-sm" title="Fullscreen">
+                            <i id="fs-icon" class="fa-solid fa-expand"></i>
+                        </button>
+                    </div>
+
+                    <!-- Tooltip Element -->
+                    <div id="tooltip" class="tooltip no-print"></div>
+
+                    <!-- Panning Container -->
+                    <div class="zoom-container w-full h-full" id="pan-container">
+                        <div class="zoom-content" id="zoom-target">
+                            
+                            <!-- TAB 1: TAMPAK ATAS (Denah Baterai) -->
+                            <div id="top-view" class="tab-content active w-full h-full justify-center items-center">
+                                <svg width="400" height="800" viewBox="-20 -20 160 540" class="shadow-[0_0_40px_rgba(0,0,0,0.5)] bg-slate-900/50 border border-slate-700/50 rounded">
+                                    <!-- Dimension Guidelines -->
+                                    <line x1="0" y1="-10" x2="120" y2="-10" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2" />
+                                    <text x="60" y="-15" fill="#cbd5e1" font-size="6" font-family="sans-serif" text-anchor="middle">Lebar: 12 Meter</text>
+                                    
+                                    <line x1="-10" y1="0" x2="-10" y2="500" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2" />
+                                    <text x="-15" y="250" fill="#cbd5e1" font-size="6" font-family="sans-serif" text-anchor="middle" transform="rotate(-90, -15, 250)">Panjang: 50 Meter</text>
+
+                                    <!-- Building Outline -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2 mb-1\'><i class=\'fa-solid fa-border-all text-sky-400\'></i><strong class=\'text-sky-300 text-base\'>Dinding Keliling</strong></div><p class=\'text-slate-200 mt-1\'>Dimensi 12x50m. Area samping ditutup menggunakan sistem tirai (Terpal A5 & Plastik Nett) untuk menjaga sirkulasi closed house.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="0" y="0" width="120" height="500" fill="rgba(255,255,255,0.02)" stroke="#38bdf8" stroke-width="1.5" />
+                                    </g>
+
+                                    <!-- Lorong Depan (1m) -->
+                                    <rect x="0" y="0" width="120" height="10" fill="rgba(250, 204, 21, 0.1)" class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-walking text-yellow-400\'></i><strong class=\'text-yellow-300\'>Lorong Servis Depan</strong></div><p class=\'text-slate-200 mt-1\'>Lebar 1 meter. Area krusial untuk pekerja beraktivitas di depan panel inlet/celldex.</p>')" onmouseout="hideTooltip()"/>
+                                    <text x="60" y="8" fill="#fde047" font-size="4" text-anchor="middle">Lorong Servis Depan (1m)</text>
+
+                                    <!-- BLOK RAK KIRI (Terpisah Lorong Tengah) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-server text-blue-400\'></i><strong class=\'text-blue-300\'>Rak Broiler Kiri (1.5m)</strong></div><p class=\'text-slate-200 mt-1\'>Kapasitas 1 sisi. Mepet ke dinding luar. Dibagi menjadi dua segmen 24m.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="0" y="10" width="15" height="240" fill="#0284c7" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="15" y1="10" x2="15" y2="250" stroke="#38bdf8" stroke-width="0.2" stroke-dasharray="1"/>
+                                        <rect x="0" y="260" width="15" height="240" fill="#0284c7" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="15" y1="260" x2="15" y2="500" stroke="#38bdf8" stroke-width="0.2" stroke-dasharray="1"/>
+                                    </g>
+                                    
+                                    <!-- BLOK RAK GANDA 1 (Terpisah Lorong Tengah) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-cubes text-blue-400\'></i><strong class=\'text-blue-300\'>Rak Broiler Ganda 1 (3m)</strong></div><p class=\'text-slate-200 mt-1\'>Tegak lurus. Rangka kayunya menyatu langsung dengan konstruksi atap sebagai pilar penyangga.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="25" y="10" width="30" height="240" fill="#0369a1" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="40" y1="10" x2="40" y2="250" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <rect x="25" y="260" width="30" height="240" fill="#0369a1" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="40" y1="260" x2="40" y2="500" stroke="#38bdf8" stroke-width="0.5"/>
+                                    </g>
+                                    
+                                    <!-- BLOK RAK GANDA 2 (Terpisah Lorong Tengah) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-cubes text-blue-400\'></i><strong class=\'text-blue-300\'>Rak Broiler Ganda 2 (3m)</strong></div><p class=\'text-slate-200 mt-1\'>Tegak lurus. Berfungsi identik sebagai kandang dan penyangga bentangan atap kayu 12m.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="65" y="10" width="30" height="240" fill="#0369a1" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="80" y1="10" x2="80" y2="250" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <rect x="65" y="260" width="30" height="240" fill="#0369a1" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="80" y1="260" x2="80" y2="500" stroke="#38bdf8" stroke-width="0.5"/>
+                                    </g>
+                                    
+                                    <!-- BLOK RAK KANAN (Terpisah Lorong Tengah) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-server text-blue-400\'></i><strong class=\'text-blue-300\'>Rak Broiler Kanan (1.5m)</strong></div><p class=\'text-slate-200 mt-1\'>Kapasitas 1 sisi. Mepet ke dinding luar kanan.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="105" y="10" width="15" height="240" fill="#0284c7" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="105" y1="10" x2="105" y2="250" stroke="#38bdf8" stroke-width="0.2" stroke-dasharray="1"/>
+                                        <rect x="105" y="260" width="15" height="240" fill="#0284c7" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="105" y1="260" x2="105" y2="500" stroke="#38bdf8" stroke-width="0.2" stroke-dasharray="1"/>
+                                    </g>
+
+                                    <!-- Lorong Inspeksi Interaktif (Dipotong oleh Cross Aisle) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-arrow-down-up-across-line text-purple-400\'></i><strong class=\'text-purple-300\'>Lorong Inspeksi Kiri</strong></div><p class=\'text-slate-200 mt-1\'>Lebar 1m. Area gerak pekerja untuk merawat Rak Kiri dan sisi kiri Rak Ganda 1.</p>')" onmouseout="hideTooltip()">
+                                        <!-- Depan -->
+                                        <rect x="15" y="10" width="10" height="240" fill="rgba(168, 85, 247, 0.1)"/>
+                                        <line x1="20" y1="10" x2="20" y2="250" stroke="#a855f7" stroke-width="0.2" stroke-dasharray="1 2"/>
+                                        <!-- Belakang -->
+                                        <rect x="15" y="260" width="10" height="240" fill="rgba(168, 85, 247, 0.1)"/>
+                                        <line x1="20" y1="260" x2="20" y2="500" stroke="#a855f7" stroke-width="0.2" stroke-dasharray="1 2"/>
+                                    </g>
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-arrow-down-up-across-line text-purple-400\'></i><strong class=\'text-purple-300\'>Lorong Sentral</strong></div><p class=\'text-slate-200 mt-1\'>Lebar 1m. Lorong utama di antara dua blok rak ganda besar.</p>')" onmouseout="hideTooltip()">
+                                        <!-- Depan -->
+                                        <rect x="55" y="10" width="10" height="240" fill="rgba(168, 85, 247, 0.1)"/>
+                                        <line x1="60" y1="10" x2="60" y2="250" stroke="#a855f7" stroke-width="0.2" stroke-dasharray="1 2"/>
+                                        <!-- Belakang -->
+                                        <rect x="55" y="260" width="10" height="240" fill="rgba(168, 85, 247, 0.1)"/>
+                                        <line x1="60" y1="260" x2="60" y2="500" stroke="#a855f7" stroke-width="0.2" stroke-dasharray="1 2"/>
+                                    </g>
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-arrow-down-up-across-line text-purple-400\'></i><strong class=\'text-purple-300\'>Lorong Inspeksi Kanan</strong></div><p class=\'text-slate-200 mt-1\'>Lebar 1m. Area gerak untuk merawat Rak Kanan dan sisi kanan Rak Ganda 2.</p>')" onmouseout="hideTooltip()">
+                                        <!-- Depan -->
+                                        <rect x="95" y="10" width="10" height="240" fill="rgba(168, 85, 247, 0.1)"/>
+                                        <line x1="100" y1="10" x2="100" y2="250" stroke="#a855f7" stroke-width="0.2" stroke-dasharray="1 2"/>
+                                        <!-- Belakang -->
+                                        <rect x="95" y="260" width="10" height="240" fill="rgba(168, 85, 247, 0.1)"/>
+                                        <line x1="100" y1="260" x2="100" y2="500" stroke="#a855f7" stroke-width="0.2" stroke-dasharray="1 2"/>
+                                    </g>
+
+                                    <!-- Lorong Tengah (1m) Cross Aisle - Ditaruh paling atas agar memotong rapi -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-arrows-left-right text-emerald-400\'></i><strong class=\'text-emerald-300\'>Cross Aisle (1m)</strong></div><p class=\'text-slate-200 mt-1\'>Lorong potong di tengah bangunan (meter ke-25). Memudahkan sirkulasi troli pakan berpindah lorong tanpa harus jalan memutar ke ujung kandang.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="0" y="250" width="120" height="10" fill="#0f172a"/> <!-- Background penutup -->
+                                        <rect x="0" y="250" width="120" height="10" fill="rgba(16, 185, 129, 0.3)"/>
+                                        <line x1="0" y1="250" x2="120" y2="250" stroke="#34d399" stroke-width="0.5" stroke-dasharray="2"/>
+                                        <line x1="0" y1="260" x2="120" y2="260" stroke="#34d399" stroke-width="0.5" stroke-dasharray="2"/>
+                                        <text x="60" y="257" fill="#a7f3d0" font-size="4" font-weight="bold" text-anchor="middle">LORONG TENGAH (1m)</text>
+                                    </g>
+
+                                    <!-- Lebar Label Lorong -->
+                                    <text x="20" y="505" fill="#c084fc" font-size="4" text-anchor="middle">Lorong 1m</text>
+                                    <text x="60" y="505" fill="#c084fc" font-size="4" text-anchor="middle">Lorong 1m</text>
+                                    <text x="100" y="505" fill="#c084fc" font-size="4" text-anchor="middle">Lorong 1m</text>
+                                    
+                                    <text x="7.5" y="515" fill="#7dd3fc" font-size="4" text-anchor="middle">1.5</text>
+                                    <text x="40" y="515" fill="#7dd3fc" font-size="4" text-anchor="middle">3m (Ganda)</text>
+                                    <text x="80" y="515" fill="#7dd3fc" font-size="4" text-anchor="middle">3m (Ganda)</text>
+                                    <text x="112.5" y="515" fill="#7dd3fc" font-size="4" text-anchor="middle">1.5</text>
+                                </svg>
+                            </div>
+
+                            <!-- TAB 2: TAMPAK DALAM (Cross Section) -->
+                            <div id="inside-view" class="tab-content w-full h-full justify-center items-center">
+                                <svg width="900" height="500" viewBox="-10 -10 140 70" class="shadow-2xl bg-slate-900/40 rounded">
+                                    <pattern id="grid" width="2" height="2" patternUnits="userSpaceOnUse">
+                                        <path d="M 2 0 L 0 0 0 2" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.2"/>
+                                    </pattern>
+                                    <rect x="-10" y="-10" width="140" height="70" fill="url(#grid)" />
+
+                                    <!-- Tanah/Lantai -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-layer-group text-slate-400\'></i><strong class=\'text-slate-300\'>Lantai Kandang</strong></div><p class=\'text-slate-200 mt-1\'>Tanah dipadatkan dan dirabat beton tipis agar troli pekerja bisa bergerak mulus di lorong.</p>')" onmouseout="hideTooltip()">
+                                        <line x1="-5" y1="50" x2="125" y2="50" stroke="#64748b" stroke-width="2"/>
+                                        <rect x="-5" y="50" width="130" height="2" fill="#334155"/>
+                                    </g>
+                                    
+                                    <!-- Dinding Keliling -->
+                                    <line x1="0" y1="50" x2="0" y2="30" stroke="#0ea5e9" stroke-width="1.5"/>
+                                    <line x1="120" y1="50" x2="120" y2="30" stroke="#0ea5e9" stroke-width="1.5"/>
+
+                                    <!-- Atap Kayu & Spandek -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-house-chimney text-amber-400\'></i><strong class=\'text-amber-300\'>Atap Rangka Kayu & Spandek</strong></div><p class=\'text-slate-200 mt-1\'>Sesuai spesifikasi: Murni menggunakan kayu (tanpa baja ringan). Rangka diikat kuat pada tiang-tiang rak baterai di bawahnya untuk mencegah lendutan (sagging) pada bentangan 12m.</p>')" onmouseout="hideTooltip()">
+                                        <polygon points="-2,30 60,15 122,30 120,31 60,16.5 0,31" fill="#94a3b8" stroke="#cbd5e1" stroke-width="0.5"/>
+                                        <!-- Rangka Kayu Kuda-kuda (Warna Coklat Kayu) -->
+                                        <polyline points="0,31 60,17 120,31" fill="none" stroke="#92400e" stroke-width="1"/>
+                                        <!-- Penyangga Diagonal Kayu -->
+                                        <line x1="30" y1="24" x2="60" y2="17" stroke="#92400e" stroke-width="0.5"/>
+                                        <line x1="90" y1="24" x2="60" y2="17" stroke="#92400e" stroke-width="0.5"/>
+                                    </g>
+
+                                    <!-- TIANG STRUKTURAL KAYU RAK GANDA -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-tree text-amber-500\'></i><strong class=\'text-amber-400\'>Pilar Utama Kayu (Kiri)</strong></div><p class=\'text-slate-200 mt-1\'>Balok kayu keras yang berfungsi ganda: menopang rangka rak ayam sekaligus tembus ke atas menjadi penyangga kuda-kuda atap.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="24.5" y="23.5" width="1" height="26.5" fill="#92400e"/>
+                                        <rect x="54.5" y="16.5" width="1" height="33.5" fill="#92400e"/>
+                                    </g>
+
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-tree text-amber-500\'></i><strong class=\'text-amber-400\'>Pilar Utama Kayu (Kanan)</strong></div><p class=\'text-slate-200 mt-1\'>Distribusi beban atap disalurkan ke tanah melalui tiang-tiang rak ini, membuat konstruksi kayu 12m menjadi kokoh.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="64.5" y="16.5" width="1" height="33.5" fill="#92400e"/>
+                                        <rect x="94.5" y="23.5" width="1" height="26.5" fill="#92400e"/>
+                                    </g>
+
+                                    <!-- RAK BATERAI -->
+                                    <!-- Rak Kiri -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-box text-blue-400\'></i><strong class=\'text-blue-300\'>Rak Broiler Mepet Dinding</strong></div><p class=\'text-slate-200 mt-1\'>Lebar 1.5m. Terdiri dari 2 tingkat. Murni ditopang rangka kayu.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="0" y="32" width="15" height="18" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <rect x="0" y="34" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                        <rect x="0" y="42" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                    </g>
+
+                                    <!-- Lorong 1 -->
+                                    <text x="20" y="49" fill="#c084fc" font-size="2" text-anchor="middle">1m</text>
+
+                                    <!-- Rak Tengah GANDA Kiri -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-boxes-stacked text-sky-400\'></i><strong class=\'text-sky-300\'>Rak Kayu Ganda (3m)</strong></div><p class=\'text-slate-200 mt-1\'>Konfigurasi tegak lurus menghemat ruang. Struktur utamanya terintegrasi ke atap.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="25" y="32" width="30" height="18" fill="#0369a1" fill-opacity="0.5" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="40" y1="32" x2="40" y2="50" stroke="#38bdf8" stroke-width="0.5" stroke-dasharray="1"/>
+                                        
+                                        <rect x="25" y="34" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                        <rect x="40" y="34" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                        <rect x="25" y="42" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                        <rect x="40" y="42" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                    </g>
+
+                                    <!-- Lorong 2 -->
+                                    <text x="60" y="49" fill="#c084fc" font-size="2" text-anchor="middle">1m</text>
+
+                                    <!-- Rak Tengah GANDA Kanan -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-boxes-stacked text-sky-400\'></i><strong class=\'text-sky-300\'>Rak Kayu Ganda (3m)</strong></div><p class=\'text-slate-200 mt-1\'>Lorong di antara rak dilengkapi sistem nipel air dan talang pakan otomatis.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="65" y="32" width="30" height="18" fill="#0369a1" fill-opacity="0.5" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <line x1="80" y1="32" x2="80" y2="50" stroke="#38bdf8" stroke-width="0.5" stroke-dasharray="1"/>
+                                        
+                                        <rect x="65" y="34" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                        <rect x="80" y="34" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                        <rect x="65" y="42" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                        <rect x="80" y="42" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                    </g>
+
+                                    <!-- Lorong 3 -->
+                                    <text x="100" y="49" fill="#c084fc" font-size="2" text-anchor="middle">1m</text>
+
+                                    <!-- Rak Kanan -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-box text-blue-400\'></i><strong class=\'text-blue-300\'>Rak Broiler Mepet Dinding</strong></div><p class=\'text-slate-200 mt-1\'>Lebar 1.5m, 2 Tingkat.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="105" y="32" width="15" height="18" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <rect x="105" y="34" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                        <rect x="105" y="42" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
+                                    </g>
+                                    
+                                    <line x1="0" y1="56" x2="120" y2="56" stroke="#94a3b8" stroke-width="0.5"/>
+                                    <line x1="0" y1="55" x2="0" y2="57" stroke="#94a3b8" stroke-width="0.5"/>
+                                    <line x1="120" y1="55" x2="120" y2="57" stroke="#94a3b8" stroke-width="0.5"/>
+                                    <text x="60" y="60" fill="#cbd5e1" font-size="3" text-anchor="middle">12 Meter</text>
+                                </svg>
+                            </div>
+
+                            <!-- TAB 3: TAMPAK DEPAN (Inlet Celldex) -->
+                            <div id="front-view" class="tab-content w-full h-full justify-center items-center">
+                                <svg width="800" height="400" viewBox="-10 -10 140 70" class="shadow-2xl bg-slate-900/40 rounded">
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-house text-amber-400\'></i><strong class=\'text-amber-300\'>Atap Spandek Sisi Depan</strong></div><p class=\'text-slate-200 mt-1\'>Dibuat overhang (menjorok keluar) agar tampias hujan tidak langsung mengenai kertas pendingin Celldex.</p>')" onmouseout="hideTooltip()">
+                                        <polygon points="0,30 60,12 120,30 120,33 60,15 0,33" fill="#64748b" stroke="#94a3b8" stroke-width="0.5"/>
+                                        <polyline points="0,33 60,17 120,33" fill="none" stroke="#92400e" stroke-width="0.5"/>
+                                    </g>
+                                    
+                                    <rect x="0" y="33" width="120" height="20" fill="rgba(14, 165, 233, 0.1)" stroke="#0ea5e9" stroke-width="0.5"/>
+                                    
+                                    <!-- Area Celldex -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-water text-cyan-400\'></i><strong class=\'text-cyan-300\'>Sistem Inlet / Cooling Pad</strong></div><p class=\'text-slate-200 mt-1\'>80 Lembar Celldex LA dirakit dalam bingkai gater. Udara dari luar disedot melewati pad basah ini untuk menurunkan suhu masuk.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="10" y="35" width="100" height="15" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+                                        <pattern id="celldexGrid2" width="1" height="1" patternUnits="userSpaceOnUse">
+                                            <path d="M 1 0 L 0 1 M 0 0 L 1 1" fill="none" stroke="#38bdf8" stroke-width="0.3"/>
+                                        </pattern>
+                                        <rect x="10" y="35" width="100" height="15" fill="url(#celldexGrid2)" />
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <!-- TAB 4: TAMPAK BELAKANG (Fan Outlet) -->
+                            <div id="back-view" class="tab-content w-full h-full justify-center items-center">
+                                <svg width="900" height="400" viewBox="-10 -10 140 70" class="shadow-2xl bg-slate-900/40 rounded">
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-house text-amber-400\'></i><strong class=\'text-amber-300\'>Atap Sisi Belakang</strong></div><p class=\'text-slate-200 mt-1\'>Rangka kayu menopang atap pada sisi pembuangan udara panas.</p>')" onmouseout="hideTooltip()">
+                                        <polygon points="0,30 60,12 120,30 120,33 60,15 0,33" fill="#64748b" stroke="#94a3b8" stroke-width="0.5"/>
+                                        <polyline points="0,33 60,17 120,33" fill="none" stroke="#92400e" stroke-width="0.5"/>
+                                    </g>
+
+                                    <rect x="0" y="33" width="120" height="20" fill="rgba(14, 165, 233, 0.1)" stroke="#0ea5e9" stroke-width="0.5"/>
+                                    
+                                    <!-- 8 Exhaust Fans - SEJAJAR DATAR (D-L-D-L-L-D-L-D) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-gears text-red-400\'></i><strong class=\'text-red-300\'>Fan 1 (DIESEL)</strong></div><p class=\'text-slate-200 mt-1\'>Kipas mekanik digerakkan oleh sabuk V-Belt.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="4.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#7f1d1d" stroke-width="0.5" rx="0.5"/>
+                                        <circle cx="8" cy="43" r="3" fill="#7f1d1d" stroke="#fca5a5" stroke-width="0.5"/>
+                                        <path d="M6,41 L10,45 M6,45 L10,41" stroke="#fca5a5" stroke-width="0.5"/>
+                                        <text x="8" y="38" fill="#fca5a5" font-size="2" text-anchor="middle" font-weight="bold">F1 (D)</text>
+                                    </g>
+
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-plug text-sky-400\'></i><strong class=\'text-sky-300\'>Fan 2 (LISTRIK)</strong></div><p class=\'text-slate-200 mt-1\'>Kipas dinamo elektrik otomatis.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="19.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#1d4ed8" stroke-width="0.5" rx="0.5"/>
+                                        <circle cx="23" cy="43" r="3" fill="#1e3a8a" stroke="#93c5fd" stroke-width="0.5"/>
+                                        <path d="M21,41 L25,45 M21,45 L25,41" stroke="#93c5fd" stroke-width="0.5"/>
+                                        <text x="23" y="38" fill="#93c5fd" font-size="2" text-anchor="middle" font-weight="bold">F2 (L)</text>
+                                    </g>
+
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-gears text-red-400\'></i><strong class=\'text-red-300\'>Fan 3 (DIESEL)</strong></div><p class=\'text-slate-200 mt-1\'>Kipas mekanik penggerak utama bagian kiri tengah.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="34.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#7f1d1d" stroke-width="0.5" rx="0.5"/>
+                                        <circle cx="38" cy="43" r="3" fill="#7f1d1d" stroke="#fca5a5" stroke-width="0.5"/>
+                                        <path d="M36,41 L40,45 M36,45 L40,41" stroke="#fca5a5" stroke-width="0.5"/>
+                                        <text x="38" y="38" fill="#fca5a5" font-size="2" text-anchor="middle" font-weight="bold">F3 (D)</text>
+                                    </g>
+
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-plug text-sky-400\'></i><strong class=\'text-sky-300\'>Fan 4 (LISTRIK)</strong></div><p class=\'text-slate-200 mt-1\'>Dinamo elektrik tersambung ke sensor suhu tengah.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="49.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#1d4ed8" stroke-width="0.5" rx="0.5"/>
+                                        <circle cx="53" cy="43" r="3" fill="#1e3a8a" stroke="#93c5fd" stroke-width="0.5"/>
+                                        <path d="M51,41 L55,45 M51,45 L55,41" stroke="#93c5fd" stroke-width="0.5"/>
+                                        <text x="53" y="38" fill="#93c5fd" font-size="2" text-anchor="middle" font-weight="bold">F4 (L)</text>
+                                    </g>
+
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-plug text-sky-400\'></i><strong class=\'text-sky-300\'>Fan 5 (LISTRIK)</strong></div><p class=\'text-slate-200 mt-1\'>Kipas dinamo elektrik otomatis.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="64.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#1d4ed8" stroke-width="0.5" rx="0.5"/>
+                                        <circle cx="68" cy="43" r="3" fill="#1e3a8a" stroke="#93c5fd" stroke-width="0.5"/>
+                                        <path d="M66,41 L70,45 M66,45 L70,41" stroke="#93c5fd" stroke-width="0.5"/>
+                                        <text x="68" y="38" fill="#93c5fd" font-size="2" text-anchor="middle" font-weight="bold">F5 (L)</text>
+                                    </g>
+
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-gears text-red-400\'></i><strong class=\'text-red-300\'>Fan 6 (DIESEL)</strong></div><p class=\'text-slate-200 mt-1\'>Kipas mekanik penggerak utama bagian kanan tengah.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="79.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#7f1d1d" stroke-width="0.5" rx="0.5"/>
+                                        <circle cx="83" cy="43" r="3" fill="#7f1d1d" stroke="#fca5a5" stroke-width="0.5"/>
+                                        <path d="M81,41 L85,45 M81,45 L85,41" stroke="#fca5a5" stroke-width="0.5"/>
+                                        <text x="83" y="38" fill="#fca5a5" font-size="2" text-anchor="middle" font-weight="bold">F6 (D)</text>
+                                    </g>
+
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-plug text-sky-400\'></i><strong class=\'text-sky-300\'>Fan 7 (LISTRIK)</strong></div><p class=\'text-slate-200 mt-1\'>Kipas dinamo elektrik otomatis.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="94.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#1d4ed8" stroke-width="0.5" rx="0.5"/>
+                                        <circle cx="98" cy="43" r="3" fill="#1e3a8a" stroke="#93c5fd" stroke-width="0.5"/>
+                                        <path d="M96,41 L100,45 M96,45 L100,41" stroke="#93c5fd" stroke-width="0.5"/>
+                                        <text x="98" y="38" fill="#93c5fd" font-size="2" text-anchor="middle" font-weight="bold">F7 (L)</text>
+                                    </g>
+
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-gears text-red-400\'></i><strong class=\'text-red-300\'>Fan 8 (DIESEL)</strong></div><p class=\'text-slate-200 mt-1\'>Kipas mekanik penggerak utama bagian paling kanan.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="109.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#7f1d1d" stroke-width="0.5" rx="0.5"/>
+                                        <circle cx="113" cy="43" r="3" fill="#7f1d1d" stroke="#fca5a5" stroke-width="0.5"/>
+                                        <path d="M111,41 L115,45 M111,45 L115,41" stroke="#fca5a5" stroke-width="0.5"/>
+                                        <text x="113" y="38" fill="#fca5a5" font-size="2" text-anchor="middle" font-weight="bold">F8 (D)</text>
+                                    </g>
+
+                                    <!-- Shaft Line ilusi -->
+                                    <line x1="8" y1="48" x2="113" y2="48" stroke="#475569" stroke-width="0.2" stroke-dasharray="1"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Panels (Data Specs) Hide on Print -->
+            <div class="no-print xl:col-span-1 space-y-5 h-[750px] overflow-y-auto pr-1">
+                
+                <!-- Spesifikasi Teknis Box -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <h3 class="font-bold text-lg text-slate-800 border-b border-slate-100 pb-3 mb-4 flex items-center">
+                        <div class="bg-blue-100 p-2 rounded-lg text-blue-600 mr-3"><i class="fa-solid fa-clipboard-list"></i></div>
+                        Perhitungan Populasi
+                    </h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex flex-col">
+                            <span class="text-xs text-slate-400 mb-0.5">Rumus Luas Efektif Rak Baterai</span>
+                            <span class="font-semibold text-slate-800 font-mono text-xs mt-1 bg-slate-50 p-2 border border-slate-100 rounded">
+                                L(1.5m) × P(48m*) × 2 Tkt × 6 Lajur<br>
+                                <span class="text-slate-400 mt-1 block">*2 blok rak panjang @ 24m</span>
+                            </span>
+                        </li>
+                        <li class="flex flex-col border-t border-slate-50 pt-2">
+                            <span class="text-xs text-slate-400 mb-0.5">Total Luas Rak Efektif</span>
+                            <span class="font-bold text-blue-600 text-lg">864 m²</span>
+                        </li>
+                        <li class="flex flex-col border-t border-slate-50 pt-2">
+                            <span class="text-xs text-slate-400 mb-0.5">Kepadatan (Density) Optimal</span>
+                            <span class="font-semibold text-slate-800">
+                                9.000 / 864 = <span class="text-emerald-600">10,4 ekor/m²</span><br>
+                                (Dibulatkan aman <strong class="text-slate-900">11 ekor/m²</strong>)
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Konfigurasi Kipas Box -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <h3 class="font-bold text-lg text-slate-800 border-b border-slate-100 pb-3 mb-4 flex items-center">
+                        <div class="bg-rose-100 p-2 rounded-lg text-rose-600 mr-3"><i class="fa-solid fa-fan"></i></div>
+                        Konfigurasi Exhaust Fan
+                    </h3>
+                    
+                    <div class="flex items-center justify-between mb-4 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                        <span class="text-sm font-medium text-slate-600">Total Kipas</span>
+                        <span class="text-lg font-black text-slate-800">8 Unit (Boxfan 50")</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3 p-3 rounded-xl border border-red-100 bg-red-50/50">
+                            <i class="fa-solid fa-gears text-red-500 mt-0.5"></i>
+                            <div>
+                                <span class="block text-sm font-bold text-red-700">4 Kipas DIESEL (Mekanik)</span>
+                                <span class="text-xs text-slate-500 leading-snug">Posisi: 1, 3, 6, 8. Digerakkan melalui sistem V-Belt.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 rounded-xl border border-sky-100 bg-sky-50/50">
+                            <i class="fa-solid fa-plug-circle-bolt text-sky-500 mt-0.5"></i>
+                            <div>
+                                <span class="block text-sm font-bold text-sky-700">4 Kipas LISTRIK (Elektrik)</span>
+                                <span class="text-xs text-slate-500 leading-snug">Posisi: 2, 4, 5, 7. Dinamo elektrik mandiri otomatis.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Panel -->
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 p-5 rounded-2xl shadow border border-emerald-400 text-white relative overflow-hidden">
+                    <i class="fa-solid fa-check-circle absolute -right-4 -bottom-4 text-6xl text-white/10"></i>
+                    <h4 class="font-bold text-lg mb-2 flex items-center shadow-sm"><i class="fa-solid fa-lightbulb text-yellow-300 mr-2"></i> Rekayasa Struktur</h4>
+                    <p class="text-sm text-emerald-50 leading-relaxed font-medium">
+                        Penggunaan <strong class="text-white bg-emerald-700/50 px-1 rounded">pilar rak ganda</strong> yang ditarik lurus hingga memotong kuda-kuda atap berhasil menghilangkan kelemahan dari bentangan kayu murni sejauh 12 meter.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tooltip = document.getElementById('tooltip');
+
+        function showTooltip(evt, text) {
+            tooltip.innerHTML = text;
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = '1';
+            
+            let x = evt.clientX + 20;
+            let y = evt.clientY + 20;
+            
+            const tooltipRect = tooltip.getBoundingClientRect();
+            
+            if (x + tooltipRect.width > window.innerWidth) {
+                x = evt.clientX - tooltipRect.width - 15;
+            }
+            if (y + tooltipRect.height > window.innerHeight) {
+                y = evt.clientY - tooltipRect.height - 15;
+            }
+            
+            tooltip.style.left = x + 'px';
+            tooltip.style.top = y + 'px';
+        }
+
+        function hideTooltip() {
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = '0';
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            resetZoom();
+        }
+
+        function toggleFullScreen() {
+            const elem = document.getElementById("canvas-wrapper");
+            const icon = document.getElementById("fs-icon");
+            
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                icon.classList.remove('fa-expand');
+                icon.classList.add('fa-compress');
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                icon.classList.remove('fa-compress');
+                icon.classList.add('fa-expand');
+            }
+        }
+        
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById("fs-icon");
+            if (!document.fullscreenElement) {
+                icon.classList.remove('fa-compress');
+                icon.classList.add('fa-expand');
+            }
+        });
+
+        let currentZoom = 1;
+        const zoomTarget = document.getElementById('zoom-target');
+        const zoomLabel = document.getElementById('zoom-level');
+        const container = document.getElementById('pan-container');
+        
+        let isDragging = false;
+        let startX, startY, translateX = 0, translateY = 0;
+
+        function updateTransform() {
+            zoomTarget.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+            zoomLabel.innerText = Math.round(currentZoom * 100) + '%';
+        }
+
+        function setZoom(factor) {
+            currentZoom *= factor;
+            if(currentZoom < 0.5) currentZoom = 0.5;
+            if(currentZoom > 4) currentZoom = 4;
+            updateTransform();
+        }
+
+        function resetZoom() {
+            currentZoom = 1;
+            translateX = 0;
+            translateY = 0;
+            updateTransform();
+        }
+
+        container.addEventListener('mousedown', (e) => {
+            if (e.target.closest('button')) return;
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            container.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            updateTransform();
+            hideTooltip();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            container.style.cursor = 'grab';
+        });
+
+        container.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                setZoom(1.1);
+            } else {
+                setZoom(0.9);
+            }
+        });
+    </script>
+</body>
+</html>
