@@ -1,23 +1,71 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TFARM Timika - Peternakan Modern</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/rcwpt/tfarm/main/logo.png" type="image/png">
+    <title>TFARM Timika - Peternakan Ayam Broiler Modern Closed House</title>
+    <meta name="description" content="TFARM Timika - Peternakan ayam broiler modern di Papua dengan teknologi Closed House rak baterai 2 tingkat berkapasitas 7.000 ekor.">
+    <link rel="icon" href="logo.png" type="image/png">
     
-    <!-- Load Tailwind CSS -->
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     
-    <!-- Load React & ReactDOM -->
+    <!-- React & ReactDOM 18 -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
-    <!-- Load Babel (untuk menerjemahkan JSX ke JS browser) -->
+    <!-- Babel for in-browser JSX compilation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        /* Custom scrollbar hide utility */
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
@@ -25,46 +73,176 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .glass-nav {
+            background: rgba(20, 83, 45, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        /* Ambient Glow Animations */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
     
-    <!-- Root Container untuk React -->
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
+        const { useState, useEffect } = React;
 
-        // --- ICON COMPONENTS (Pengganti Lucide-React agar jalan tanpa install) ---
-        const ChickenIcon = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2a3 3 0 0 1 3 3v1a2 2 0 0 1-2 2h-1" /><path d="M16.5 6.5c1 0 1.5.5 2 1.5C19 9 20 11 20 11c0 2-2 3-4 3" /><path d="M12 22c-3 0-5-2-5-5 0-1.5.5-3 2-4l1-4h4l1 4c1.5 1 2 2.5 2 4 0 3-2 5-5 5Z" /><path d="M12 13h.01" /><path d="M9 7l-1 2" /></svg>
+        // --- ICON COMPONENTS (SVG Inline untuk performa tinggi & zero-dependency) ---
+        const ChickenIcon = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M12 2a3 3 0 0 1 3 3v1a2 2 0 0 1-2 2h-1" />
+                <path d="M16.5 6.5c1 0 1.5.5 2 1.5C19 9 20 11 20 11c0 2-2 3-4 3" />
+                <path d="M12 22c-3 0-5-2-5-5 0-1.5.5-3 2-4l1-4h4l1 4c1.5 1 2 2.5 2 4 0 3-2 5-5 5Z" />
+                <path d="M12 13h.01" />
+                <path d="M9 7l-1 2" />
+            </svg>
         );
-        const MapPin = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> );
-        const Layers = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> );
-        const ArrowRight = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> );
-        const CheckCircle = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> );
-        const Home = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> );
-        const Menu = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></svg> );
-        const X = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> );
-        const Users = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> );
-        const PenTool = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg> );
-        const Ruler = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><line x1="14.5" y1="9.5" x2="18.5" y2="13.5"/><line x1="11.5" y1="6.5" x2="15.5" y2="10.5"/><line x1="8.5" y1="3.5" x2="12.5" y2="7.5"/></svg> );
-        const Activity = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> );
-        const ClipboardList = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg> );
-        const TrendingUp = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> );
-        const Award = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> );
+        const MapPin = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+        );
+        const Layers = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+            </svg>
+        );
+        const ArrowRight = ({ className = "w-5 h-5" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+        );
+        const CheckCircle = ({ className = "w-5 h-5" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+        );
+        const Home = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+        );
+        const Menu = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/>
+            </svg>
+        );
+        const X = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        );
+        const Users = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+        );
+        const PenTool = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/>
+            </svg>
+        );
+        const Ruler = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/>
+                <line x1="14.5" y1="9.5" x2="18.5" y2="13.5"/><line x1="11.5" y1="6.5" x2="15.5" y2="10.5"/><line x1="8.5" y1="3.5" x2="12.5" y2="7.5"/>
+            </svg>
+        );
+        const Activity = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+        );
+        const ClipboardList = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/>
+            </svg>
+        );
+        const TrendingUp = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+            </svg>
+        );
+        const Award = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+            </svg>
+        );
+        const Calculator = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/>
+            </svg>
+        );
+        const ExternalLink = ({ className = "w-4 h-4" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+        );
+        const CopyIcon = ({ className = "w-4 h-4" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            </svg>
+        );
+        const ZoomIn = ({ className = "w-5 h-5" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="11" x2="11" y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/>
+            </svg>
+        );
+        const ChevronLeft = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+        );
+        const ChevronRight = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        );
+        const Compass = ({ className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+        );
 
         // --- MAIN APP COMPONENT ---
         const App = () => {
             const [activeTab, setActiveTab] = useState('all');
-            const [activePeriod, setActivePeriod] = useState(3); // Default to Periode 3
+            const [activePeriod, setActivePeriod] = useState(3);
             const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const [toastMessage, setToastMessage] = useState('');
+            const [lightbox, setLightbox] = useState({ isOpen: false, index: 0, list: [] });
 
-            // Base URL for images
+            // Interactive IP Calculator state
+            const [calcDoc, setCalcDoc] = useState(7000);
+            const [calcWeight, setCalcWeight] = useState(2.8);
+            const [calcAge, setCalcAge] = useState(42);
+            const [calcFcr, setCalcFcr] = useState(1.46);
+            const [calcMortality, setCalcMortality] = useState(4.2);
+
+            // Asset URLs (Local priority with remote fallback)
             const baseUrl = "https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/";
-            const logoUrl = "https://raw.githubusercontent.com/rcwpt/tfarm/main/logo.png";
+            const logoUrl = "logo.png";
+            const prestasiImgUrl = "prestasi index.jpg";
+            const mapLink = "https://maps.app.goo.gl/9bsQuqhotEgjAspY6";
 
-            // Data Construction Progress
+            // Construction Data (23 items)
             const constructionData = [
                 { id: 1, desc: "Leveling lahan menggunakan laser presisi", img: "(1).jpg", category: "tahap1" },
                 { id: 2, desc: "Pembuatan aliran air / drainase untuk sanitasi", img: "(2).jpg", category: "tahap1" },
@@ -92,13 +270,12 @@
             ];
 
             const operationsData = [
-                { title: "Pemasukan DOC", img: "pemasukan%20doc.jpeg", desc: "Bibit ayam berkualitas masuk kandang" },
-                { title: "Masa Chick-In", img: "chckin.jpeg", desc: "Fase awal pemeliharaan intensif" },
-                { title: "Kandang Rak Baterai", img: "kandang%20rak%20baterai.jpeg", desc: "Sistem modern higienis" },
-                { title: "Ayam Siap Panen", img: "ayam%20siap%20panen.jpeg", desc: "Hasil panen berkualitas tinggi" },
+                { title: "Pemasukan DOC Berkualitas", img: "pemasukan%20doc.jpeg", desc: "Bibit ayam broiler strain unggul dengan daya hidup tinggi masuk kandang steril." },
+                { title: "Masa Chick-In & Brooding", img: "chckin.jpeg", desc: "Fase awal pemeliharaan intensif dengan kontrol pemanas dan suhu akurat." },
+                { title: "Sistem Kandang Rak Baterai", img: "kandang%20rak%20baterai.jpeg", desc: "Higienitas maksimal, kotoran terpisah otomatis, sirkulasi udara merata 2 tingkat." },
+                { title: "Hasil Panen Prima", img: "ayam%20siap%20panen.jpeg", desc: "Ayam sehat berbobot standar tinggi, bebas antibiotik terlarang, siap suplai pasar." },
             ];
 
-            // Dashboard Data (Updated with realistic figures)
             const dashboardData = [
                 { 
                     period: 1, 
@@ -108,6 +285,7 @@
                     deplesi: 5.8,
                     beratRata: 2.4,
                     umurPanen: 40,
+                    statusText: "Sangat Baik",
                     sop: { biosecurity: 92, temperature: 90, vaccination: 98 }
                 },
                 { 
@@ -118,6 +296,7 @@
                     deplesi: 5.1,
                     beratRata: 2.6,
                     umurPanen: 41,
+                    statusText: "Sangat Baik",
                     sop: { biosecurity: 95, temperature: 94, vaccination: 100 }
                 },
                 { 
@@ -128,451 +307,1111 @@
                     deplesi: 4.2,
                     beratRata: 2.8,
                     umurPanen: 42,
+                    statusText: "Istimewa",
                     sop: { biosecurity: 98, temperature: 97, vaccination: 100 }
                 }
             ];
 
-            const activeDashboard = dashboardData.find(d => d.period === activePeriod);
+            const activeDashboard = dashboardData.find(d => d.period === activePeriod) || dashboardData[2];
 
-            const mapLink = "https://maps.app.goo.gl/9bsQuqhotEgjAspY6";
+            // Formula Perhitungan IP Broiler: (Daya Hidup % * Bobot kg) / (FCR * Umur Hari) * 100
+            const calculatedLivability = Math.max(0, 100 - Number(calcMortality));
+            const calculatedIp = Math.round(((calculatedLivability * Number(calcWeight)) / (Number(calcFcr) * Number(calcAge))) * 100);
+            const calculatedBiomassKg = Math.round(Number(calcDoc) * (calculatedLivability / 100) * Number(calcWeight));
+
+            const showToast = (msg) => {
+                setToastMessage(msg);
+                setTimeout(() => setToastMessage(''), 3000);
+            };
+
+            const copyAddress = () => {
+                navigator.clipboard.writeText("TFARM Timika - Peternakan Ayam Broiler Modern Closed House, Timika, Papua, Indonesia");
+                showToast("✅ Alamat TFARM berhasil disalin ke clipboard!");
+            };
+
+            // Lightbox Modal Handlers
+            const openLightbox = (items, index) => {
+                setLightbox({ isOpen: true, index, list: items });
+            };
+
+            const closeLightbox = () => {
+                setLightbox({ isOpen: false, index: 0, list: [] });
+            };
+
+            const nextLightbox = () => {
+                setLightbox(prev => ({
+                    ...prev,
+                    index: (prev.index + 1) % prev.list.length
+                }));
+            };
+
+            const prevLightbox = () => {
+                setLightbox(prev => ({
+                    ...prev,
+                    index: (prev.index - 1 + prev.list.length) % prev.list.length
+                }));
+            };
+
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if (!lightbox.isOpen) return;
+                    if (e.key === 'Escape') closeLightbox();
+                    if (e.key === 'ArrowRight') nextLightbox();
+                    if (e.key === 'ArrowLeft') prevLightbox();
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, [lightbox.isOpen]);
 
             return (
-                <div className="font-sans text-gray-800 bg-gray-50 min-h-screen">
-                    {/* Navbar */}
-                    <nav className="bg-green-700 text-white shadow-lg sticky top-0 z-50">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between h-16">
-                            <div className="flex items-center space-x-3">
-                            <div className="bg-white p-1 rounded-full">
-                                <img src={logoUrl} alt="Logo TFARM" className="h-8 w-8 object-contain" />
-                            </div>
-                            <span className="font-bold text-xl sm:text-2xl tracking-tight">TFARM TIMIKA</span>
-                            </div>
-                            
-                            <div className="hidden md:block">
-                            <div className="ml-10 flex items-baseline space-x-4">
-                                <a href="#dashboard" className="hover:bg-green-800 px-3 py-2 rounded-md text-sm font-medium transition">Dashboard</a>
-                                <a href="#about" className="hover:bg-green-800 px-3 py-2 rounded-md text-sm font-medium transition">Tentang</a>
-                                <a href="#blueprint" className="hover:bg-green-800 px-3 py-2 rounded-md text-sm font-medium transition">Sketsa</a>
-                                <a href="#construction" className="hover:bg-green-800 px-3 py-2 rounded-md text-sm font-medium transition">Pembangunan</a>
-                                <a href="#gallery" className="hover:bg-green-800 px-3 py-2 rounded-md text-sm font-medium transition">Galeri</a>
-                                <a href="#location" className="bg-white text-green-700 hover:bg-gray-100 px-4 py-2 rounded-full text-sm font-bold shadow-md transition">Lokasi</a>
-                            </div>
-                            </div>
+                <div className="font-sans text-slate-800 bg-slate-50 min-h-screen flex flex-col">
+                    
+                    {/* TOAST NOTIFICATION */}
+                    {toastMessage && (
+                        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-emerald-500/40 transform transition-all duration-300 animate-bounce">
+                            <span className="text-emerald-400 font-semibold">{toastMessage}</span>
+                        </div>
+                    )}
 
-                            <div className="md:hidden">
-                            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="bg-green-800 inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-green-900 focus:outline-none">
-                                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                            </button>
+                    {/* TOP PROMO BANNER: LINK TO 9000.HTML */}
+                    <div className="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-emerald-100 text-xs sm:text-sm py-2 px-4 border-b border-emerald-700/50">
+                        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 font-medium">
+                                <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider">Blueprint Baru</span>
+                                <span>Tersedia Cetak Biru Kandang Skala Besar <strong>12m x 50m (9.000 Ekor)</strong> dengan Sistem Rangka Kayu</span>
                             </div>
-                        </div>
-                        </div>
-
-                        {isMobileMenuOpen && (
-                        <div className="md:hidden bg-green-800 shadow-xl">
-                            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                            <a href="#dashboard" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-700 font-bold bg-green-900/50">Dashboard</a>
-                            <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-700">Tentang</a>
-                            <a href="#blueprint" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-700">Sketsa</a>
-                            <a href="#construction" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-700">Pembangunan</a>
-                            <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-700">Galeri</a>
-                            <a href="#location" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-700">Lokasi</a>
-                            </div>
-                        </div>
-                        )}
-                    </nav>
-
-                    {/* Hero Section */}
-                    <div className="relative bg-gray-900 text-white overflow-hidden">
-                        <div className="absolute inset-0 opacity-40">
-                        <img src={baseUrl + "kandang%20rak%20baterai.jpeg"} className="w-full h-full object-cover" alt="Background" />
-                        </div>
-                        <div className="relative max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-                        <div className="bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 animate-bounce">
-                            KAPASITAS 7.000 EKOR
-                        </div>
-                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 leading-tight">
-                            Peternakan Modern di <span className="text-green-400 block sm:inline">Tanah Papua</span>
-                        </h1>
-                        <p className="mt-4 max-w-2xl text-lg sm:text-xl text-gray-200 px-4">
-                            TFARM menghadirkan kualitas ayam broiler terbaik dengan sistem kandang rak baterai 2 tingkat, didukung fasilitas lengkap.
-                        </p>
-                        <div className="mt-8 flex gap-4">
-                            <a href="#dashboard" className="px-6 py-3 sm:px-8 border border-transparent text-base font-medium rounded-full text-white bg-green-600 hover:bg-green-700 md:text-lg shadow-lg transition transform hover:scale-105 flex items-center gap-2">
-                            <Activity className="w-5 h-5" /> Cek Performa
+                            <a href="9000.html" className="inline-flex items-center gap-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-3 py-1 rounded-full text-xs transition transform hover:scale-105 shadow-sm">
+                                Buka Blueprint 9.000 <ArrowRight className="w-3.5 h-3.5" />
                             </a>
-                        </div>
                         </div>
                     </div>
 
-                    {/* DASHBOARD SECTION (NEW) */}
-                    <section id="dashboard" className="py-16 bg-slate-100">
+                    {/* STICKY NAVBAR */}
+                    <nav className="glass-nav text-white shadow-xl sticky top-0 z-40 border-b border-emerald-700/40">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="text-center mb-10">
-                                <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Dashboard Informasi Terbaik 2025</h2>
-                                <p className="mt-4 text-lg text-gray-600">Laporan performa produksi aktual selama 3 periode terakhir.</p>
-                            </div>
-
-                            {/* Period Selector */}
-                            <div className="flex justify-center mb-10 space-x-2 sm:space-x-4">
-                                {dashboardData.map((d) => (
-                                    <button
-                                        key={d.period}
-                                        onClick={() => setActivePeriod(d.period)}
-                                        className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-bold text-sm sm:text-base transition-all transform hover:scale-105 shadow-md ${
-                                            activePeriod === d.period 
-                                            ? 'bg-gradient-to-r from-green-600 to-green-500 text-white ring-4 ring-green-200' 
-                                            : 'bg-white text-gray-600 hover:bg-gray-50'
-                                        }`}
-                                    >
-                                        Periode {d.period}
-                                    </button>
-                                ))}
-                            </div>
-
-                            {/* Main Metrics Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                                {/* IP Card */}
-                                <div className="bg-gradient-to-br from-green-500 to-green-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
-                                    <div className="absolute right-0 top-0 opacity-20 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
-                                        <TrendingUp className="w-24 h-24" />
+                            <div className="flex items-center justify-between h-20">
+                                
+                                {/* Logo & Brand */}
+                                <a href="index.html" className="flex items-center space-x-3 group">
+                                    <div className="bg-white p-1.5 rounded-2xl shadow-md group-hover:scale-105 transition-transform duration-300">
+                                        <img src={logoUrl} onError={(e) => { e.target.src = "https://raw.githubusercontent.com/rcwpt/tfarm/main/logo.png"; }} alt="Logo TFARM" className="h-9 w-9 object-contain" />
                                     </div>
-                                    <h3 className="text-lg font-medium opacity-90">Indeks Performa (IP)</h3>
-                                    <div className="text-5xl font-extrabold mt-2">{activeDashboard.ip}</div>
-                                    <div className="mt-4 text-sm bg-white/20 inline-block px-3 py-1 rounded-full">
-                                        {activeDashboard.ip > 400 ? '⭐ Excellent' : '👍 Sangat Baik'}
+                                    <div>
+                                        <span className="font-extrabold text-xl sm:text-2xl tracking-tight text-white flex items-center gap-1.5">
+                                            TFARM <span className="text-emerald-400 font-bold text-sm bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-600/40">TIMIKA</span>
+                                        </span>
+                                        <p className="text-[11px] text-emerald-200 font-medium hidden sm:block tracking-wide">Modern Broiler Closed House Farm</p>
+                                    </div>
+                                </a>
+                                
+                                {/* Desktop Menu Navigation */}
+                                <div className="hidden lg:flex items-center space-x-1">
+                                    <a href="#dashboard" className="hover:bg-emerald-700/60 px-3.5 py-2 rounded-xl text-sm font-semibold transition">Dashboard</a>
+                                    <a href="#calculator" className="hover:bg-emerald-700/60 px-3.5 py-2 rounded-xl text-sm font-semibold transition">Kalkulator IP</a>
+                                    <a href="#about" className="hover:bg-emerald-700/60 px-3.5 py-2 rounded-xl text-sm font-semibold transition">Fasilitas</a>
+                                    <a href="#blueprint" className="hover:bg-emerald-700/60 px-3.5 py-2 rounded-xl text-sm font-semibold transition">Sketsa 7.000</a>
+                                    <a href="#construction" className="hover:bg-emerald-700/60 px-3.5 py-2 rounded-xl text-sm font-semibold transition">Pembangunan</a>
+                                    <a href="#gallery" className="hover:bg-emerald-700/60 px-3.5 py-2 rounded-xl text-sm font-semibold transition">Galeri</a>
+                                    <a href="#location" className="hover:bg-emerald-700/60 px-3.5 py-2 rounded-xl text-sm font-semibold transition">Lokasi</a>
+                                </div>
+
+                                {/* Header Right Action */}
+                                <div className="hidden md:flex items-center space-x-3">
+                                    <a href="9000.html" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-900 font-bold px-4 py-2 rounded-xl text-sm shadow-md transition transform hover:-translate-y-0.5">
+                                        <Ruler className="w-4 h-4" /> Blueprint 9.000
+                                    </a>
+                                </div>
+
+                                {/* Mobile Hamburger Button */}
+                                <div className="lg:hidden">
+                                    <button 
+                                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+                                        className="bg-emerald-800/80 p-2.5 rounded-xl text-white hover:bg-emerald-700 focus:outline-none border border-emerald-600/40"
+                                        aria-label="Toggle Menu"
+                                    >
+                                        {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mobile Drawer Menu */}
+                        {isMobileMenuOpen && (
+                            <div className="lg:hidden bg-emerald-950/95 border-t border-emerald-800 px-4 pt-3 pb-6 space-y-2 shadow-2xl backdrop-blur-xl">
+                                <a href="#dashboard" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-800/60 hover:bg-emerald-700">Dashboard Performa</a>
+                                <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-sm font-medium text-emerald-100 hover:bg-emerald-800/60">Kalkulator IP Broiler</a>
+                                <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-sm font-medium text-emerald-100 hover:bg-emerald-800/60">Fasilitas Kandang</a>
+                                <a href="#blueprint" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-sm font-medium text-emerald-100 hover:bg-emerald-800/60">Sketsa Teknis 7.000</a>
+                                <a href="#construction" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-sm font-medium text-emerald-100 hover:bg-emerald-800/60">Jurnal Pembangunan (23 Foto)</a>
+                                <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-sm font-medium text-emerald-100 hover:bg-emerald-800/60">Galeri Operasional</a>
+                                <a href="#location" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-sm font-medium text-emerald-100 hover:bg-emerald-800/60">Lokasi & Navigasi Maps</a>
+                                
+                                <div className="pt-2 border-t border-emerald-800/80">
+                                    <a href="9000.html" className="flex items-center justify-center gap-2 w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-4 py-3 rounded-xl text-sm shadow-lg">
+                                        <Ruler className="w-4 h-4" /> Buka Blueprint Kandang 9.000 Ekor (12x50m)
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+                    </nav>
+
+                    {/* HERO SECTION */}
+                    <div className="relative bg-slate-950 text-white overflow-hidden py-24 sm:py-32">
+                        {/* Background Hero Image with Dark Gradient Layer */}
+                        <div className="absolute inset-0 z-0">
+                            <img 
+                                src={baseUrl + "kandang%20rak%20baterai.jpeg"} 
+                                className="w-full h-full object-cover opacity-25 filter brightness-90 scale-105" 
+                                alt="Kandang TFARM Timika" 
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-transparent"></div>
+                            <div className="absolute inset-0 bg-radial from-emerald-900/20 to-transparent"></div>
+                        </div>
+
+                        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                            
+                            {/* Top Badges */}
+                            <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full mb-6 backdrop-blur-md">
+                                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                <span>KAPASITAS AKTIF: 7.000 EKOR • CLOSED HOUSE 2 TINGKAT</span>
+                            </div>
+
+                            <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight max-w-5xl mx-auto">
+                                Peternakan Modern di <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-green-400">Tanah Papua</span>
+                            </h1>
+                            
+                            <p className="mt-4 max-w-3xl mx-auto text-lg sm:text-xl text-slate-300 font-normal leading-relaxed">
+                                TFARM Timika menghadirkan standar mutu ayam broiler terbaik melalui rekayasa kandang rak baterai 2 tingkat, biosecurity ketat, dan efisiensi konversi pakan berkelas nasional.
+                            </p>
+
+                            {/* Dual Primary Call-to-Actions */}
+                            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
+                                <a href="#dashboard" className="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-xl shadow-emerald-500/20 transition transform hover:-translate-y-1 flex items-center justify-center gap-2.5">
+                                    <Activity className="w-5 h-5 text-slate-950" /> Cek Performa & Dashboard IP
+                                </a>
+                                <a href="9000.html" className="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700 shadow-xl transition transform hover:-translate-y-1 flex items-center justify-center gap-2.5">
+                                    <Ruler className="w-5 h-5 text-amber-400" /> Blueprint 9.000 Ekor (12x50m) <ExternalLink className="w-4 h-4 text-slate-400" />
+                                </a>
+                            </div>
+
+                            {/* Live Hero KPI Metrics */}
+                            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                                <div className="bg-slate-900/70 border border-slate-800 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-center">
+                                    <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">IP Tertinggi</p>
+                                    <p className="text-3xl sm:text-4xl font-extrabold text-emerald-400 mt-1">385</p>
+                                    <span className="text-[11px] text-emerald-300/80 font-medium">Kategori Istimewa</span>
+                                </div>
+                                <div className="bg-slate-900/70 border border-slate-800 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-center">
+                                    <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">FCR Efisien</p>
+                                    <p className="text-3xl sm:text-4xl font-extrabold text-sky-400 mt-1">1.46</p>
+                                    <span className="text-[11px] text-sky-300/80 font-medium">Konversi Maksimal</span>
+                                </div>
+                                <div className="bg-slate-900/70 border border-slate-800 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-center">
+                                    <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Deplesi Rendah</p>
+                                    <p className="text-3xl sm:text-4xl font-extrabold text-teal-400 mt-1">4.2%</p>
+                                    <span className="text-[11px] text-teal-300/80 font-medium">Daya Hidup 95.8%</span>
+                                </div>
+                                <div className="bg-slate-900/70 border border-slate-800 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-center">
+                                    <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Bobot Rata-rata</p>
+                                    <p className="text-3xl sm:text-4xl font-extrabold text-purple-400 mt-1">2.8 <span className="text-base font-normal">kg</span></p>
+                                    <span className="text-[11px] text-purple-300/80 font-medium">Panen 42 Hari</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* DASHBOARD SECTION */}
+                    <section id="dashboard" className="py-20 bg-slate-100 border-b border-slate-200">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            
+                            <div className="text-center max-w-3xl mx-auto mb-12">
+                                <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
+                                    <Award className="w-4 h-4 text-emerald-600" /> Data Operasional Terverifikasi
+                                </div>
+                                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Dashboard Performa Produksi 2025</h2>
+                                <p className="mt-3 text-base sm:text-lg text-slate-600">
+                                    Laporan berkala hasil panen aktual closed house TFARM per periode pemeliharaan.
+                                </p>
+                            </div>
+
+                            {/* Period Selector Tabs */}
+                            <div className="flex justify-center mb-10">
+                                <div className="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-2 justify-center">
+                                    {dashboardData.map((d) => (
+                                        <button
+                                            key={d.period}
+                                            onClick={() => setActivePeriod(d.period)}
+                                            className={`px-5 py-3 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 flex items-center gap-2 ${
+                                                activePeriod === d.period 
+                                                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30' 
+                                                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                                            }`}
+                                        >
+                                            <span>{d.label}</span>
+                                            {d.period === 3 && (
+                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-extrabold ${activePeriod === 3 ? 'bg-amber-400 text-slate-950' : 'bg-emerald-100 text-emerald-800'}`}>
+                                                    IP 385 ⭐
+                                                </span>
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Main Metrics 4 Cards Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                                
+                                {/* IP Card */}
+                                <div className="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden group hover:shadow-2xl transition duration-300">
+                                    <div className="absolute right-0 top-0 opacity-15 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
+                                        <TrendingUp className="w-28 h-28" />
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs uppercase tracking-wider font-bold bg-white/20 px-2.5 py-1 rounded-full">Indeks Performa</span>
+                                        <span className="text-xs font-semibold text-emerald-200">Standar > 300</span>
+                                    </div>
+                                    <div className="text-5xl font-black mt-4 tracking-tight">{activeDashboard.ip}</div>
+                                    <div className="mt-4 flex items-center gap-2">
+                                        <span className="text-xs font-bold bg-amber-400 text-slate-950 px-3 py-1 rounded-full shadow-sm">
+                                            {activeDashboard.statusText}
+                                        </span>
+                                        <span className="text-xs text-emerald-100">Efisiensi optimal</span>
                                     </div>
                                 </div>
 
                                 {/* FCR Card */}
-                                <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
-                                    <div className="absolute right-0 top-0 opacity-20 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
-                                        <Layers className="w-24 h-24" />
+                                <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden group hover:shadow-2xl transition duration-300">
+                                    <div className="absolute right-0 top-0 opacity-15 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
+                                        <Layers className="w-28 h-28" />
                                     </div>
-                                    <h3 className="text-lg font-medium opacity-90">FCR (Feed Conv.)</h3>
-                                    <div className="text-5xl font-extrabold mt-2">{activeDashboard.fcr}</div>
-                                    <p className="mt-2 text-sm opacity-80">Std: 1.45 - 1.67</p>
-                                    <div className="mt-2 w-full bg-blue-900/30 rounded-full h-2">
-                                        {/* Visual logic: 2.0 base max */}
-                                        <div className="bg-white h-2 rounded-full" style={{ width: `${(2.0 - activeDashboard.fcr) * 100}%` }}></div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs uppercase tracking-wider font-bold bg-white/20 px-2.5 py-1 rounded-full">FCR (Feed Conv.)</span>
+                                        <span className="text-xs font-semibold text-blue-200">Target &lt; 1.55</span>
                                     </div>
-                                </div>
-
-                                {/* Deplesi Card */}
-                                <div className="bg-gradient-to-br from-red-500 to-red-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
-                                     <div className="absolute right-0 top-0 opacity-20 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
-                                        <Activity className="w-24 h-24" />
-                                    </div>
-                                    <h3 className="text-lg font-medium opacity-90">Deplesi / Mort.</h3>
-                                    <div className="text-5xl font-extrabold mt-2">{activeDashboard.deplesi}%</div>
-                                    <p className="mt-2 text-sm opacity-80">Range: 4% - 6%</p>
-                                    <div className="mt-2 w-full bg-red-900/30 rounded-full h-2">
-                                        {/* Visual logic */}
-                                        <div className="bg-white h-2 rounded-full" style={{ width: `${(10 - activeDashboard.deplesi) * 10}%` }}></div>
+                                    <div className="text-5xl font-black mt-4 tracking-tight">{activeDashboard.fcr}</div>
+                                    <p className="mt-2 text-xs text-blue-100">Kg pakan untuk hasilkan 1 kg daging</p>
+                                    <div className="mt-3 w-full bg-blue-950/40 rounded-full h-2">
+                                        <div className="bg-amber-300 h-2 rounded-full" style={{ width: `${Math.min(100, (2.0 - activeDashboard.fcr) * 100)}%` }}></div>
                                     </div>
                                 </div>
 
-                                {/* Berat Rata2 Card - Changed to Purple to avoid conflict with Green theme */}
-                                <div className="bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
-                                     <div className="absolute right-0 top-0 opacity-20 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
-                                        <ChickenIcon className="w-24 h-24" />
+                                {/* Deplesi / Mortalitas Card */}
+                                <div className="bg-gradient-to-br from-rose-600 to-red-700 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden group hover:shadow-2xl transition duration-300">
+                                    <div className="absolute right-0 top-0 opacity-15 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
+                                        <Activity className="w-28 h-28" />
                                     </div>
-                                    <h3 className="text-lg font-medium opacity-90">Berat Rata-rata</h3>
-                                    <div className="text-5xl font-extrabold mt-2">{activeDashboard.beratRata} <span className="text-2xl">kg</span></div>
-                                    <p className="mt-2 text-sm opacity-80">Umur Panen: {activeDashboard.umurPanen} Hari</p>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs uppercase tracking-wider font-bold bg-white/20 px-2.5 py-1 rounded-full">Deplesi / Mort.</span>
+                                        <span className="text-xs font-semibold text-rose-200">Batas &lt; 6.0%</span>
+                                    </div>
+                                    <div className="text-5xl font-black mt-4 tracking-tight">{activeDashboard.deplesi}<span className="text-2xl font-bold">%</span></div>
+                                    <p className="mt-2 text-xs text-rose-100">Daya hidup populasi: {(100 - activeDashboard.deplesi).toFixed(1)}%</p>
+                                    <div className="mt-3 w-full bg-rose-950/40 rounded-full h-2">
+                                        <div className="bg-emerald-300 h-2 rounded-full" style={{ width: `${(10 - activeDashboard.deplesi) * 10}%` }}></div>
+                                    </div>
                                 </div>
+
+                                {/* Berat Rata-rata Card */}
+                                <div className="bg-gradient-to-br from-purple-600 to-violet-800 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden group hover:shadow-2xl transition duration-300">
+                                    <div className="absolute right-0 top-0 opacity-15 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
+                                        <ChickenIcon className="w-28 h-28" />
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs uppercase tracking-wider font-bold bg-white/20 px-2.5 py-1 rounded-full">Bobot Panen</span>
+                                        <span className="text-xs font-semibold text-purple-200">Umur: {activeDashboard.umurPanen} Hari</span>
+                                    </div>
+                                    <div className="text-5xl font-black mt-4 tracking-tight">{activeDashboard.beratRata} <span className="text-2xl font-bold">kg</span></div>
+                                    <p className="mt-2 text-xs text-purple-100">Daging padat & seragam</p>
+                                    <div className="mt-3 text-xs bg-white/20 inline-block px-3 py-1 rounded-full">
+                                        Performa Ayam Prima
+                                    </div>
+                                </div>
+
                             </div>
 
-                            {/* SOP Compliance Section */}
-                            <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100 mb-8">
-                                <div className="flex items-center gap-3 mb-6">
-                                    <div className="p-3 bg-green-100 rounded-lg text-green-700">
-                                        <ClipboardList className="w-6 h-6" />
+                            {/* SOP Compliance & Operational Discipline */}
+                            <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-200/80 mb-12">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-3 bg-emerald-100 rounded-2xl text-emerald-700">
+                                            <ClipboardList className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl sm:text-2xl font-bold text-slate-900">Kepatuhan Standar Operasional (SOP)</h3>
+                                            <p className="text-xs sm:text-sm text-slate-500">Parameter biosafety, manajemen iklim mikro, dan medis ayam</p>
+                                        </div>
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-800">Kepatuhan SOP & Standar Kualitas</h3>
+                                    <span className="inline-flex items-center gap-1.5 text-xs font-extrabold bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-200">
+                                        <CheckCircle className="w-4 h-4 text-emerald-600" /> Audit Lolos 100%
+                                    </span>
                                 </div>
                                 
-                                <div className="space-y-6">
-                                    <div>
-                                        <div className="flex justify-between mb-2">
-                                            <span className="font-semibold text-gray-700">Biosecurity & Sanitasi</span>
-                                            <span className="font-bold text-green-700">{activeDashboard.sop.biosecurity}%</span>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="font-bold text-slate-700 text-sm">Biosecurity & Sanitasi</span>
+                                            <span className="font-extrabold text-emerald-700 text-base">{activeDashboard.sop.biosecurity}%</span>
                                         </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-4">
-                                            <div className="bg-green-600 h-4 rounded-full transition-all duration-1000" style={{ width: `${activeDashboard.sop.biosecurity}%` }}></div>
+                                        <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                                            <div className="bg-emerald-600 h-3 rounded-full transition-all duration-1000" style={{ width: `${activeDashboard.sop.biosecurity}%` }}></div>
                                         </div>
+                                        <p className="text-[11px] text-slate-500 mt-2">Dipping roda, spray gerbang, APD steril petugas.</p>
                                     </div>
-                                    <div>
-                                        <div className="flex justify-between mb-2">
-                                            <span className="font-semibold text-gray-700">Manajemen Suhu & Ventilasi</span>
-                                            <span className="font-bold text-green-700">{activeDashboard.sop.temperature}%</span>
+
+                                    <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="font-bold text-slate-700 text-sm">Suhu & Sirkulasi Angin</span>
+                                            <span className="font-extrabold text-emerald-700 text-base">{activeDashboard.sop.temperature}%</span>
                                         </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-4">
-                                            <div className="bg-green-500 h-4 rounded-full transition-all duration-1000" style={{ width: `${activeDashboard.sop.temperature}%` }}></div>
+                                        <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                                            <div className="bg-teal-500 h-3 rounded-full transition-all duration-1000" style={{ width: `${activeDashboard.sop.temperature}%` }}></div>
                                         </div>
+                                        <p className="text-[11px] text-slate-500 mt-2">Kontrol otomatis suhu, kelembaban, dan celldex inlet.</p>
                                     </div>
-                                    <div>
-                                        <div className="flex justify-between mb-2">
-                                            <span className="font-semibold text-gray-700">Program Vaksinasi</span>
-                                            <span className="font-bold text-green-700">{activeDashboard.sop.vaccination}%</span>
+
+                                    <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="font-bold text-slate-700 text-sm">Program Vaksin & Medis</span>
+                                            <span className="font-extrabold text-emerald-700 text-base">{activeDashboard.sop.vaccination}%</span>
                                         </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-4">
-                                            <div className="bg-green-400 h-4 rounded-full transition-all duration-1000" style={{ width: `${activeDashboard.sop.vaccination}%` }}></div>
+                                        <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                                            <div className="bg-emerald-500 h-3 rounded-full transition-all duration-1000" style={{ width: `${activeDashboard.sop.vaccination}%` }}></div>
                                         </div>
+                                        <p className="text-[11px] text-slate-500 mt-2">Jadwal vaksinasi ketat ND-IB, Gumboro, dan multivitamin.</p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* PRESTASI SECTION (Updated: Smaller Layout & Clickable) */}
-                            <div className="mt-12 max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-                                <div className="p-6 text-center border-b border-gray-100 bg-gradient-to-r from-yellow-50 to-white">
-                                    <h3 className="text-2xl font-bold text-gray-800 flex items-center justify-center gap-3">
-                                        <Award className="w-8 h-8 text-yellow-500" />
-                                        Prestasi Kemitraan
-                                    </h3>
-                                    <p className="text-gray-600 mt-2">Bukti komitmen kami terhadap kualitas dan hasil panen terbaik. (Klik gambar untuk memperbesar)</p>
+                            {/* PRESTASI SECTION (Interactive Lightbox Trigger) */}
+                            <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200/80 group">
+                                <div className="p-6 text-center border-b border-slate-100 bg-gradient-to-r from-amber-50/70 via-white to-emerald-50/70 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3 text-left">
+                                        <div className="p-3 bg-amber-100 text-amber-600 rounded-2xl">
+                                            <Award className="w-7 h-7" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-slate-900">Sertifikat Prestasi Kemitraan</h3>
+                                            <p className="text-xs sm:text-sm text-slate-500">Bukti integritas & reputasi panen berprestasi di tingkat regional</p>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={() => openLightbox([{ title: "Sertifikat Prestasi Kemitraan TFARM", img: prestasiImgUrl, desc: "Sertifikat Penghargaan Prestasi Kemitraan Peternakan Broiler TFARM Timika." }], 0)}
+                                        className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm"
+                                    >
+                                        <ZoomIn className="w-4 h-4 text-amber-400" /> Perbesar Sertifikat
+                                    </button>
                                 </div>
-                                <div className="w-full bg-gray-50 p-4">
-                                    <a href="https://raw.githubusercontent.com/rcwpt/tfarm/main/prestasi%20index.jpg" target="_blank" rel="noopener noreferrer" className="block cursor-pointer hover:opacity-95 transition-opacity">
+                                <div className="p-6 bg-slate-50 flex justify-center">
+                                    <div 
+                                        onClick={() => openLightbox([{ title: "Sertifikat Prestasi Kemitraan TFARM", img: prestasiImgUrl, desc: "Sertifikat Penghargaan Prestasi Kemitraan Peternakan Broiler TFARM Timika." }], 0)}
+                                        className="relative cursor-pointer max-w-lg rounded-2xl overflow-hidden shadow-md border border-slate-200 hover:shadow-2xl transition-all duration-300"
+                                    >
                                         <img 
-                                            src="https://raw.githubusercontent.com/rcwpt/tfarm/main/prestasi%20index.jpg" 
+                                            src={prestasiImgUrl} 
+                                            onError={(e) => { e.target.src = "https://raw.githubusercontent.com/rcwpt/tfarm/main/prestasi%20index.jpg"; }} 
                                             alt="Prestasi Kemitraan TFARM" 
-                                            className="w-full h-auto rounded-lg shadow-sm"
-                                            loading="lazy"
+                                            className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" 
+                                            loading="lazy" 
                                         />
-                                    </a>
+                                        <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <span className="bg-white/90 backdrop-blur-md text-slate-900 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow-lg">
+                                                <ZoomIn className="w-4 h-4 text-emerald-600" /> Klik untuk Melihat Full HD
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                         </div>
                     </section>
 
-                    {/* About Section */}
-                    <section id="about" className="py-16 bg-white">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Spesifikasi & Fasilitas</h2>
-                            <p className="mt-4 text-lg text-gray-500">Infrastruktur lengkap untuk mendukung operasional dan kesejahteraan karyawan.</p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div className="bg-green-50 rounded-2xl p-6 border border-green-100 shadow-sm hover:shadow-md transition">
-                            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-4 text-green-600"><Layers className="w-5 h-5" /></div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Rak Baterai 2 Tingkat</h3>
-                            <p className="text-sm text-gray-600">Sistem rak 2 level dengan pakan bulat internal untuk efisiensi pakan maksimal.</p>
-                            </div>
-                            <div className="bg-green-50 rounded-2xl p-6 border border-green-100 shadow-sm hover:shadow-md transition">
-                            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-4 text-green-600"><Ruler className="w-5 h-5" /></div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Closed House 24x8m</h3>
-                            <p className="text-sm text-gray-600">Bangunan kandang utama 2 lantai presisi tinggi, sirkulasi udara terkontrol.</p>
-                            </div>
-                            <div className="bg-green-50 rounded-2xl p-6 border border-green-100 shadow-sm hover:shadow-md transition">
-                            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-4 text-green-600"><Users className="w-5 h-5" /></div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Mess & Office</h3>
-                            <p className="text-sm text-gray-600">Bangunan 2 lantai (5x12m) menempel di sisi kiri kandang.</p>
-                            </div>
-                            <div className="bg-green-50 rounded-2xl p-6 border border-green-100 shadow-sm hover:shadow-md transition">
-                            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-4 text-green-600"><Home className="w-5 h-5" /></div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Fasilitas Rapat</h3>
-                            <p className="text-sm text-gray-600">Ruang pertemuan representatif untuk koordinasi tim dan manajemen.</p>
-                            </div>
-                        </div>
-                        </div>
-                    </section>
-
-                    {/* Blueprint Section */}
-                    <section id="blueprint" className="py-16 bg-blue-900 text-white overflow-hidden relative">
-                        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                    {/* LIVE IP CALCULATOR INTERACTIVE SECTION */}
+                    <section id="calculator" className="py-20 bg-slate-900 text-white relative overflow-hidden">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                        <div className="flex flex-col md:flex-row items-center justify-between mb-10">
-                            <div>
-                            <h2 className="text-3xl font-extrabold flex items-center gap-3"><PenTool className="w-8 h-8 text-green-400" /> Sketsa Teknis</h2>
-                            <p className="mt-2 text-blue-200">Denah layout kawasan dan detail sistem kandang.</p>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            {/* Sketch 1 */}
-                            <div className="bg-blue-800/50 p-6 rounded-xl border border-blue-700/50 backdrop-blur-sm">
-                            <h3 className="text-xl font-bold mb-4 text-green-300">Layout Kawasan (Tampak Atas)</h3>
-                            <div className="w-full aspect-video bg-blue-900 rounded-lg border-2 border-dashed border-blue-400 p-4 flex items-center justify-center relative overflow-hidden">
-                                <svg viewBox="0 0 320 200" className="w-full h-full drop-shadow-lg">
-                                <defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5"/></pattern></defs>
-                                <rect width="100%" height="100%" fill="url(#grid)" />
-                                <rect x="50" y="70" width="220" height="80" fill="rgba(59, 130, 246, 0.1)" stroke="white" strokeWidth="2" />
-                                <text x="160" y="60" fill="white" fontSize="8" textAnchor="middle">KANDANG CLOSED HOUSE (24m x 8m)</text>
-                                <text x="160" y="165" fill="white" fontSize="8" textAnchor="middle">Panjang: 24 Meter</text>
-                                <text x="40" y="110" fill="white" fontSize="8" textAnchor="middle" transform="rotate(-90, 40, 110)">Lebar</text>
-                                <text x="160" y="110" fill="#93c5fd" fontSize="12" textAnchor="middle" fontWeight="bold" opacity="0.8">FULL KANDANG</text>
-                                <text x="160" y="125" fill="#93c5fd" fontSize="10" textAnchor="middle" opacity="0.8">(LANTAI 1 & 2)</text>
-                                <rect x="50" y="20" width="50" height="50" fill="rgba(249, 115, 22, 0.2)" stroke="#fdba74" strokeWidth="2" />
-                                <text x="75" y="35" fill="#fdba74" fontSize="6" textAnchor="middle" fontWeight="bold">MESS & OFFICE</text>
-                                <text x="75" y="45" fill="#fdba74" fontSize="5" textAnchor="middle">2 Lantai</text>
-                                <text x="75" y="55" fill="#fdba74" fontSize="4" textAnchor="middle">5m x 12m</text>
-                                <circle cx="75" cy="70" r="2" fill="red" />
-                                <text x="90" y="72" fill="white" fontSize="6" textAnchor="start">Akses</text>
-                                </svg>
-                            </div>
-                            <p className="mt-3 text-sm text-blue-200 italic text-center">*Mess/Office menempel di bagian atas-kiri (hulu) kandang utama.</p>
+                            
+                            <div className="text-center max-w-3xl mx-auto mb-14">
+                                <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
+                                    <Calculator className="w-4 h-4 text-emerald-400" /> Simulasi Produktivitas
+                                </div>
+                                <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Kalkulator Indeks Performa (IP) Broiler</h2>
+                                <p className="mt-3 text-slate-300 text-base sm:text-lg">
+                                    Hitung langsung skor IP dan estimasi biomassa panen dengan memasukkan parameter kandang Anda.
+                                </p>
                             </div>
 
-                            {/* Sketch 2 */}
-                            <div className="bg-blue-800/50 p-6 rounded-xl border border-blue-700/50 backdrop-blur-sm">
-                            <h3 className="text-xl font-bold mb-4 text-green-300">Potongan Melintang (Cross Section)</h3>
-                            <div className="w-full aspect-video bg-blue-900 rounded-lg border-2 border-dashed border-blue-400 p-4 flex items-center justify-center relative">
-                                <svg viewBox="0 0 240 160" className="w-full h-full drop-shadow-lg">
-                                <line x1="10" y1="150" x2="230" y2="150" stroke="white" strokeWidth="2" />
-                                <line x1="10" y1="80" x2="230" y2="80" stroke="white" strokeWidth="2" />
-                                <path d="M 10 150 L 10 30 L 120 10 L 230 30 L 230 150" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-                                <text x="235" y="75" fill="white" fontSize="6" opacity="0.7">Lt 2</text>
-                                <text x="235" y="145" fill="white" fontSize="6" opacity="0.7">Lt 1</text>
-                                {[150, 80].map((floorY, i) => (
-                                    <g key={i} transform={`translate(0, ${floorY - 40})`}> 
-                                    <g transform="translate(20, 0)">
-                                        <rect x="0" y="0" width="40" height="35" fill="rgba(34, 197, 94, 0.2)" stroke="#22c55e" strokeWidth="1" />
-                                        <line x1="0" y1="17.5" x2="40" y2="17.5" stroke="#22c55e" strokeWidth="0.5" />
-                                        <circle cx="20" cy="8.75" r="5" fill="#f97316" />
-                                        <circle cx="20" cy="26.25" r="5" fill="#f97316" />
-                                    </g>
-                                    <g transform="translate(80, 0)">
-                                        <rect x="0" y="0" width="80" height="35" fill="rgba(34, 197, 94, 0.2)" stroke="#22c55e" strokeWidth="1" />
-                                        <line x1="0" y1="17.5" x2="80" y2="17.5" stroke="#22c55e" strokeWidth="0.5" />
-                                        <line x1="40" y1="0" x2="40" y2="35" stroke="#22c55e" strokeWidth="0.5" strokeDasharray="2" />
-                                        <circle cx="20" cy="8.75" r="5" fill="#f97316" />
-                                        <circle cx="20" cy="26.25" r="5" fill="#f97316" />
-                                        <circle cx="60" cy="8.75" r="5" fill="#f97316" />
-                                        <circle cx="60" cy="26.25" r="5" fill="#f97316" />
-                                    </g>
-                                    <g transform="translate(180, 0)">
-                                        <rect x="0" y="0" width="40" height="35" fill="rgba(34, 197, 94, 0.2)" stroke="#22c55e" strokeWidth="1" />
-                                        <line x1="0" y1="17.5" x2="40" y2="17.5" stroke="#22c55e" strokeWidth="0.5" />
-                                        <circle cx="20" cy="8.75" r="5" fill="#f97316" />
-                                        <circle cx="20" cy="26.25" r="5" fill="#f97316" />
-                                    </g>
-                                    </g>
-                                ))}
-                                <text x="70" y="145" fill="white" fontSize="4" textAnchor="middle" opacity="0.5">Jalan</text>
-                                <text x="170" y="145" fill="white" fontSize="4" textAnchor="middle" opacity="0.5">Jalan</text>
-                                <text x="120" y="15" fill="#4ade80" fontSize="5" textAnchor="middle">Rak Dibuat Lebar Memenuhi Layout (Efisiensi Tinggi)</text>
-                                <text x="120" y="100" fill="white" fontSize="4" textAnchor="middle">Rak Tengah Gabung (Double Width)</text>
-                                </svg>
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto">
+                                
+                                {/* Input Controls */}
+                                <div className="lg:col-span-7 bg-slate-800/90 border border-slate-700 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-2xl">
+                                    <h3 className="text-lg font-bold text-emerald-400 mb-6 flex items-center gap-2">
+                                        <PenTool className="w-5 h-5" /> Parameter Panen
+                                    </h3>
+
+                                    <div className="space-y-5">
+                                        {/* DOC Input */}
+                                        <div>
+                                            <div className="flex justify-between text-sm mb-1.5">
+                                                <span className="text-slate-300 font-medium">Populasi DOC Masuk</span>
+                                                <span className="font-mono font-bold text-emerald-300">{Number(calcDoc).toLocaleString()} Ekor</span>
+                                            </div>
+                                            <input 
+                                                type="range" 
+                                                min="1000" 
+                                                max="20000" 
+                                                step="500" 
+                                                value={calcDoc} 
+                                                onChange={(e) => setCalcDoc(e.target.value)}
+                                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
+                                            />
+                                        </div>
+
+                                        {/* Weight Input */}
+                                        <div>
+                                            <div className="flex justify-between text-sm mb-1.5">
+                                                <span className="text-slate-300 font-medium">Bobot Rata-rata Panen (kg)</span>
+                                                <span className="font-mono font-bold text-emerald-300">{calcWeight} kg</span>
+                                            </div>
+                                            <input 
+                                                type="range" 
+                                                min="1.2" 
+                                                max="3.5" 
+                                                step="0.05" 
+                                                value={calcWeight} 
+                                                onChange={(e) => setCalcWeight(e.target.value)}
+                                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
+                                            />
+                                        </div>
+
+                                        {/* Age Input */}
+                                        <div>
+                                            <div className="flex justify-between text-sm mb-1.5">
+                                                <span className="text-slate-300 font-medium">Umur Panen (Hari)</span>
+                                                <span className="font-mono font-bold text-emerald-300">{calcAge} Hari</span>
+                                            </div>
+                                            <input 
+                                                type="range" 
+                                                min="28" 
+                                                max="50" 
+                                                step="1" 
+                                                value={calcAge} 
+                                                onChange={(e) => setCalcAge(e.target.value)}
+                                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
+                                            />
+                                        </div>
+
+                                        {/* FCR Input */}
+                                        <div>
+                                            <div className="flex justify-between text-sm mb-1.5">
+                                                <span className="text-slate-300 font-medium">FCR (Feed Conversion Ratio)</span>
+                                                <span className="font-mono font-bold text-emerald-300">{calcFcr}</span>
+                                            </div>
+                                            <input 
+                                                type="range" 
+                                                min="1.20" 
+                                                max="2.00" 
+                                                step="0.01" 
+                                                value={calcFcr} 
+                                                onChange={(e) => setCalcFcr(e.target.value)}
+                                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
+                                            />
+                                        </div>
+
+                                        {/* Mortality Input */}
+                                        <div>
+                                            <div className="flex justify-between text-sm mb-1.5">
+                                                <span className="text-slate-300 font-medium">Deplesi / Kematian (%)</span>
+                                                <span className="font-mono font-bold text-emerald-300">{calcMortality}%</span>
+                                            </div>
+                                            <input 
+                                                type="range" 
+                                                min="1.0" 
+                                                max="15.0" 
+                                                step="0.1" 
+                                                value={calcMortality} 
+                                                onChange={(e) => setCalcMortality(e.target.value)}
+                                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
+                                            />
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                {/* Calculated Output Display */}
+                                <div className="lg:col-span-5 bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 border border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col justify-between">
+                                    <div>
+                                        <div className="flex justify-between items-center mb-4">
+                                            <span className="text-xs text-slate-400 uppercase tracking-widest font-bold">Hasil Perhitungan IP</span>
+                                            <span className={`text-xs px-3 py-1 rounded-full font-extrabold ${
+                                                calculatedIp >= 380 ? 'bg-amber-400 text-slate-950' :
+                                                calculatedIp >= 340 ? 'bg-emerald-400 text-slate-950' :
+                                                calculatedIp >= 300 ? 'bg-blue-400 text-slate-950' : 'bg-red-400 text-slate-950'
+                                            }`}>
+                                                {calculatedIp >= 380 ? '⭐ ISTIMEWA' : calculatedIp >= 340 ? 'SANGAT BAIK' : calculatedIp >= 300 ? 'BAIK' : 'PERLU EVALUASI'}
+                                            </span>
+                                        </div>
+
+                                        <div className="text-6xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-200 tracking-tight my-2">
+                                            {calculatedIp}
+                                        </div>
+
+                                        <p className="text-xs text-slate-400 mb-6 font-mono">
+                                            Rumus: (Daya Hidup % × Bobot kg) / (FCR × Umur Hari) × 100
+                                        </p>
+                                    </div>
+
+                                    <div className="space-y-3 pt-6 border-t border-slate-700/80 text-sm">
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-400">Daya Hidup (Livability):</span>
+                                            <span className="font-bold text-white">{calculatedLivability.toFixed(1)}%</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-400">Total Panen Hidup:</span>
+                                            <span className="font-bold text-emerald-400">{Math.round(Number(calcDoc) * (calculatedLivability / 100)).toLocaleString()} Ekor</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-400">Total Estimasi Biomassa:</span>
+                                            <span className="font-bold text-emerald-300">{calculatedBiomassKg.toLocaleString()} kg</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8">
+                                        <a href="9000.html" className="w-full inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-4 py-3 rounded-2xl text-xs sm:text-sm transition shadow-lg">
+                                            <Ruler className="w-4 h-4" /> Buka Kalkulator Ventilasi di Blueprint 9.000 <ArrowRight className="w-4 h-4" />
+                                        </a>
+                                    </div>
+                                </div>
+
                             </div>
-                            <p className="mt-3 text-sm text-blue-200 italic text-center">*Rak dimaksimalkan lebarnya untuk kapasitas maksimal dengan 2 lorong servis.</p>
-                            </div>
-                        </div>
+
                         </div>
                     </section>
 
-                    {/* Construction Section */}
-                    <section id="construction" className="py-16 bg-gray-50">
+                    {/* ABOUT / FACILITIES SECTION */}
+                    <section id="about" className="py-20 bg-white border-b border-slate-200">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex flex-col md:flex-row justify-between items-end mb-10 border-b border-gray-200 pb-5">
-                            <div className="w-full md:w-auto">
-                            <h2 className="text-3xl font-extrabold text-gray-900">Jurnal Pembangunan</h2>
-                            <p className="mt-2 text-gray-500">Dokumentasi proses konstruksi dari nol hingga siap beroperasi.</p>
+                            
+                            <div className="text-center max-w-3xl mx-auto mb-16">
+                                <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
+                                    <Layers className="w-4 h-4 text-emerald-600" /> Infrastruktur Berkelanjutan
+                                </div>
+                                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Spesifikasi & Fasilitas Kandang</h2>
+                                <p className="mt-3 text-base sm:text-lg text-slate-600">
+                                    Infrastruktur modern dan fasilitas terpadu untuk kenyamanan kerja tim dan performa ayam terbaik.
+                                </p>
                             </div>
-                            <div className="mt-4 md:mt-0 w-full md:w-auto flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
-                            {[
-                                { id: 'all', label: 'Semua' },
-                                { id: 'tahap1', label: 'Struktur Awal' },
-                                { id: 'tahap2', label: 'Bangunan' },
-                                { id: 'tahap3', label: 'Instalasi Rak' },
-                                { id: 'tahap4', label: 'Finishing' },
-                            ].map((tab) => (
-                                <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${activeTab === tab.id ? 'bg-green-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'}`}>
-                                {tab.label}
-                                </button>
-                            ))}
-                            </div>
-                        </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {constructionData.filter(item => activeTab === 'all' || item.category === activeTab).map((item) => (
-                            <div key={item.id} className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col">
-                                <div className="relative h-48 overflow-hidden bg-gray-200">
-                                <img src={baseUrl + item.img} alt={item.desc} loading="lazy" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" onError={(e) => {e.target.src = "https://via.placeholder.com/400x300?text=Loading+Image"}} />
-                                <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">#{item.id}</div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                
+                                <div className="bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-300 group">
+                                    <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 text-emerald-700 group-hover:scale-110 transition-transform">
+                                        <Layers className="w-6 h-6" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-slate-900 mb-2">Rak Baterai 2 Tingkat</h3>
+                                    <p className="text-sm text-slate-600 leading-relaxed">
+                                        Sistem rak 2 level dengan nipple drink dan pakan internal untuk efisiensi pakan maksimal serta sanitasi unggul.
+                                    </p>
                                 </div>
-                                <div className="p-4 flex-1 flex flex-col justify-between">
-                                <div className="flex items-start gap-2">
-                                    <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
-                                    <p className="text-sm font-medium text-gray-700">{item.desc}</p>
+
+                                <div className="bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-300 group">
+                                    <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 text-emerald-700 group-hover:scale-110 transition-transform">
+                                        <Ruler className="w-6 h-6" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-slate-900 mb-2">Closed House 24x8m</h3>
+                                    <p className="text-sm text-slate-600 leading-relaxed">
+                                        Bangunan 2 lantai dengan kontrol iklim terpadu, tirai otomatis, dan celldex cooling pad menjaga suhu sejuk stabil.
+                                    </p>
                                 </div>
+
+                                <div className="bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-300 group">
+                                    <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 text-emerald-700 group-hover:scale-110 transition-transform">
+                                        <Users className="w-6 h-6" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-slate-900 mb-2">Mess & Kantor 2 Lantai</h3>
+                                    <p className="text-sm text-slate-600 leading-relaxed">
+                                        Bangunan (5x12m) terintegrasi di sisi kiri kandang, dilengkapi kamar istirahat, pantry, dan sanitasi karyawan.
+                                    </p>
                                 </div>
+
+                                <div className="bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-300 group">
+                                    <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 text-emerald-700 group-hover:scale-110 transition-transform">
+                                        <Home className="w-6 h-6" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-slate-900 mb-2">Ruang Rapat & Monitoring</h3>
+                                    <p className="text-sm text-slate-600 leading-relaxed">
+                                        Ruang representatif untuk koordinasi teknis tim, pencatatan harian, dan penerimaan tamu mitra peternakan.
+                                    </p>
+                                </div>
+
                             </div>
-                            ))}
-                        </div>
+
                         </div>
                     </section>
 
-                    {/* Gallery Section */}
-                    <section id="gallery" className="py-16 bg-white">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl font-extrabold text-gray-900">Galeri Operasional</h2>
-                            <p className="mt-4 text-lg text-gray-500">TFARM dalam keadaan beroperasi penuh.</p>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {operationsData.map((op, idx) => (
-                            <div key={idx} className="relative rounded-2xl overflow-hidden shadow-lg group h-64 sm:h-80">
-                                <img src={baseUrl + op.img} alt={op.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
-                                <h3 className="text-white text-2xl font-bold">{op.title}</h3>
-                                <p className="text-gray-300 mt-1">{op.desc}</p>
+                    {/* BLUEPRINT & TECHNICAL SKETCH SECTION */}
+                    <section id="blueprint" className="py-20 bg-slate-900 text-white relative overflow-hidden">
+                        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(#38bdf8 1px, transparent 1px), linear-gradient(90deg, #38bdf8 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                        
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                            
+                            <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
+                                <div>
+                                    <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
+                                        <PenTool className="w-4 h-4 text-emerald-400" /> Sketsa Rekayasa Kandang
+                                    </div>
+                                    <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Desain Teknis Kandang TFARM (24x8m)</h2>
+                                    <p className="mt-2 text-slate-300 text-sm sm:text-base">Tata letak kawasan presisi dan potongan melintang sistem rak ganda.</p>
                                 </div>
-                            </div>
-                            ))}
-                        </div>
-                        </div>
-                    </section>
 
-                    {/* Location Section */}
-                    <section id="location" className="py-16 bg-green-50">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                            <div className="order-2 lg:order-1">
-                            <h2 className="text-3xl font-extrabold text-gray-900 mb-6">Lokasi Kami</h2>
-                            <div className="space-y-4">
-                                <div className="flex items-start">
-                                <div className="bg-white p-2 rounded-full shadow-sm text-green-600 mr-4"><MapPin className="w-6 h-6" /></div>
-                                <div><h4 className="text-lg font-bold text-gray-900">Alamat</h4><p className="text-gray-600">Timika, Papua, Indonesia</p></div>
-                                </div>
-                                <div className="flex items-start">
-                                <div className="bg-white p-2 rounded-full shadow-sm text-green-600 mr-4"><Home className="w-6 h-6" /></div>
-                                <div><h4 className="text-lg font-bold text-gray-900">Fasilitas Lengkap</h4><p className="text-gray-600">Kandang 2 Lantai (24x8m), Mess Karyawan (5x12m), Kamar Tamu, Ruang Rapat.</p></div>
-                                </div>
-                                <div className="mt-8">
-                                <a href={mapLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center w-full justify-center lg:w-auto px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-blue-600 hover:bg-blue-700 transition transform hover:-translate-y-1">
-                                    Buka Navigasi Google Maps <ArrowRight className="ml-2 w-5 h-5" />
+                                <a href="9000.html" className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-5 py-3 rounded-2xl text-sm transition shadow-lg self-start lg:self-auto">
+                                    <Ruler className="w-4 h-4" /> Buka Cetak Biru Model 12x50m (9.000 Ekor) <ArrowRight className="w-4 h-4" />
                                 </a>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                                
+                                {/* Sketch 1: Layout Kawasan */}
+                                <div className="bg-slate-800/80 p-6 sm:p-7 rounded-3xl border border-slate-700/80 backdrop-blur-md shadow-2xl">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-lg font-bold text-emerald-300">Layout Kawasan (Tampak Atas 24x8m)</h3>
+                                        <span className="text-xs bg-slate-700 px-2.5 py-1 rounded-full text-slate-300">Model 7.000</span>
+                                    </div>
+                                    
+                                    <div className="w-full aspect-video bg-slate-950 rounded-2xl border-2 border-dashed border-slate-700 p-4 flex items-center justify-center relative overflow-hidden shadow-inner">
+                                        <svg viewBox="0 0 320 200" className="w-full h-full drop-shadow-md">
+                                            <defs>
+                                                <pattern id="gridIndex" width="10" height="10" patternUnits="userSpaceOnUse">
+                                                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(56, 189, 248, 0.15)" strokeWidth="0.5"/>
+                                                </pattern>
+                                            </defs>
+                                            <rect width="100%" height="100%" fill="url(#gridIndex)" />
+                                            
+                                            {/* Main House Outline */}
+                                            <rect x="50" y="70" width="220" height="80" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" strokeWidth="2" rx="4" />
+                                            <text x="160" y="58" fill="#a7f3d0" fontSize="8" fontWeight="bold" textAnchor="middle">KANDANG CLOSED HOUSE (24m x 8m)</text>
+                                            <text x="160" y="165" fill="#94a3b8" fontSize="8" textAnchor="middle">Panjang: 24 Meter</text>
+                                            <text x="38" y="110" fill="#94a3b8" fontSize="8" textAnchor="middle" transform="rotate(-90, 38, 110)">Lebar: 8m</text>
+                                            
+                                            <text x="160" y="105" fill="#6ee7b7" fontSize="11" textAnchor="middle" fontWeight="bold">FULL KANDANG CLOSED HOUSE</text>
+                                            <text x="160" y="122" fill="#34d399" fontSize="9" textAnchor="middle">(LANTAI 1 & 2 - KAPASITAS 7.000 EKOR)</text>
+                                            
+                                            {/* Mess & Office */}
+                                            <rect x="50" y="18" width="55" height="48" fill="rgba(249, 115, 22, 0.2)" stroke="#fb923c" strokeWidth="1.5" rx="3" />
+                                            <text x="77" y="34" fill="#fed7aa" fontSize="6.5" textAnchor="middle" fontWeight="bold">MESS & KANTOR</text>
+                                            <text x="77" y="45" fill="#fdba74" fontSize="5" textAnchor="middle">2 Lantai (5m x 12m)</text>
+                                            <circle cx="77" cy="68" r="2.5" fill="#ef4444" />
+                                            <text x="90" y="70" fill="#fca5a5" fontSize="6" textAnchor="start">Pintu Akses</text>
+                                        </svg>
+                                    </div>
+                                    <p className="mt-3 text-xs text-slate-400 italic text-center">*Mess & kantor terhubung langsung di sudut hulu kandang untuk monitoring 24 jam.</p>
                                 </div>
-                            </div>
-                            </div>
-                            <div className="relative w-full h-80 lg:h-96 bg-gray-200 rounded-2xl overflow-hidden shadow-lg border-4 border-white order-1 lg:order-2 group">
-                            <iframe title="TFARM Location" width="100%" height="100%" frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0" src="https://maps.google.com/maps?q=Timika+Papua&t=k&z=12&ie=UTF8&iwloc=&output=embed" className="w-full h-full filter group-hover:brightness-75 transition duration-300"></iframe>
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-xl text-center transform scale-100 group-hover:scale-105 transition duration-300 pointer-events-auto">
-                                <p className="font-bold text-gray-800 mb-2">Lihat Lokasi Presisi</p>
-                                <a href={mapLink} target="_blank" rel="noopener noreferrer" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700">Buka di Aplikasi Maps</a>
+
+                                {/* Sketch 2: Cross Section */}
+                                <div className="bg-slate-800/80 p-6 sm:p-7 rounded-3xl border border-slate-700/80 backdrop-blur-md shadow-2xl">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-lg font-bold text-emerald-300">Potongan Melintang (Cross Section)</h3>
+                                        <span className="text-xs bg-slate-700 px-2.5 py-1 rounded-full text-slate-300">2 Tingkat</span>
+                                    </div>
+                                    
+                                    <div className="w-full aspect-video bg-slate-950 rounded-2xl border-2 border-dashed border-slate-700 p-4 flex items-center justify-center relative shadow-inner">
+                                        <svg viewBox="0 0 240 160" className="w-full h-full drop-shadow-md">
+                                            <line x1="10" y1="150" x2="230" y2="150" stroke="#64748b" strokeWidth="2" />
+                                            <line x1="10" y1="80" x2="230" y2="80" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 2" />
+                                            <path d="M 10 150 L 10 30 L 120 10 L 230 30 L 230 150" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
+                                            
+                                            <text x="235" y="75" fill="#94a3b8" fontSize="6" opacity="0.8">Lt 2</text>
+                                            <text x="235" y="145" fill="#94a3b8" fontSize="6" opacity="0.8">Lt 1</text>
+                                            
+                                            {[150, 80].map((floorY, i) => (
+                                                <g key={i} transform={`translate(0, ${floorY - 40})`}> 
+                                                    {/* Side Left Rack */}
+                                                    <g transform="translate(20, 0)">
+                                                        <rect x="0" y="0" width="40" height="35" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" strokeWidth="1" rx="2" />
+                                                        <line x1="0" y1="17.5" x2="40" y2="17.5" stroke="#10b981" strokeWidth="0.5" />
+                                                        <circle cx="20" cy="8.75" r="4" fill="#f97316" />
+                                                        <circle cx="20" cy="26.25" r="4" fill="#f97316" />
+                                                    </g>
+                                                    {/* Center Double Rack */}
+                                                    <g transform="translate(80, 0)">
+                                                        <rect x="0" y="0" width="80" height="35" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" strokeWidth="1" rx="2" />
+                                                        <line x1="0" y1="17.5" x2="80" y2="17.5" stroke="#10b981" strokeWidth="0.5" />
+                                                        <line x1="40" y1="0" x2="40" y2="35" stroke="#10b981" strokeWidth="0.5" strokeDasharray="2" />
+                                                        <circle cx="20" cy="8.75" r="4" fill="#f97316" />
+                                                        <circle cx="20" cy="26.25" r="4" fill="#f97316" />
+                                                        <circle cx="60" cy="8.75" r="4" fill="#f97316" />
+                                                        <circle cx="60" cy="26.25" r="4" fill="#f97316" />
+                                                    </g>
+                                                    {/* Side Right Rack */}
+                                                    <g transform="translate(180, 0)">
+                                                        <rect x="0" y="0" width="40" height="35" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" strokeWidth="1" rx="2" />
+                                                        <line x1="0" y1="17.5" x2="40" y2="17.5" stroke="#10b981" strokeWidth="0.5" />
+                                                        <circle cx="20" cy="8.75" r="4" fill="#f97316" />
+                                                        <circle cx="20" cy="26.25" r="4" fill="#f97316" />
+                                                    </g>
+                                                </g>
+                                            ))}
+                                            
+                                            <text x="70" y="145" fill="#a7f3d0" fontSize="4" textAnchor="middle">Lorong</text>
+                                            <text x="170" y="145" fill="#a7f3d0" fontSize="4" textAnchor="middle">Lorong</text>
+                                            <text x="120" y="18" fill="#4ade80" fontSize="5" fontWeight="bold" textAnchor="middle">Struktur Rak Efisiensi Maksimal (2 Jalur Servis)</text>
+                                        </svg>
+                                    </div>
+                                    <p className="mt-3 text-xs text-slate-400 italic text-center">*Konfigurasi rak ganda tengah menghemat ruang & memperlancar sirkulasi lorong.</p>
                                 </div>
+
                             </div>
+
+                            {/* BLUEPRINT CTA BANNER */}
+                            <div className="bg-gradient-to-r from-emerald-800 via-teal-800 to-slate-900 rounded-3xl p-8 border border-emerald-500/40 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+                                <div className="space-y-2 text-center md:text-left">
+                                    <span className="bg-amber-400 text-slate-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">Ekspansi 9.000 Ekor</span>
+                                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white">Ingin Melihat Desain Skala 12x50m?</h3>
+                                    <p className="text-emerald-100 text-sm max-w-2xl">
+                                        Pelajari cetak biru interaktif 12x50m dengan 8 Exhaust Fan (4 Diesel + 4 Listrik), simulasi sirkulasi udara, serta kalkulator densitas lengkap.
+                                    </p>
+                                </div>
+                                <a href="9000.html" className="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-900 font-extrabold px-6 py-3.5 rounded-2xl text-sm shadow-xl transition transform hover:scale-105 flex-shrink-0">
+                                    Buka Blueprint 9.000 Ekor <ArrowRight className="w-4 h-4 text-emerald-600" />
+                                </a>
                             </div>
-                        </div>
+
                         </div>
                     </section>
 
-                    {/* Footer */}
-                    <footer className="bg-gray-900 text-white py-12">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-                        <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                            <div className="bg-white p-1 rounded-full">
-                                <img src={logoUrl} alt="Logo TFARM" className="h-6 w-6 object-contain" />
+                    {/* CONSTRUCTION JOURNAL & TIMELINE SECTION */}
+                    <section id="construction" className="py-20 bg-slate-50 border-b border-slate-200">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 pb-6 border-b border-slate-200 gap-6">
+                                <div>
+                                    <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
+                                        <Activity className="w-4 h-4 text-emerald-600" /> Jurnal Konstruksi Lapangan
+                                    </div>
+                                    <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Dokumentasi Pembangunan (23 Tahap)</h2>
+                                    <p className="mt-2 text-slate-600 text-sm sm:text-base">Proses rekayasa kandang dari nol pematangan lahan hingga siap chick-in.</p>
+                                </div>
+                                
+                                {/* Stage Filter Tabs */}
+                                <div className="w-full md:w-auto flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
+                                    {[
+                                        { id: 'all', label: 'Semua (23)' },
+                                        { id: 'tahap1', label: 'Tahap 1: Struktur' },
+                                        { id: 'tahap2', label: 'Tahap 2: Dinding/Atap' },
+                                        { id: 'tahap3', label: 'Tahap 3: Rak Baterai' },
+                                        { id: 'tahap4', label: 'Tahap 4: Chick-In' },
+                                    ].map((tab) => (
+                                        <button 
+                                            key={tab.id} 
+                                            onClick={() => setActiveTab(tab.id)} 
+                                            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
+                                                activeTab === tab.id 
+                                                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30' 
+                                                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                                            }`}
+                                        >
+                                            {tab.label}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                            <span className="font-bold text-xl">TFARM</span>
+
+                            {/* Photo Cards Grid with Lightbox Trigger */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {constructionData
+                                    .filter(item => activeTab === 'all' || item.category === activeTab)
+                                    .map((item, idx, filteredArr) => (
+                                        <div 
+                                            key={item.id} 
+                                            onClick={() => openLightbox(filteredArr.map(x => ({ title: `Tahap #${x.id}`, desc: x.desc, img: baseUrl + x.img })), idx)}
+                                            className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-200 flex flex-col cursor-pointer transform hover:-translate-y-1"
+                                        >
+                                            <div className="relative h-52 overflow-hidden bg-slate-200">
+                                                <img 
+                                                    src={baseUrl + item.img} 
+                                                    alt={item.desc} 
+                                                    loading="lazy" 
+                                                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" 
+                                                    onError={(e) => { e.target.src = "https://via.placeholder.com/400x300?text=TFARM+Tahap+" + item.id; }} 
+                                                />
+                                                <div className="absolute top-3 right-3 bg-slate-950/80 text-white text-xs font-mono font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20">
+                                                    #{item.id}
+                                                </div>
+                                                <div className="absolute inset-0 bg-slate-950/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <span className="bg-white/95 text-slate-900 text-xs font-bold px-3 py-1.5 rounded-xl shadow-lg flex items-center gap-1.5">
+                                                        <ZoomIn className="w-3.5 h-3.5 text-emerald-600" /> Lihat Foto
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="p-4 flex-1 flex flex-col justify-between bg-white">
+                                                <div className="flex items-start gap-2">
+                                                    <CheckCircle className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                                                    <p className="text-xs sm:text-sm font-semibold text-slate-700 leading-snug">{item.desc}</p>
+                                                </div>
+                                                <div className="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center text-[11px] text-slate-400">
+                                                    <span className="capitalize">{item.category.replace('tahap', 'Tahap ')}</span>
+                                                    <span className="text-emerald-600 font-bold group-hover:underline">Perbesar →</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                            </div>
+
                         </div>
-                        <div className="text-gray-400 text-sm">&copy; {new Date().getFullYear()} TFARM Timika. All rights reserved.</div>
+                    </section>
+
+                    {/* OPERATIONAL GALLERY SECTION */}
+                    <section id="gallery" className="py-20 bg-white border-b border-slate-200">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            
+                            <div className="text-center max-w-3xl mx-auto mb-16">
+                                <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
+                                    <ChickenIcon className="w-4 h-4 text-emerald-600" /> Kandang Aktif
+                                </div>
+                                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Galeri Operasional Ternak</h2>
+                                <p className="mt-3 text-base sm:text-lg text-slate-600">
+                                    Dokumentasi nyata kegiatan operasional, sanitasi, dan panen broiler di TFARM Timika.
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {operationsData.map((op, idx) => (
+                                    <div 
+                                        key={idx} 
+                                        onClick={() => openLightbox(operationsData.map(x => ({ title: x.title, desc: x.desc, img: baseUrl + x.img })), idx)}
+                                        className="relative rounded-3xl overflow-hidden shadow-lg group h-72 sm:h-96 cursor-pointer border border-slate-200 transform hover:-translate-y-1 transition duration-300"
+                                    >
+                                        <img 
+                                            src={baseUrl + op.img} 
+                                            alt={op.title} 
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" 
+                                            loading="lazy" 
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent flex flex-col justify-end p-6 sm:p-8">
+                                            <span className="text-emerald-400 text-xs font-extrabold uppercase tracking-wider mb-1">Operasional Berjalan</span>
+                                            <h3 className="text-white text-2xl font-black">{op.title}</h3>
+                                            <p className="text-slate-300 mt-2 text-sm max-w-xl">{op.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                        </div>
+                    </section>
+
+                    {/* LOCATION & CONTACT SECTION */}
+                    <section id="location" className="py-20 bg-emerald-950 text-white relative overflow-hidden">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                            
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                                
+                                {/* Location Details */}
+                                <div className="lg:col-span-6 space-y-6">
+                                    <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+                                        <MapPin className="w-4 h-4 text-emerald-400" /> Lokasi Strategis
+                                    </div>
+                                    
+                                    <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
+                                        Kunjungi Lokasi Peternakan TFARM Timika
+                                    </h2>
+                                    
+                                    <p className="text-slate-300 text-base">
+                                        Terletak di kawasan agrobisnis Timika, Papua, dengan akses jalan luas untuk armada pengiriman DOC, pakan, dan panen logistik ayam.
+                                    </p>
+
+                                    <div className="space-y-4 pt-2">
+                                        <div className="flex items-start gap-4 bg-emerald-900/50 p-4 rounded-2xl border border-emerald-800">
+                                            <div className="p-3 bg-emerald-800 rounded-xl text-emerald-300 flex-shrink-0">
+                                                <MapPin className="w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-white text-base">Alamat Peternakan</h4>
+                                                <p className="text-slate-300 text-sm mt-0.5">Timika, Kabupaten Mimika, Provinsi Papua Tengah, Indonesia</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-start gap-4 bg-emerald-900/50 p-4 rounded-2xl border border-emerald-800">
+                                            <div className="p-3 bg-emerald-800 rounded-xl text-emerald-300 flex-shrink-0">
+                                                <Home className="w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-white text-base">Fasilitas Tapak</h4>
+                                                <p className="text-slate-300 text-sm mt-0.5">Kandang 2 Lantai (24x8m), Mess & Kantor (5x12m), Gudang Pakan, Ruang Genset & Tamu.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="flex flex-wrap gap-4 pt-4">
+                                        <a 
+                                            href={mapLink} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer" 
+                                            className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-bold px-6 py-3.5 rounded-2xl text-sm shadow-xl transition transform hover:-translate-y-1"
+                                        >
+                                            <Compass className="w-5 h-5 text-slate-950" /> Buka di Google Maps <ExternalLink className="w-4 h-4" />
+                                        </a>
+                                        <button 
+                                            onClick={copyAddress} 
+                                            className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-3.5 rounded-2xl text-sm border border-slate-700 transition"
+                                        >
+                                            <CopyIcon className="w-4 h-4 text-emerald-400" /> Salin Alamat
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Google Maps Embed Card */}
+                                <div className="lg:col-span-6">
+                                    <div className="relative w-full h-80 sm:h-96 bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border-4 border-emerald-800/80 group">
+                                        <iframe 
+                                            title="TFARM Location Timika" 
+                                            width="100%" 
+                                            height="100%" 
+                                            frameBorder="0" 
+                                            scrolling="no" 
+                                            marginHeight="0" 
+                                            marginWidth="0" 
+                                            src="https://maps.google.com/maps?q=Timika+Papua&t=k&z=12&ie=UTF8&iwloc=&output=embed" 
+                                            className="w-full h-full filter brightness-90 contrast-105 group-hover:brightness-100 transition duration-300"
+                                        ></iframe>
+                                        
+                                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-4">
+                                            <div className="bg-slate-950/90 backdrop-blur-md p-5 rounded-2xl shadow-2xl text-center border border-emerald-500/40 pointer-events-auto transform scale-95 group-hover:scale-100 transition duration-300 max-w-xs">
+                                                <p className="font-bold text-white text-sm mb-1">Titik Koordinat Timika</p>
+                                                <p className="text-xs text-slate-300 mb-3">Klik tombol untuk panduan navigasi rute lengkap via aplikasi Maps</p>
+                                                <a 
+                                                    href={mapLink} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer" 
+                                                    className="inline-block bg-emerald-500 text-slate-950 px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-400 shadow-md"
+                                                >
+                                                    Mulai Navigasi GPS
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </section>
+
+                    {/* FOOTER */}
+                    <footer className="bg-slate-950 text-white py-16 border-t border-slate-800">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+                                
+                                {/* Brand Column */}
+                                <div className="md:col-span-2 space-y-4">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="bg-white p-1.5 rounded-2xl shadow">
+                                            <img src={logoUrl} onError={(e) => { e.target.src = "https://raw.githubusercontent.com/rcwpt/tfarm/main/logo.png"; }} alt="Logo TFARM" className="h-8 w-8 object-contain" />
+                                        </div>
+                                        <span className="font-black text-2xl tracking-tight">TFARM TIMIKA</span>
+                                    </div>
+                                    <p className="text-slate-400 text-sm max-w-md leading-relaxed">
+                                        Peternakan ayam broiler modern di Timika, Papua. Menerapkan teknologi Closed House 2 tingkat berstandar nasional untuk ketahanan pangan berkualitas tinggi.
+                                    </p>
+                                </div>
+
+                                {/* Quick Links */}
+                                <div>
+                                    <h4 className="font-bold text-white text-sm mb-4 uppercase tracking-wider">Navigasi Halaman</h4>
+                                    <ul className="space-y-2.5 text-sm text-slate-400">
+                                        <li><a href="#dashboard" className="hover:text-emerald-400 transition">Dashboard Performa IP</a></li>
+                                        <li><a href="#calculator" className="hover:text-emerald-400 transition">Kalkulator IP Broiler</a></li>
+                                        <li><a href="#about" className="hover:text-emerald-400 transition">Fasilitas & Spesifikasi</a></li>
+                                        <li><a href="#blueprint" className="hover:text-emerald-400 transition">Sketsa Teknis 7.000 Ekor</a></li>
+                                        <li><a href="#construction" className="hover:text-emerald-400 transition">Jurnal Pembangunan (23 Tahap)</a></li>
+                                        <li><a href="#gallery" className="hover:text-emerald-400 transition">Galeri Operasional</a></li>
+                                    </ul>
+                                </div>
+
+                                {/* Blueprint Links */}
+                                <div>
+                                    <h4 className="font-bold text-white text-sm mb-4 uppercase tracking-wider">Cetak Biru Khusus</h4>
+                                    <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+                                        <p className="text-xs text-slate-300">
+                                            Model kandang skala 12x50m (9.000 ekor) dengan ventilasi 8 exhaust fan:
+                                        </p>
+                                        <a href="9000.html" className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300">
+                                            Buka Blueprint 9.000 Ekor →
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div className="mt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
+                                <p>&copy; {new Date().getFullYear()} TFARM Timika. All rights reserved. Dikembangkan untuk efisiensi agrobisnis peternakan modern.</p>
+                                <div className="flex items-center space-x-4">
+                                    <a href="index.html" className="hover:text-slate-300 transition">Beranda</a>
+                                    <a href="9000.html" className="hover:text-slate-300 transition">Blueprint 9000</a>
+                                    <a href={mapLink} target="_blank" rel="noopener noreferrer" className="hover:text-slate-300 transition">Google Maps</a>
+                                </div>
+                            </div>
+
                         </div>
                     </footer>
+
+                    {/* LIGHTBOX MODAL VIEWER */}
+                    {lightbox.isOpen && lightbox.list.length > 0 && (
+                        <div className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between p-4 sm:p-8 animate-fadeIn">
+                            
+                            {/* Modal Header */}
+                            <div className="flex justify-between items-center text-white pb-4 border-b border-slate-800">
+                                <div>
+                                    <h4 className="text-base sm:text-lg font-bold">{lightbox.list[lightbox.index]?.title || "Dokumentasi TFARM"}</h4>
+                                    <p className="text-xs text-slate-400">Foto {lightbox.index + 1} dari {lightbox.list.length}</p>
+                                </div>
+                                <button 
+                                    onClick={closeLightbox}
+                                    className="p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition"
+                                    aria-label="Tutup"
+                                >
+                                    <X className="w-6 h-6" />
+                                </button>
+                            </div>
+
+                            {/* Main Image View */}
+                            <div className="relative flex-1 flex items-center justify-center my-4 overflow-hidden">
+                                <img 
+                                    src={lightbox.list[lightbox.index]?.img} 
+                                    alt={lightbox.list[lightbox.index]?.desc || "TFARM Image"} 
+                                    className="max-h-[70vh] max-w-full object-contain rounded-2xl shadow-2xl border border-slate-800"
+                                />
+
+                                {/* Navigation Arrows */}
+                                {lightbox.list.length > 1 && (
+                                    <>
+                                        <button 
+                                            onClick={prevLightbox} 
+                                            className="absolute left-2 sm:left-6 p-3 bg-slate-900/80 hover:bg-slate-800 text-white rounded-2xl border border-slate-700 transition shadow-xl"
+                                            aria-label="Sebelumnya"
+                                        >
+                                            <ChevronLeft className="w-6 h-6" />
+                                        </button>
+                                        <button 
+                                            onClick={nextLightbox} 
+                                            className="absolute right-2 sm:right-6 p-3 bg-slate-900/80 hover:bg-slate-800 text-white rounded-2xl border border-slate-700 transition shadow-xl"
+                                            aria-label="Selanjutnya"
+                                        >
+                                            <ChevronRight className="w-6 h-6" />
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Caption Footer */}
+                            <div className="text-center text-slate-300 text-xs sm:text-sm bg-slate-900/80 p-4 rounded-2xl border border-slate-800 max-w-2xl mx-auto">
+                                <p>{lightbox.list[lightbox.index]?.desc}</p>
+                            </div>
+
+                        </div>
+                    )}
+
                 </div>
             );
         };
