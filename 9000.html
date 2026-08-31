@@ -14,27 +14,6 @@
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
-                    },
-                    colors: {
-                        blueprint: {
-                            bg: '#090d16',
-                            card: '#0f172a',
-                            border: '#1e293b',
-                            accent: '#38bdf8',
-                            glow: 'rgba(56, 189, 248, 0.25)',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -64,7 +43,7 @@
             visibility: hidden;
             position: fixed;
             z-index: 100;
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(15, 23, 42, 0.96);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             color: #f8fafc;
@@ -74,19 +53,19 @@
             font-size: 0.8125rem;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.15s ease, transform 0.15s ease;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 0 15px rgba(56, 189, 248, 0.2);
+            transition: opacity 0.15s ease;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.3);
             max-width: 320px;
             line-height: 1.5;
         }
 
         .tab-btn { 
             position: relative; 
-            transition: all 0.25s ease; 
+            transition: all 0.2s ease; 
         }
         .tab-btn.active {
             color: #38bdf8;
-            background-color: rgba(56, 189, 248, 0.12);
+            background-color: rgba(56, 189, 248, 0.15);
             border-color: #0284c7;
         }
         .tab-btn.active::after {
@@ -183,11 +162,11 @@
         <div class="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 
-                {/* Brand & Breadcrumb */}
+                <!-- Brand & Breadcrumb -->
                 <div class="flex items-center space-x-3">
-                    <a href="index.html" className="flex items-center space-x-3 group">
+                    <a href="index.html" class="flex items-center space-x-3 group">
                         <div class="bg-white p-1 rounded-xl shadow-md">
-                            <img src="logo.png" onError="this.src='https://raw.githubusercontent.com/rcwpt/tfarm/main/logo.png'" alt="Logo TFARM" class="h-7 w-7 object-contain">
+                            <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/rcwpt/tfarm/main/logo.png'" alt="Logo TFARM" class="h-7 w-7 object-contain">
                         </div>
                         <span class="font-extrabold text-xl tracking-tight text-white flex items-center gap-1.5">
                             TFARM <span class="text-emerald-400 font-bold text-xs bg-emerald-950 px-2 py-0.5 rounded border border-emerald-600/40">TIMIKA</span>
@@ -204,7 +183,7 @@
                     </div>
                 </div>
 
-                {/* Navigation Links Back to index.html */}
+                <!-- Navigation Links Back to index.html -->
                 <div class="hidden md:flex items-center space-x-2 text-sm font-medium text-slate-300">
                     <a href="index.html" class="hover:text-emerald-400 hover:bg-slate-800 px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
                         <i class="fa-solid fa-house text-xs text-emerald-400"></i> Beranda
@@ -223,12 +202,12 @@
                     </a>
                 </div>
 
-                {/* Primary Action Button */}
+                <!-- Primary Action Button -->
                 <div class="flex items-center space-x-3">
                     <a href="index.html" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-bold transition">
                         <i class="fa-solid fa-arrow-left text-xs text-emerald-400"></i> Model 7.000 Ekor
                     </a>
-                    <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 px-3.5 py-1.5 rounded-xl text-xs font-black shadow-md shadow-sky-500/20 transition">
+                    <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 px-3.5 py-1.5 rounded-xl text-xs font-black shadow-md shadow-sky-500/20 transition cursor-pointer">
                         <i class="fa-solid fa-print"></i> Cetak PDF
                     </button>
                 </div>
@@ -284,7 +263,7 @@
         <!-- Main Grid Content: Blueprint Canvas (Left) + Engineering Specs (Right) -->
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
-            <!-- CANVAS AREA (Col-Span 8 / 9) -->
+            <!-- CANVAS AREA -->
             <div class="xl:col-span-8 2xl:col-span-9 flex flex-col h-[780px] relative">
                 
                 <!-- View Tab Navigation -->
@@ -313,13 +292,13 @@
                     
                     <!-- Floating Zoom Controls -->
                     <div class="no-print absolute top-4 right-4 z-40 bg-slate-900/90 backdrop-blur shadow-2xl border border-slate-700 rounded-2xl p-1.5 flex items-center space-x-1.5">
-                        <button onclick="setZoom(0.8)" class="w-8 h-8 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-200 transition" title="Perkecil (Zoom Out)"><i class="fa-solid fa-minus text-xs"></i></button>
+                        <button onclick="setZoom(0.8)" class="w-8 h-8 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-200 transition cursor-pointer" title="Perkecil (Zoom Out)"><i class="fa-solid fa-minus text-xs"></i></button>
                         <span id="zoom-level" class="w-12 text-center text-xs font-mono font-bold text-sky-400">100%</span>
-                        <button onclick="setZoom(1.2)" class="w-8 h-8 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-200 transition" title="Perbesar (Zoom In)"><i class="fa-solid fa-plus text-xs"></i></button>
+                        <button onclick="setZoom(1.2)" class="w-8 h-8 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-200 transition cursor-pointer" title="Perbesar (Zoom In)"><i class="fa-solid fa-plus text-xs"></i></button>
                         <div class="w-px h-5 bg-slate-700 mx-1"></div>
-                        <button onclick="resetZoom()" class="px-2.5 h-8 flex items-center justify-center bg-sky-950 hover:bg-sky-900 text-sky-300 border border-sky-700/50 rounded-xl text-xs font-bold transition">RESET</button>
+                        <button onclick="resetZoom()" class="px-2.5 h-8 flex items-center justify-center bg-sky-950 hover:bg-sky-900 text-sky-300 border border-sky-700/50 rounded-xl text-xs font-bold transition cursor-pointer">RESET</button>
                         <div class="w-px h-5 bg-slate-700 mx-1"></div>
-                        <button onclick="toggleFullScreen()" class="w-8 h-8 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition shadow-sm" title="Layar Penuh">
+                        <button onclick="toggleFullScreen()" class="w-8 h-8 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition shadow-sm cursor-pointer" title="Layar Penuh">
                             <i id="fs-icon" class="fa-solid fa-expand text-xs"></i>
                         </button>
                     </div>
@@ -449,14 +428,14 @@
                                     </g>
 
                                     <!-- RAK BATERAI -->
-                                    {/* Rak Kiri */}
+                                    <!-- Rak Kiri -->
                                     <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-box text-blue-400\'></i><strong class=\'text-blue-300\'>Rak Sisi Kiri (1.5m)</strong></div><p class=\'text-slate-300 mt-1\'>2 Tingkat. Dilengkapi alas slat plastik higienis dan talang pakan.</p>')" onmouseout="hideTooltip()">
                                         <rect x="0" y="32" width="15" height="18" fill="#0284c7" fill-opacity="0.5" stroke="#38bdf8" stroke-width="0.5"/>
                                         <rect x="0" y="34" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
                                         <rect x="0" y="42" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
                                     </g>
 
-                                    {/* Rak Ganda 1 */}
+                                    <!-- Rak Ganda 1 -->
                                     <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-boxes-stacked text-sky-400\'></i><strong class=\'text-sky-300\'>Rak Tengah Ganda 1 (3m)</strong></div><p class=\'text-slate-300 mt-1\'>2 Tingkat ganda back-to-back. Rangka menyatu langsung dengan pilar utama.</p>')" onmouseout="hideTooltip()">
                                         <rect x="25" y="32" width="30" height="18" fill="#0369a1" fill-opacity="0.6" stroke="#38bdf8" stroke-width="0.5"/>
                                         <line x1="40" y1="32" x2="40" y2="50" stroke="#38bdf8" stroke-width="0.5" stroke-dasharray="1"/>
@@ -466,7 +445,7 @@
                                         <rect x="40" y="42" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
                                     </g>
 
-                                    {/* Rak Ganda 2 */}
+                                    <!-- Rak Ganda 2 -->
                                     <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-boxes-stacked text-sky-400\'></i><strong class=\'text-sky-300\'>Rak Tengah Ganda 2 (3m)</strong></div><p class=\'text-slate-300 mt-1\'>2 Tingkat ganda. Sistem air otomatis dengan nipple drinker per sekat.</p>')" onmouseout="hideTooltip()">
                                         <rect x="65" y="32" width="30" height="18" fill="#0369a1" fill-opacity="0.6" stroke="#38bdf8" stroke-width="0.5"/>
                                         <line x1="80" y1="32" x2="80" y2="50" stroke="#38bdf8" stroke-width="0.5" stroke-dasharray="1"/>
@@ -476,7 +455,7 @@
                                         <rect x="80" y="42" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
                                     </g>
 
-                                    {/* Rak Kanan */}
+                                    <!-- Rak Kanan -->
                                     <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><i class=\'fa-solid fa-box text-blue-400\'></i><strong class=\'text-blue-300\'>Rak Sisi Kanan (1.5m)</strong></div><p class=\'text-slate-300 mt-1\'>2 Tingkat mepet dinding luar kanan.</p>')" onmouseout="hideTooltip()">
                                         <rect x="105" y="32" width="15" height="18" fill="#0284c7" fill-opacity="0.5" stroke="#38bdf8" stroke-width="0.5"/>
                                         <rect x="105" y="34" width="15" height="6" fill="none" stroke="#cbd5e1" stroke-width="0.5"/> 
@@ -522,23 +501,69 @@
                                     <rect x="0" y="33" width="120" height="20" fill="rgba(14, 165, 233, 0.1)" stroke="#0ea5e9" stroke-width="0.5"/>
                                     
                                     <!-- 8 Kipas Exhaust (D - L - D - L - L - D - L - D) -->
-                                    {[
-                                        { id: 1, type: 'DIESEL', x: 4.5, color: '#ef4444', icon: 'fa-gears' },
-                                        { id: 2, type: 'LISTRIK', x: 19.5, color: '#38bdf8', icon: 'fa-bolt' },
-                                        { id: 3, type: 'DIESEL', x: 34.5, color: '#ef4444', icon: 'fa-gears' },
-                                        { id: 4, type: 'LISTRIK', x: 49.5, color: '#38bdf8', icon: 'fa-bolt' },
-                                        { id: 5, type: 'LISTRIK', x: 64.5, color: '#38bdf8', icon: 'fa-bolt' },
-                                        { id: 6, type: 'DIESEL', x: 79.5, color: '#ef4444', icon: 'fa-gears' },
-                                        { id: 7, type: 'LISTRIK', x: 94.5, color: '#38bdf8', icon: 'fa-bolt' },
-                                        { id: 8, type: 'DIESEL', x: 109.5, color: '#ef4444', icon: 'fa-gears' },
-                                    ].map(fan => `
-                                        <g class="svg-element" onmousemove="showTooltip(event, '<div class=\\'flex items-center gap-2\\'><strong class=\\'text-${fan.type === 'DIESEL' ? 'red' : 'sky'}-400\\'>Exhaust Fan ${fan.id} (${fan.type})</strong></div><p class=\\'text-slate-300 mt-1\\'>Boxfan 50 inch. ${fan.type === 'DIESEL' ? 'Penggerak mekanik diesel via pulley V-belt, kebal pemadaman listrik.' : 'Penggerak motor elektrik dengan sensor suhu otomatis.'}</p>')" onmouseout="hideTooltip()">
-                                            <rect x="${fan.x}" y="39.5" width="7" height="7" fill="#0f172a" stroke="${fan.color}" stroke-width="0.6" rx="0.8"/>
-                                            <circle cx="${fan.x + 3.5}" cy="43" r="3" fill="${fan.type === 'DIESEL' ? '#7f1d1d' : '#0369a1'}" stroke="${fan.color}" stroke-width="0.4"/>
-                                            <path d="M${fan.x + 1.5},41 L${fan.x + 5.5},45 M${fan.x + 1.5},45 L${fan.x + 5.5},41" stroke="${fan.color}" stroke-width="0.5"/>
-                                            <text x="${fan.x + 3.5}" y="38" fill="${fan.color}" font-size="2" text-anchor="middle" font-weight="bold">F${fan.id} (${fan.type[0]})</text>
-                                        </g>
-                                    `).join('')}
+                                    <!-- Fan 1 (Diesel) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><strong class=\'text-red-400\'>Exhaust Fan 1 (DIESEL)</strong></div><p class=\'text-slate-300 mt-1\'>Boxfan 50 inch. Penggerak mekanik diesel via pulley V-belt, kebal pemadaman listrik.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="4.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#ef4444" stroke-width="0.6" rx="0.8"/>
+                                        <circle cx="8" cy="43" r="3" fill="#7f1d1d" stroke="#ef4444" stroke-width="0.4"/>
+                                        <path d="M6,41 L10,45 M6,45 L10,41" stroke="#ef4444" stroke-width="0.5"/>
+                                        <text x="8" y="38" fill="#ef4444" font-size="2" text-anchor="middle" font-weight="bold">F1 (D)</text>
+                                    </g>
+
+                                    <!-- Fan 2 (Listrik) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><strong class=\'text-sky-400\'>Exhaust Fan 2 (LISTRIK)</strong></div><p class=\'text-slate-300 mt-1\'>Boxfan 50 inch. Dinamo elektrik mandiri otomatis dengan sensor suhu.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="19.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#38bdf8" stroke-width="0.6" rx="0.8"/>
+                                        <circle cx="23" cy="43" r="3" fill="#0369a1" stroke="#38bdf8" stroke-width="0.4"/>
+                                        <path d="M21,41 L25,45 M21,45 L25,41" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <text x="23" y="38" fill="#38bdf8" font-size="2" text-anchor="middle" font-weight="bold">F2 (L)</text>
+                                    </g>
+
+                                    <!-- Fan 3 (Diesel) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><strong class=\'text-red-400\'>Exhaust Fan 3 (DIESEL)</strong></div><p class=\'text-slate-300 mt-1\'>Boxfan 50 inch. Penggerak mekanik diesel via pulley V-belt.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="34.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#ef4444" stroke-width="0.6" rx="0.8"/>
+                                        <circle cx="38" cy="43" r="3" fill="#7f1d1d" stroke="#ef4444" stroke-width="0.4"/>
+                                        <path d="M36,41 L40,45 M36,45 L40,41" stroke="#ef4444" stroke-width="0.5"/>
+                                        <text x="38" y="38" fill="#ef4444" font-size="2" text-anchor="middle" font-weight="bold">F3 (D)</text>
+                                    </g>
+
+                                    <!-- Fan 4 (Listrik) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><strong class=\'text-sky-400\'>Exhaust Fan 4 (LISTRIK)</strong></div><p class=\'text-slate-300 mt-1\'>Boxfan 50 inch. Dinamo elektrik mandiri otomatis dengan sensor suhu tengah.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="49.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#38bdf8" stroke-width="0.6" rx="0.8"/>
+                                        <circle cx="53" cy="43" r="3" fill="#0369a1" stroke="#38bdf8" stroke-width="0.4"/>
+                                        <path d="M51,41 L55,45 M51,45 L55,41" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <text x="53" y="38" fill="#38bdf8" font-size="2" text-anchor="middle" font-weight="bold">F4 (L)</text>
+                                    </g>
+
+                                    <!-- Fan 5 (Listrik) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><strong class=\'text-sky-400\'>Exhaust Fan 5 (LISTRIK)</strong></div><p class=\'text-slate-300 mt-1\'>Boxfan 50 inch. Dinamo elektrik mandiri otomatis dengan sensor suhu tengah.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="64.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#38bdf8" stroke-width="0.6" rx="0.8"/>
+                                        <circle cx="68" cy="43" r="3" fill="#0369a1" stroke="#38bdf8" stroke-width="0.4"/>
+                                        <path d="M66,41 L70,45 M66,45 L70,41" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <text x="68" y="38" fill="#38bdf8" font-size="2" text-anchor="middle" font-weight="bold">F5 (L)</text>
+                                    </g>
+
+                                    <!-- Fan 6 (Diesel) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><strong class=\'text-red-400\'>Exhaust Fan 6 (DIESEL)</strong></div><p class=\'text-slate-300 mt-1\'>Boxfan 50 inch. Penggerak mekanik diesel via pulley V-belt.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="79.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#ef4444" stroke-width="0.6" rx="0.8"/>
+                                        <circle cx="83" cy="43" r="3" fill="#7f1d1d" stroke="#ef4444" stroke-width="0.4"/>
+                                        <path d="M81,41 L85,45 M81,45 L85,41" stroke="#ef4444" stroke-width="0.5"/>
+                                        <text x="83" y="38" fill="#ef4444" font-size="2" text-anchor="middle" font-weight="bold">F6 (D)</text>
+                                    </g>
+
+                                    <!-- Fan 7 (Listrik) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><strong class=\'text-sky-400\'>Exhaust Fan 7 (LISTRIK)</strong></div><p class=\'text-slate-300 mt-1\'>Boxfan 50 inch. Dinamo elektrik mandiri otomatis dengan sensor suhu.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="94.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#38bdf8" stroke-width="0.6" rx="0.8"/>
+                                        <circle cx="98" cy="43" r="3" fill="#0369a1" stroke="#38bdf8" stroke-width="0.4"/>
+                                        <path d="M96,41 L100,45 M96,45 L100,41" stroke="#38bdf8" stroke-width="0.5"/>
+                                        <text x="98" y="38" fill="#38bdf8" font-size="2" text-anchor="middle" font-weight="bold">F7 (L)</text>
+                                    </g>
+
+                                    <!-- Fan 8 (Diesel) -->
+                                    <g class="svg-element" onmousemove="showTooltip(event, '<div class=\'flex items-center gap-2\'><strong class=\'text-red-400\'>Exhaust Fan 8 (DIESEL)</strong></div><p class=\'text-slate-300 mt-1\'>Boxfan 50 inch. Penggerak mekanik diesel via pulley V-belt sisi paling kanan.</p>')" onmouseout="hideTooltip()">
+                                        <rect x="109.5" y="39.5" width="7" height="7" fill="#0f172a" stroke="#ef4444" stroke-width="0.6" rx="0.8"/>
+                                        <circle cx="113" cy="43" r="3" fill="#7f1d1d" stroke="#ef4444" stroke-width="0.4"/>
+                                        <path d="M111,41 L115,45 M111,45 L115,41" stroke="#ef4444" stroke-width="0.5"/>
+                                        <text x="113" y="38" fill="#ef4444" font-size="2" text-anchor="middle" font-weight="bold">F8 (D)</text>
+                                    </g>
 
                                     <text x="60" y="58" fill="#f87171" font-size="3" text-anchor="middle">Sisi Hilir Kandang (Pembuangan Udara Panas & Amonia)</text>
                                 </svg>
@@ -547,18 +572,6 @@
                             <!-- TAB 5: SIMULASI SIRKULASI UDARA (AIRFLOW SIMULATION) -->
                             <div id="airflow-view" class="tab-content w-full h-full justify-center items-center p-4">
                                 <svg width="900" height="420" viewBox="-10 -10 140 70" class="shadow-2xl bg-slate-950/80 border border-slate-800 rounded-2xl">
-                                    {/* Building outline */}
-                                    <rect x="0" y="15" width="120" height="40" fill="rgba(15, 23, 42, 0.6)" stroke="#38bdf8" stroke-width="1" rx="2" />
-                                    
-                                    {/* Inlet Cooling Zone */}
-                                    <rect x="0" y="15" width="10" height="40" fill="rgba(56, 189, 248, 0.3)" stroke="#38bdf8" stroke-width="0.5"/>
-                                    <text x="5" y="36" fill="#38bdf8" font-size="2.5" font-weight="bold" text-anchor="middle" transform="rotate(-90, 5, 36)">INLET 24°C</text>
-
-                                    {/* Animated Airflow Streamlines */}
-                                    {[20, 25, 30, 35, 40, 45, 50].map((y, idx) => `
-                                        <path d="M 12 ${y} L 108 ${y}" stroke="url(#airflowGradient)" stroke-width="1.2" class="wind-particle" />
-                                    `).join('')}
-
                                     <defs>
                                         <linearGradient id="airflowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                                             <stop offset="0%" stop-color="#38bdf8" />
@@ -567,7 +580,23 @@
                                         </linearGradient>
                                     </defs>
 
-                                    {/* Outlet Fan Zone */}
+                                    <!-- Building outline -->
+                                    <rect x="0" y="15" width="120" height="40" fill="rgba(15, 23, 42, 0.6)" stroke="#38bdf8" stroke-width="1" rx="2" />
+                                    
+                                    <!-- Inlet Cooling Zone -->
+                                    <rect x="0" y="15" width="10" height="40" fill="rgba(56, 189, 248, 0.3)" stroke="#38bdf8" stroke-width="0.5"/>
+                                    <text x="5" y="36" fill="#38bdf8" font-size="2.5" font-weight="bold" text-anchor="middle" transform="rotate(-90, 5, 36)">INLET 24°C</text>
+
+                                    <!-- Animated Airflow Streamlines -->
+                                    <path d="M 12 20 L 108 20" stroke="url(#airflowGradient)" stroke-width="1.2" class="wind-particle" />
+                                    <path d="M 12 25 L 108 25" stroke="url(#airflowGradient)" stroke-width="1.2" class="wind-particle" />
+                                    <path d="M 12 30 L 108 30" stroke="url(#airflowGradient)" stroke-width="1.2" class="wind-particle" />
+                                    <path d="M 12 35 L 108 35" stroke="url(#airflowGradient)" stroke-width="1.2" class="wind-particle" />
+                                    <path d="M 12 40 L 108 40" stroke="url(#airflowGradient)" stroke-width="1.2" class="wind-particle" />
+                                    <path d="M 12 45 L 108 45" stroke="url(#airflowGradient)" stroke-width="1.2" class="wind-particle" />
+                                    <path d="M 12 50 L 108 50" stroke="url(#airflowGradient)" stroke-width="1.2" class="wind-particle" />
+
+                                    <!-- Outlet Fan Zone -->
                                     <rect x="110" y="15" width="10" height="40" fill="rgba(239, 68, 68, 0.3)" stroke="#ef4444" stroke-width="0.5"/>
                                     <text x="115" y="36" fill="#fca5a5" font-size="2.5" font-weight="bold" text-anchor="middle" transform="rotate(90, 115, 36)">OUTLET 28°C</text>
 
@@ -581,7 +610,7 @@
                 </div>
             </div>
 
-            <!-- SIDEBAR SPECIFICATIONS & LIVE CFM CALCULATOR (Col-Span 4 / 3) -->
+            <!-- SIDEBAR SPECIFICATIONS & LIVE CFM CALCULATOR -->
             <div class="no-print xl:col-span-4 2xl:col-span-3 space-y-4 h-[780px] overflow-y-auto pr-1">
                 
                 <!-- LIVE DENSITY & FAN CFM CALCULATOR -->
@@ -597,7 +626,7 @@
                         <div>
                             <div class="flex justify-between text-slate-300 mb-1">
                                 <span>Target Populasi Panen:</span>
-                                <span id="calc-pop-val" class="font-mono font-bold text-sky-400">9.000 Ekor</span>
+                                <span id="calc-pop-val" class="font-mono font-bold text-sky-400">9,000 Ekor</span>
                             </div>
                             <input type="range" id="calc-pop" min="7000" max="12000" step="500" value="9000" oninput="updateBlueprintCalc()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-400">
                         </div>
@@ -622,7 +651,7 @@
                             </div>
                             <div class="flex justify-between text-slate-400">
                                 <span>Total Biomassa Panen:</span>
-                                <span id="res-biomass" class="font-bold text-sky-400">19.800 kg</span>
+                                <span id="res-biomass" class="font-bold text-sky-400">19,800 kg</span>
                             </div>
                             <div class="flex justify-between text-slate-400 pt-2 border-t border-slate-800">
                                 <span>Kebutuhan Kipas Aktif:</span>
@@ -743,19 +772,19 @@
                 if (elem.requestFullscreen) elem.requestFullscreen();
                 else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
                 else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
-                icon.classList.replace('fa-expand', 'fa-compress');
+                icon.className = "fa-solid fa-compress text-xs";
             } else {
                 if (document.exitFullscreen) document.exitFullscreen();
                 else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
                 else if (document.msExitFullscreen) document.msExitFullscreen();
-                icon.classList.replace('fa-compress', 'fa-expand');
+                icon.className = "fa-solid fa-expand text-xs";
             }
         }
         
         document.addEventListener('fullscreenchange', () => {
             const icon = document.getElementById("fs-icon");
             if (!document.fullscreenElement) {
-                icon.classList.replace('fa-compress', 'fa-expand');
+                icon.className = "fa-solid fa-expand text-xs";
             }
         });
 
@@ -839,6 +868,11 @@
             const fansNeeded = Math.min(8, Math.max(4, Math.ceil(totalCfm / 21000)));
             document.getElementById('res-fans').innerText = `${fansNeeded} - 8 Unit (50")`;
         }
+
+        // Initialize calculation on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBlueprintCalc();
+        });
     </script>
 </body>
 </html>
