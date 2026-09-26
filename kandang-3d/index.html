@@ -62,6 +62,7 @@
             <button class="btn-secondary" data-camera="left">Kiri</button>
             <button class="btn-secondary" data-camera="right">Kanan</button>
             <button class="btn-secondary" data-camera="interior" style="color:var(--accent-gold)">🚶 Masuk Interior</button>
+            <button class="btn-primary" id="btn-toggle-denah" style="background:linear-gradient(135deg,#00e5ff,#0288d1);color:#000;font-weight:700;">🗺️ Visual Denah (2D)</button>
 
             <select class="cad-select" id="select-display-mode" title="Mode Tampilan">
                 <option value="realistic">Mode Realistis (PBR)</option>
@@ -93,12 +94,13 @@
         </div>
     </header>
 
-    <!-- Left Panel: Layers, Tree, Search, Construction Steps -->
+    <!-- Left Panel: Layers, Components, Tree, Construction Steps -->
     <aside class="cad-panel" id="left-panel">
         <div class="panel-tabs">
             <button class="tab-btn active" data-tab="layers">LAYERS</button>
-            <button class="tab-btn" data-tab="search">CARI KOMPONEN</button>
+            <button class="tab-btn" data-tab="components">KOMPONEN & JUMLAH</button>
             <button class="tab-btn" data-tab="steps">TAHAP KONSTRUKSI</button>
+            <button class="tab-btn" data-tab="search">CARI</button>
         </div>
 
         <div class="panel-content">
@@ -111,6 +113,59 @@
                 <div id="layer-list"></div>
             </div>
 
+            <!-- Components & Quantity Breakdown Tab -->
+            <div class="tab-pane" id="pane-components">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="font-size:11px;font-weight:700;color:var(--accent-cyan);">KATALOG KOMPONEN & JUMLAH</span>
+                    <span class="badge-tag" style="color:var(--accent-gold);">8.564 Objek</span>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">
+                    Klik komponen untuk sorot di 3D & lihat spesifikasi detail.
+                </div>
+                <div id="component-breakdown-list"></div>
+            </div>
+
+            <!-- Steps Tab with Component Counts -->
+            <div class="tab-pane" id="pane-steps">
+                <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">
+                    URUTAN PEMBANGUNAN KANDANG [1/8 s.d 8/8]
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                    <button class="btn-secondary stage-step-btn" onclick="app.constrMgr.setStage(1)">
+                        <div class="step-title">[1/8] Pondasi & Lantai Cor</div>
+                        <div class="step-count">32 Umpak Beton • 4 Plat Cor 312 m²</div>
+                    </button>
+                    <button class="btn-secondary stage-step-btn" onclick="app.constrMgr.setStage(2)">
+                        <div class="step-title">[2/8] Got Drainase & Papan Ulin</div>
+                        <div class="step-count">3 Jalur Got 25m • 3 Papan Ulin t=2.5cm</div>
+                    </button>
+                    <button class="btn-secondary stage-step-btn" onclick="app.constrMgr.setStage(3)">
+                        <div class="step-title">[3/8] 32 Tiang Komposit Kayu Besi</div>
+                        <div class="step-count">64 Bilah Ulin 5x10 • 64 Spacer Penjepit</div>
+                    </button>
+                    <button class="btn-secondary stage-step-btn" onclick="app.constrMgr.setStage(4)">
+                        <div class="step-title">[4/8] Rangka Dinding & Sabuk</div>
+                        <div class="step-count">169 Tiang Vertikal 1.5x6 • 6 Sabuk 5x10</div>
+                    </button>
+                    <button class="btn-secondary stage-step-btn" onclick="app.constrMgr.setStage(5)">
+                        <div class="step-title">[5/8] Rangka Rak 3 Susun, Slat & Pakan</div>
+                        <div class="step-count">156 Tiang • 360 Slat • 1.440 Nipple • 108 Talang</div>
+                    </button>
+                    <button class="btn-secondary stage-step-btn" onclick="app.constrMgr.setStage(6)">
+                        <div class="step-title">[6/8] 6 Exhaust Fan 50in & Kubota</div>
+                        <div class="step-count">6 Fan Box • 66 Louver • 1 Mesin • As 10.4m</div>
+                    </button>
+                    <button class="btn-secondary stage-step-btn" onclick="app.constrMgr.setStage(7)">
+                        <div class="step-title">[7/8] Terpal Dinding & Celldeck 12m</div>
+                        <div class="step-count">41 Panel Pad 7090 • 2 Talang Stainless • Plafon</div>
+                    </button>
+                    <button class="btn-secondary stage-step-btn" onclick="app.constrMgr.setStage(8)">
+                        <div class="step-title">[8/8] Kuda-kuda, Gording & Spandek</div>
+                        <div class="step-count">14 Kuda-kuda 12m • 13 Gording 26m • 180 Spandek</div>
+                    </button>
+                </div>
+            </div>
+
             <!-- Search Tab -->
             <div class="tab-pane" id="pane-search">
                 <div class="search-wrapper">
@@ -119,23 +174,6 @@
                 </div>
                 <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">
                     💡 Ketik nomor atau nama komponen untuk mencari objek secara instan. Kamera akan otomatis bergerak memusatkan pandangan ke objek yang dipilih.
-                </div>
-            </div>
-
-            <!-- Steps Tab -->
-            <div class="tab-pane" id="pane-steps">
-                <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">
-                    URUTAN PEMBANGUNAN KANDANG [1/8 s.d 8/8]
-                </div>
-                <div style="display:flex;flex-direction:column;gap:6px;">
-                    <button class="btn-secondary" onclick="app.constrMgr.setStage(1)">[1/8] Pondasi Umpak & Lantai Cor</button>
-                    <button class="btn-secondary" onclick="app.constrMgr.setStage(2)">[2/8] Got Drainase & Papan Ulin</button>
-                    <button class="btn-secondary" onclick="app.constrMgr.setStage(3)">[3/8] 32 Tiang Komposit Kayu Besi</button>
-                    <button class="btn-secondary" onclick="app.constrMgr.setStage(4)">[4/8] Rangka Dinding Vertikal & Sabuk</button>
-                    <button class="btn-secondary" onclick="app.constrMgr.setStage(5)">[5/8] Rak 3 Susun, Slat, Pintu & Talang</button>
-                    <button class="btn-secondary" onclick="app.constrMgr.setStage(6)">[6/8] 6 Exhaust Fan 50in & Kubota</button>
-                    <button class="btn-secondary" onclick="app.constrMgr.setStage(7)">[7/8] Terpal Dinding & Celldeck Cooling Pad</button>
-                    <button class="btn-secondary" onclick="app.constrMgr.setStage(8)">[8/8] Kuda-kuda, Gording & Spandek</button>
                 </div>
             </div>
         </div>
@@ -276,7 +314,44 @@
     <div id="presentation-badge">
         <div style="font-weight:800;font-size:14px;color:var(--accent-cyan);">KANDANG BROILER 26×12M (3 SUSUN, 7.000 EKOR)</div>
         <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Closed House System • Source: build_kandang_LENGKAP.rb</div>
-        <div style="font-size:10px;color:var(--accent-gold);margin-top:4px;">Tekan [P] atau [ESC] untuk keluar dari Mode Presentasi</div>
+    <!-- Interactive 2D Visual Denah (Floor Plan Modal & Mini-Map) -->
+    <div id="denah-modal" class="denah-modal-overlay" style="display:none;">
+        <div class="denah-modal-window">
+            <div class="denah-modal-header">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:20px;">🗺️</span>
+                    <div>
+                        <h3 style="font-size:15px;color:var(--accent-cyan);font-weight:700;">DENAH TATA LETAK BANGUNAN (26.00 × 12.00 M)</h3>
+                        <div style="font-size:11px;color:var(--text-muted);">Klik sembarang area/zona pada denah untuk langsung memindahkan kamera 3D ke lokasi tersebut</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <button class="btn-secondary" id="btn-denah-pip" title="Kecilkan ke Sudut Layar (Mini-Map)">📌 Mode Mini-Map</button>
+                    <button class="btn-icon btn-secondary" id="btn-close-denah" title="Tutup Denah">✕</button>
+                </div>
+            </div>
+            <div class="denah-modal-body" id="denah-svg-container">
+                <!-- Interactive SVG Floor Plan rendered by ui.js -->
+            </div>
+            <div class="denah-modal-footer">
+                <div class="denah-legend">
+                    <span class="legend-chip" style="border-left: 4px solid #ea580c;">32 Tiang 15x10</span>
+                    <span class="legend-chip" style="border-left: 4px solid #22c55e;">6 Rak 3 Susun</span>
+                    <span class="legend-chip" style="border-left: 4px solid #f59e0b;">3 Got Drainase</span>
+                    <span class="legend-chip" style="border-left: 4px solid #38bdf8;">3 Lorong (1.0m)</span>
+                    <span class="legend-chip" style="border-left: 4px solid #a855f7;">6 Exhaust Fan 50"</span>
+                    <span class="legend-chip" style="border-left: 4px solid #eab308;">Celldeck 12m</span>
+                </div>
+                <div class="denah-quick-nav">
+                    <span style="font-size:11px;color:var(--accent-gold);margin-right:4px;">💡 Navigasi Instan:</span>
+                    <button class="btn-micro" id="nav-denah-all">Keseluruhan</button>
+                    <button class="btn-micro" id="nav-denah-blower">Blower (Timur)</button>
+                    <button class="btn-micro" id="nav-denah-celldeck">Celldeck (Barat)</button>
+                    <button class="btn-micro" id="nav-denah-aisle">Lorong Tengah</button>
+                    <button class="btn-micro" id="nav-denah-roof">Atap Monitor</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Application Script Bootstrap -->

@@ -141,9 +141,9 @@ export class ConstructionManager {
                 mesh.visible = false;
             } else if (p >= endP) {
                 mesh.visible = true;
-                // restore original position
+                // restore original position and scale exactly
                 mesh.position.copy(item.origPos);
-                mesh.scale.set(1, 1, 1);
+                mesh.scale.copy(item.origScale);
             } else {
                 // Assembly in progress for this stage
                 mesh.visible = true;
@@ -151,18 +151,20 @@ export class ConstructionManager {
 
                 // Construction animation: objects emerge smoothly
                 if (stage === 3) {
-                    // Columns rise from below ground
+                    // Columns rise from below ground into exact final height
                     const riseOffset = (1.0 - localT) * -3.0;
                     mesh.position.set(item.origPos.x, item.origPos.y, item.origPos.z + riseOffset);
+                    mesh.scale.copy(item.origScale);
                 } else if (stage === 8) {
                     // Trusses / Roof lower into place from crane height
                     const lowerOffset = (1.0 - localT) * 4.0;
                     mesh.position.set(item.origPos.x, item.origPos.y, item.origPos.z + lowerOffset);
+                    mesh.scale.copy(item.origScale);
                 } else {
-                    // Grow / scale into place
+                    // Scale into place proportionally based on original dimensions
                     const s = Math.max(0.001, localT);
                     mesh.position.copy(item.origPos);
-                    mesh.scale.set(s, s, s);
+                    mesh.scale.set(item.origScale.x * s, item.origScale.y * s, item.origScale.z * s);
                 }
             }
         }

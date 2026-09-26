@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sketsa Teknis 2D Interaktif & RAB Material Lengkap (Tanpa Harga) - Kandang Broiler 26x12m</title>
+    <title>Sketsa Teknis 2D CAD Interaktif & RAB Material Lengkap - Kandang Broiler 26x12m</title>
     <style>
         :root {
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
-            --bg-card-sub: #111827;
-            --border-color: #334155;
+            --bg-body: #0b1120;
+            --bg-card: #151e32;
+            --bg-card-sub: #0f172a;
+            --border-color: #2e3c54;
             --primary: #00e5ff;
             --primary-dark: #0288d1;
             --accent-gold: #f59e0b;
@@ -37,19 +37,20 @@
 
         /* Header */
         header.main-header {
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            background: linear-gradient(180deg, #151e32 0%, #0b1120 100%);
             border-bottom: 1px solid var(--border-color);
-            padding: 18px 28px;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
         .brand-title-wrap h1 {
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 800;
             color: var(--text-main);
             display: flex;
@@ -98,7 +99,7 @@
             color: var(--text-main);
         }
         .btn-secondary:hover {
-            background: #334155;
+            background: #233047;
             color: var(--primary);
         }
 
@@ -116,7 +117,7 @@
         /* Main Container */
         .container {
             max-width: 1440px;
-            margin: 24px auto;
+            margin: 20px auto;
             padding: 0 20px;
         }
 
@@ -125,17 +126,17 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
             gap: 14px;
-            margin-bottom: 24px;
+            margin-bottom: 22px;
         }
 
         .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 16px;
+            padding: 14px 16px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         .stat-label {
@@ -147,7 +148,7 @@
         }
 
         .stat-val {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             color: var(--primary);
             font-family: var(--font-mono);
@@ -163,33 +164,34 @@
             display: flex;
             gap: 6px;
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             overflow-x: auto;
         }
 
         .nav-tab-btn {
-            padding: 12px 18px;
+            padding: 10px 16px;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-bottom: none;
             border-radius: 6px 6px 0 0;
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .nav-tab-btn:hover {
             color: var(--text-main);
-            background: #273549;
+            background: #1c2840;
         }
 
         .nav-tab-btn.active {
-            background: #1e293b;
+            background: #151e32;
             color: var(--primary);
             border-top: 3px solid var(--primary);
         }
@@ -205,8 +207,9 @@
         .drawing-selector {
             display: flex;
             gap: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .view-btn {
@@ -218,46 +221,53 @@
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+        .view-btn:hover {
+            color: var(--text-main);
+            background: #233047;
         }
         .view-btn.active {
             background: var(--primary);
             color: #000;
             border-color: var(--primary);
+            font-weight: 700;
         }
 
         .drawing-canvas-wrapper {
-            background: #0b1120;
+            background: #060a12;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 20px;
-            min-height: 520px;
+            padding: 24px;
+            min-height: 560px;
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: auto;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
         }
 
         svg.cad-svg {
             width: 100%;
             height: auto;
-            min-height: 500px;
+            min-height: 520px;
             display: block;
         }
 
         /* Interactive Drawing Elements */
         .cad-element {
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.15s ease-out;
         }
         .cad-element:hover {
-            filter: drop-shadow(0 0 6px var(--primary));
-            stroke-width: 2.5px !important;
+            filter: drop-shadow(0 0 8px var(--primary)) brightness(1.2);
+            stroke-width: 0.08px !important;
             stroke: #fff !important;
         }
 
         .drawing-tooltip {
             position: fixed;
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(11, 17, 32, 0.96);
             border: 1px solid var(--primary);
             border-radius: 6px;
             padding: 10px 14px;
@@ -265,7 +275,7 @@
             z-index: 999;
             pointer-events: none;
             display: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(8px);
         }
 
@@ -324,7 +334,7 @@
         }
 
         table.qto-table th {
-            background: #111827;
+            background: #0d1525;
             color: var(--text-muted);
             font-weight: 700;
             text-transform: uppercase;
@@ -332,6 +342,7 @@
             letter-spacing: 0.5px;
             position: sticky;
             top: 0;
+            z-index: 10;
         }
 
         table.qto-table tr:hover td {
@@ -386,7 +397,7 @@
 
         /* Code Viewer */
         .code-viewer-wrap {
-            background: #090d16;
+            background: #060a12;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 16px;
@@ -424,17 +435,17 @@
     <header class="main-header">
         <div class="brand-title-wrap">
             <h1>
-                📐 Sketsa Teknis & RAB Material Lengkap
+                📐 Sketsa Teknis 2D CAD & RAB Material Lengkap
                 <span class="badge badge-cyan">Model 26 × 12 m</span>
                 <span class="badge badge-gold">7.000 Ekor</span>
                 <span class="badge badge-green">3 Susun</span>
             </h1>
-            <p>Source of Truth: <code>build_kandang_LENGKAP.rb</code> • Bill of Materials (Tanpa Harga) • Quantity Take-Off</p>
+            <p>Source of Truth: <code>build_kandang_LENGKAP.rb</code> • Bill of Materials (Tanpa Harga) • Quantity Take-Off Presisi</p>
         </div>
         <div class="nav-links">
             <a href="kandang-3d/index.html" class="btn btn-primary">🎮 Buka 3D Digital Twin Viewer</a>
             <a href="index.html" class="btn btn-secondary">🏠 Portal TFARM</a>
-            <button class="btn btn-secondary" onclick="window.print()">🖨️ Cetak Dokumen / PDF</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Cetak PDF</button>
         </div>
     </header>
 
@@ -444,13 +455,13 @@
         <div class="overview-grid">
             <div class="stat-card">
                 <span class="stat-label">Dimensi Bangunan</span>
-                <span class="stat-val">26 × 12 m</span>
-                <span class="stat-sub">Luas Lantai Efektif: 312,0 m²</span>
+                <span class="stat-val">26,00 × 12,00 m</span>
+                <span class="stat-sub">Luas Lantai: 312,0 m²</span>
             </div>
             <div class="stat-card">
                 <span class="stat-label">Elevasi Puncak (Monitor)</span>
-                <span class="stat-val">5,92 m</span>
-                <span class="stat-sub">Elevasi Dinding Samping: 2,97 m</span>
+                <span class="stat-val">+5,92 m</span>
+                <span class="stat-sub">Elevasi Dinding Samping: +2,97 m</span>
             </div>
             <div class="stat-card">
                 <span class="stat-label">Tiang Struktur Kayu Besi</span>
@@ -476,7 +487,7 @@
 
         <!-- Navigation Tabs -->
         <div class="nav-tabs">
-            <button class="nav-tab-btn active" data-tab="drawings">📐 Sketsa Denah & Potongan 2D</button>
+            <button class="nav-tab-btn active" data-tab="drawings">📐 Sketsa Denah, Potongan & Tampak CAD (Upright)</button>
             <button class="nav-tab-btn" data-tab="qto-rekap">📊 Rekap Raw Material & QTO</button>
             <button class="nav-tab-btn" data-tab="rab-table">📑 RAB Bahan Lengkap (Tanpa Harga)</button>
             <button class="nav-tab-btn" data-tab="audit">🔍 Audit & Validasi Ruby</button>
@@ -486,15 +497,16 @@
         <!-- TAB 1: 2D TECHNICAL DRAWINGS -->
         <div class="tab-content-panel active" id="tab-drawings">
             <div class="drawing-selector">
-                <button class="view-btn active" onclick="switchDrawing('plan')">1. Denah Tata Letak (Tampak Atas)</button>
-                <button class="view-btn" onclick="switchDrawing('cross')">2. Potongan Melintang (Bentang 12m)</button>
-                <button class="view-btn" onclick="switchDrawing('front')">3. Tampak Depan (Celldeck Barat)</button>
-                <button class="view-btn" onclick="switchDrawing('back')">4. Tampak Belakang (6 Blower Timur)</button>
-                <button class="view-btn" onclick="switchDrawing('side')">5. Tampak Samping (Panjang 26m)</button>
+                <button class="view-btn active" onclick="switchDrawing('cross')">1. Potongan Melintang (Bentang 12m, Z=0 s.d +5.92m)</button>
+                <button class="view-btn" onclick="switchDrawing('plan')">2. Denah Tata Letak (Tampak Atas 26x12m)</button>
+                <button class="view-btn" onclick="switchDrawing('front')">3. Tampak Depan (Celldeck Barat X=26m)</button>
+                <button class="view-btn" onclick="switchDrawing('back')">4. Tampak Belakang (6 Blower Timur X=0m)</button>
+                <button class="view-btn" onclick="switchDrawing('side')">5. Tampak Samping Memanjang (26m)</button>
+                <span style="font-size:11px;color:var(--accent-gold);margin-left:auto;">💡 Hover / klik komponen untuk melihat ukuran & detail teknik</span>
             </div>
 
             <div class="drawing-canvas-wrapper" id="drawing-container">
-                <!-- SVG will be rendered here dynamically -->
+                <!-- SVG rendered here -->
             </div>
         </div>
 
@@ -1612,9 +1624,12 @@ KandangBroiler_Lengkap.build
         }
 
         // ==========================================
-        // 2D SVG DRAWINGS ENGINE
+        // 2D SVG DRAWINGS ENGINE (MATHEMATICALLY UPRIGHT & CAD DIMENSIONED)
+        // In SVG, Y increases downwards. For elevations/sections,
+        // we map CAD elevation Z into SVG Y as: svgY = Z_BASE - Z.
+        // This ensures +5.92m is at the TOP, and +0.00m (ground) is at the BOTTOM!
         // ==========================================
-        let currentDrawingMode = 'plan';
+        let currentDrawingMode = 'cross';
 
         function switchDrawing(mode) {
             currentDrawingMode = mode;
@@ -1625,10 +1640,10 @@ KandangBroiler_Lengkap.build
 
         function renderCurrentDrawing() {
             const container = document.getElementById('drawing-container');
-            if (currentDrawingMode === 'plan') {
-                container.innerHTML = getFloorPlanSVG();
-            } else if (currentDrawingMode === 'cross') {
+            if (currentDrawingMode === 'cross') {
                 container.innerHTML = getCrossSectionSVG();
+            } else if (currentDrawingMode === 'plan') {
+                container.innerHTML = getFloorPlanSVG();
             } else if (currentDrawingMode === 'front') {
                 container.innerHTML = getFrontElevationSVG();
             } else if (currentDrawingMode === 'back') {
@@ -1639,7 +1654,186 @@ KandangBroiler_Lengkap.build
             setupSVGTooltips();
         }
 
-        // SVG 1: Denah Tata Letak (Floor Plan X-Y)
+        // Helper to map elevation Z to upright SVG Y
+        // Ground Z=0 is at svgY = 7.0. Peak Z=5.92 is at svgY = 7.0 - 5.92 = 1.08.
+        const Z_BASE = 7.0;
+        function zToY(z) {
+            return Z_BASE - z;
+        }
+
+        // Helper to create an upright rect from CAD coordinates:
+        // x, z_bottom, w, h -> in SVG: y = zToY(z_bottom + h), height = h
+        function rectZ(x, z_bottom, w, h, fill, stroke, strokeWidth, className, title, info) {
+            const svgY = zToY(z_bottom + h);
+            return `<rect x="${x.toFixed(3)}" y="${svgY.toFixed(3)}" width="${w.toFixed(3)}" height="${h.toFixed(3)}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" class="${className}" data-title="${title}" data-info="${info}"/>`;
+        }
+
+        // Helper to create a line from CAD (x1, z1) to (x2, z2)
+        function lineZ(x1, z1, x2, z2, stroke, strokeWidth, strokeDash, className, title, info) {
+            const y1 = zToY(z1);
+            const y2 = zToY(z2);
+            const dash = strokeDash ? `stroke-dasharray="${strokeDash}"` : '';
+            return `<line x1="${x1.toFixed(3)}" y1="${y1.toFixed(3)}" x2="${x2.toFixed(3)}" y2="${y2.toFixed(3)}" stroke="${stroke}" stroke-width="${strokeWidth}" ${dash} class="${className}" data-title="${title || ''}" data-info="${info || ''}"/>`;
+        }
+
+        // SVG 1: Potongan Melintang (Cross Section Y-Z looking along X, Bentang 12m)
+        // UPRIGHT: Z=0 at bottom, Z=5.92m at top!
+        function getCrossSectionSVG() {
+            const yMin = -2.5;
+            const yMax = 14.5;
+            const viewBox = "-3 0 18 8.5";
+
+            let svg = `<svg class="cad-svg" viewBox="${viewBox}">
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#00e5ff" />
+                    </marker>
+                </defs>
+
+                <!-- Title Banner -->
+                <text x="6" y="0.5" fill="#00e5ff" font-size="0.45" font-weight="bold" text-anchor="middle" font-family="sans-serif">POTONGAN MELINTANG BENTANG 12.00 METER (TAMPAK MUKA BARAT/TIMUR)</text>
+                <text x="6" y="0.85" fill="#94a3b8" font-size="0.25" text-anchor="middle" font-family="sans-serif">Elevasi Tegak: +0.00m (Lantai Dasar) s.d +5.92m (Puncak Monitor Roof)</text>
+
+                <!-- Ground Line Z=0.00 -->
+                <line x1="-2" y1="${zToY(0)}" x2="14" y2="${zToY(0)}" stroke="#475569" stroke-width="0.06"/>
+                <text x="-2.2" y="${zToY(0) + 0.1}" fill="#94a3b8" font-size="0.22" font-family="monospace">±0.00 M</text>
+
+                <!-- Concrete Floor Slab Z=0.00 to 0.03m -->
+                ${rectZ(0.0, 0.0, 12.0, 0.03, '#cbd5e1', '#94a3b8', 0.02, 'cad-element', 'Lantai Cor Semen', 'Tebal 3 cm • Lebar 12.0m')}
+
+                <!-- 3 Drainage Gutters at Y=2.0, 6.0, 10.0 (Z=-0.25 to 0.00) -->
+                ${[2.0, 6.0, 10.0].map((gy, i) => `
+                    ${rectZ(gy - 0.05, -0.25, 0.30, 0.25, '#475569', '#f59e0b', 0.03, 'cad-element', `Got Drainase #${i+1}`, 'Ukuran bersih 20x20cm cor semen + Papan Ulin tebal 2.5cm')}
+                    ${rectZ(gy, 0.005, 0.20, 0.025, '#b45309', '#fcd34d', 0.01, 'cad-element', `Papan Penutup Got #${i+1}`, 'Kayu Ulin 2.5x20cm removable')}
+                `).join('')}
+
+                <!-- 4 Main Posts at Y=0, 4, 8, 12m with concrete umpak pondasi Z=-0.40 to 0.00 -->
+                ${[
+                    {y: 0.0, h: 2.97, label: "Tiang Kolom A (Utara)", topZ: 2.97},
+                    {y: 4.0, h: 4.27, label: "Tiang Kolom B (Peninggi Kap Atas)", topZ: 4.30},
+                    {y: 8.0, h: 4.27, label: "Tiang Kolom C (Peninggi Kap Atas)", topZ: 4.30},
+                    {y: 12.0, h: 2.97, label: "Tiang Kolom D (Selatan)", topZ: 2.97}
+                ].map(p => `
+                    <!-- Umpak Beton 30x30x40cm -->
+                    ${rectZ(p.y - 0.15, -0.40, 0.30, 0.40, '#334155', '#64748b', 0.03, 'cad-element', `Umpak Beton ${p.label}`, 'Beton bertulang 30x30x40cm (Z=-0.40 s.d 0.00)')}
+                    <!-- Tiang Kayu Besi 15x10cm -->
+                    ${rectZ(p.y - 0.05, 0.03, 0.10, p.h, '#ea580c', '#fff', 0.02, 'cad-element', p.label, `Kayu Besi Komposit 15x10cm • Elevasi Top Z=+${p.topZ.toFixed(2)}m`)}
+                `).join('')}
+
+                <!-- Balok Tarik Kuda-Kuda Bentang 12m at Z=3.00m (Tebal 10cm) -->
+                ${rectZ(0.0, 3.00, 12.0, 0.10, '#d97706', '#fbbf24', 0.03, 'cad-element', 'Balok Tarik Kuda-Kuda Bentang 12m', 'Kayu Kuda-kuda 5x10 cm • Elevasi Z=+3.00 s.d +3.10m')}
+
+                <!-- Plafon Terpal Putih at Z=2.98m -->
+                ${lineZ(0.0, 2.98, 12.0, 2.98, '#f8fafc', 0.03, '0.1,0.1', 'cad-element', 'Plafon Terpal Putih', 'Z=+2.98m • Menutup seluruh langit-langit kandang')}
+
+                <!-- Kaki Kuda Utama (Rafters Sayap Atap) Kemiringan 16.7° -->
+                ${lineZ(-0.80, 2.86, 6.00, 4.90, '#d97706', 0.10, null, 'cad-element', 'Kaki Kuda Utama Kiri (Sayap)', 'Kayu 5x10 cm • Kemiringan 16.7°')}
+                ${lineZ(6.00, 4.90, 12.80, 2.86, '#d97706', 0.10, null, 'cad-element', 'Kaki Kuda Utama Kanan (Sayap)', 'Kayu 5x10 cm • Kemiringan 16.7°')}
+
+                <!-- Skur Penahan Kuda-Kuda -->
+                ${lineZ(-0.60, 2.92, 0.00, 2.00, '#b45309', 0.08, null, 'cad-element', 'Skur Luar Kiri 5x10', 'Kayu Skur Penahan 5x10')}
+                ${lineZ(12.00, 2.00, 12.60, 2.92, '#b45309', 0.08, null, 'cad-element', 'Skur Luar Kanan 5x10', 'Kayu Skur Penahan 5x10')}
+                ${lineZ(0.00, 3.10, 2.00, 3.70, '#b45309', 0.08, null, 'cad-element', 'Skur Diagonal Kiri 1', 'Kayu Skur 5x10')}
+                ${lineZ(2.00, 3.70, 4.00, 3.10, '#b45309', 0.08, null, 'cad-element', 'Skur Diagonal Kiri 2', 'Kayu Skur 5x10')}
+                ${lineZ(8.00, 3.10, 10.00, 3.70, '#b45309', 0.08, null, 'cad-element', 'Skur Diagonal Kanan 1', 'Kayu Skur 5x10')}
+                ${lineZ(10.00, 3.70, 12.00, 3.10, '#b45309', 0.08, null, 'cad-element', 'Skur Diagonal Kanan 2', 'Kayu Skur 5x10')}
+                ${lineZ(4.00, 3.10, 5.85, 4.80, '#b45309', 0.08, null, 'cad-element', 'Skur Tengah Kiri', 'Kayu Skur 5x10')}
+                ${lineZ(6.15, 4.80, 8.00, 3.10, '#b45309', 0.08, null, 'cad-element', 'Skur Tengah Kanan', 'Kayu Skur 5x10')}
+
+                <!-- Tiang Vertikal Monitor at Y=4.75 and Y=7.15 (Z=4.64 to 5.40m) -->
+                ${rectZ(4.75, 4.64, 0.05, 0.76, '#d97706', '#fff', 0.02, 'cad-element', 'Tiang Monitor Kiri', 'Kayu 5x10 • Z=4.64 s.d 5.40m')}
+                ${rectZ(7.15, 4.64, 0.05, 0.76, '#d97706', '#fff', 0.02, 'cad-element', 'Tiang Monitor Kanan', 'Kayu 5x10 • Z=4.64 s.d 5.40m')}
+
+                <!-- Rafter Topi Monitor Roof -->
+                ${lineZ(4.20, 5.22, 6.00, 5.76, '#d97706', 0.08, null, 'cad-element', 'Rafter Topi Monitor Kiri', 'Kayu 5x10')}
+                ${lineZ(6.00, 5.76, 7.80, 5.22, '#d97706', 0.08, null, 'cad-element', 'Rafter Topi Monitor Kanan', 'Kayu 5x10')}
+
+                <!-- Penutup Atap Spandek Bergelombang (Sayap 6m & Topi Monitor 2m) -->
+                ${lineZ(-0.80, 3.06, 4.95, 4.85, '#0284c7', 0.12, null, 'cad-element', 'Atap Spandek Sayap Kiri 6m', 'Spandek Galvalum Bergelombang (Lebar Efektif 0.70m)')}
+                ${lineZ(7.05, 4.85, 12.80, 3.06, '#0284c7', 0.12, null, 'cad-element', 'Atap Spandek Sayap Kanan 6m', 'Spandek Galvalum Bergelombang (Lebar Efektif 0.70m)')}
+                ${lineZ(4.20, 5.37, 6.00, 5.92, '#0284c7', 0.12, null, 'cad-element', 'Atap Spandek Topi Monitor Kiri 2m', 'Spandek Galvalum Bergelombang Puncak Nok')}
+                ${lineZ(6.00, 5.92, 7.80, 5.37, '#0284c7', 0.12, null, 'cad-element', 'Atap Spandek Topi Monitor Kanan 2m', 'Spandek Galvalum Bergelombang Puncak Nok')}
+
+                <!-- 13 Gording 5x10 Canted Miring Nodes -->
+                ${[
+                    {y: -0.80, z: 2.96}, {y: 1.10, z: 3.53}, {y: 3.00, z: 4.10}, {y: 4.80, z: 4.64}, {y: 5.80, z: 4.94},
+                    {y: 6.20, z: 4.94}, {y: 7.20, z: 4.64}, {y: 9.00, z: 4.10}, {y: 10.90, z: 3.53}, {y: 12.80, z: 2.96},
+                    {y: 4.20, z: 5.32}, {y: 5.95, z: 5.86}, {y: 7.80, z: 5.32}
+                ].map(g => `<circle cx="${g.y}" cy="${zToY(g.z)}" r="0.08" fill="#fcd34d" stroke="#000" stroke-width="0.02" class="cad-element" data-title="Gording 5x10 Miring Canted" data-info="Posisi Y=${g.y}m, Z=+${g.z}m • Miring 16.7°"/>`).join('')}
+
+                <!-- 6 Racks 3 Susun Detail (Rak A, B1, B2, C1, C2, D) -->
+                ${getUprightRacksSVG()}
+
+                <!-- CAD Elevation Datum & Dimension Lines on the Left -->
+                <line x1="-1.6" y1="${zToY(-0.4)}" x2="-1.6" y2="${zToY(5.92)}" stroke="#00e5ff" stroke-width="0.04"/>
+                ${[
+                    {z: 5.92, label: "+5.92 m (Puncak Nok Monitor)"},
+                    {z: 4.90, label: "+4.90 m (Puncak Sayap Atap)"},
+                    {z: 4.30, label: "+4.30 m (Tiang Peninggi Kap Atas Kolom B-C)"},
+                    {z: 3.00, label: "+3.00 m (Balok Tarik Kuda-Kuda)"},
+                    {z: 2.15, label: "+2.15 m (Lantai Ayam Susun 3)"},
+                    {z: 1.90, label: "+1.90 m (Alas Kotoran Susun 3)"},
+                    {z: 1.20, label: "+1.20 m (Lantai Ayam Susun 2)"},
+                    {z: 0.95, label: "+0.95 m (Alas Kotoran Susun 2)"},
+                    {z: 0.25, label: "+0.25 m (Lantai Ayam Susun 1)"},
+                    {z: 0.03, label: "+0.03 m (Permukaan Lantai Beton)"},
+                    {z: 0.00, label: "±0.00 m (Dasar / Got Drainase)"},
+                    {z: -0.40, label: "-0.40 m (Dasar Umpak Pondasi)"}
+                ].map(e => `
+                    <line x1="-1.6" y1="${zToY(e.z)}" x2="-1.3" y2="${zToY(e.z)}" stroke="#f59e0b" stroke-width="0.03"/>
+                    <text x="-1.7" y="${zToY(e.z) + 0.06}" fill="#00e5ff" font-size="0.18" font-family="monospace" text-anchor="end">${e.label}</text>
+                `).join('')}
+
+                <!-- Overall Dimension 12.00m at Bottom -->
+                <line x1="0" y1="${zToY(-0.8)}" x2="12" y2="${zToY(-0.8)}" stroke="#00e5ff" stroke-width="0.06"/>
+                <line x1="0" y1="${zToY(-0.7)}" x2="0" y2="${zToY(-0.9)}" stroke="#00e5ff" stroke-width="0.06"/>
+                <line x1="12" y1="${zToY(-0.7)}" x2="12" y2="${zToY(-0.9)}" stroke="#00e5ff" stroke-width="0.06"/>
+                <text x="6" y="${zToY(-0.95)}" fill="#00e5ff" font-size="0.3" font-weight="bold" font-family="monospace" text-anchor="middle">LEBAR BENTANG KUDA-KUDA = 12.00 M</text>
+            </svg>`;
+            return svg;
+        }
+
+        // Helper to draw upright 3-tier racks with proper Z elevation
+        function getUprightRacksSVG() {
+            const rackYs = [
+                {ys: 0.00, ye: 1.50, label: "Rak A (Utara)"},
+                {ys: 2.50, ye: 4.00, label: "Rak B1 (Tengah-Kiri)"},
+                {ys: 4.00, ye: 5.50, label: "Rak B2 (Tengah-Kanan)"},
+                {ys: 6.50, ye: 8.00, label: "Rak C1 (Tengah-Kiri)"},
+                {ys: 8.00, ye: 9.50, label: "Rak C2 (Tengah-Kanan)"},
+                {ys: 10.50, ye: 12.00, label: "Rak D (Selatan)"}
+            ];
+
+            let svg = '';
+            rackYs.forEach(r => {
+                const w = r.ye - r.ys;
+                // Vertical rack posts 5x5cm Z=0.03 to 2.97m
+                svg += rectZ(r.ys, 0.03, 0.05, 2.94, '#78350f', '#92400e', 0.01, 'cad-element', `Tiang Depan ${r.label}`, 'Kayu 5x5 cm H=2.94m');
+                svg += rectZ(r.ye - 0.05, 0.03, 0.05, 2.94, '#78350f', '#92400e', 0.01, 'cad-element', `Tiang Belakang ${r.label}`, 'Kayu 5x5 cm H=2.94m');
+
+                // Susun 1: Slat Ayam Z=+0.25m
+                svg += rectZ(r.ys, 0.25, w, 0.05, '#16a34a', '#22c55e', 0.02, 'cad-element', `${r.label} - Lantai Ayam Susun 1`, 'Elevasi +0.25m • Slat Mesh Plastik Hijau');
+                // Susun 2: Alas Kotoran Z=+0.95m
+                svg += rectZ(r.ys, 0.95, w, 0.02, '#eab308', '#ca8a04', 0.01, 'cad-element', `${r.label} - Alas Kotoran Susun 2`, 'Elevasi +0.95m • Tripleks 8mm');
+                // Susun 2: Lantai Ayam Z=+1.20m
+                svg += rectZ(r.ys, 1.20, w, 0.05, '#16a34a', '#22c55e', 0.02, 'cad-element', `${r.label} - Lantai Ayam Susun 2`, 'Elevasi +1.20m • Slat Mesh Plastik Hijau');
+                // Susun 3: Alas Kotoran Z=+1.90m
+                svg += rectZ(r.ys, 1.90, w, 0.02, '#eab308', '#ca8a04', 0.01, 'cad-element', `${r.label} - Alas Kotoran Susun 3`, 'Elevasi +1.90m • Tripleks 8mm');
+                // Susun 3: Lantai Ayam Z=+2.15m
+                svg += rectZ(r.ys, 2.15, w, 0.05, '#16a34a', '#22c55e', 0.02, 'cad-element', `${r.label} - Lantai Ayam Susun 3`, 'Elevasi +2.15m • Slat Mesh Plastik Hijau');
+
+                // Talang pakan profil U (open trough) & Nipple Line
+                [0.25, 1.20, 2.15].forEach((lz, li) => {
+                    // Talang Pakan at Z = lz + 0.07m
+                    svg += rectZ(r.ys + 0.02, lz + 0.07, 0.12, 0.08, '#f8fafc', '#94a3b8', 0.01, 'cad-element', `Talang Pakan PVC ${r.label} T${li+1}`, 'Profil U terbuka lebar 12cm, tinggi 10cm, bibir 2cm');
+                    // Nipple Drinker line at Z = lz + 0.40m
+                    svg += `<circle cx="${r.ys + w/2}" cy="${zToY(lz + 0.40)}" r="0.04" fill="#ef4444" class="cad-element" data-title="Nipple Drinker 360° ${r.label} T${li+1}" data-info="Pipa 3/4in + Nipple Merah Spasi 30cm"/>`;
+                });
+            });
+            return svg;
+        }
+
+        // SVG 2: Denah Tata Letak (Floor Plan 26x12m)
         function getFloorPlanSVG() {
             return `
             <svg class="cad-svg" viewBox="-2.5 -2.5 32 17">
@@ -1650,69 +1844,76 @@ KandangBroiler_Lengkap.build
                     </pattern>
                 </defs>
 
-                <!-- Grid Guidelines -->
-                <line x1="0" y1="-1" x2="0" y2="13" stroke="#475569" stroke-width="0.05" stroke-dasharray="0.2,0.2"/>
-                <line x1="2" y1="-1" x2="2" y2="13" stroke="#475569" stroke-width="0.05" stroke-dasharray="0.2,0.2"/>
-                <line x1="6" y1="-1" x2="6" y2="13" stroke="#475569" stroke-width="0.05" stroke-dasharray="0.2,0.2"/>
-                <line x1="10" y1="-1" x2="10" y2="13" stroke="#475569" stroke-width="0.05" stroke-dasharray="0.2,0.2"/>
-                <line x1="14" y1="-1" x2="14" y2="13" stroke="#475569" stroke-width="0.05" stroke-dasharray="0.2,0.2"/>
-                <line x1="18" y1="-1" x2="18" y2="13" stroke="#475569" stroke-width="0.05" stroke-dasharray="0.2,0.2"/>
-                <line x1="22" y1="-1" x2="22" y2="13" stroke="#475569" stroke-width="0.05" stroke-dasharray="0.2,0.2"/>
-                <line x1="26" y1="-1" x2="26" y2="13" stroke="#475569" stroke-width="0.05" stroke-dasharray="0.2,0.2"/>
+                <!-- Grid Lines X: 0, 2, 6, 10, 14, 18, 22, 26m -->
+                ${[0, 2, 6, 10, 14, 18, 22, 26].map(gx => `
+                    <line x1="${gx}" y1="-0.8" x2="${gx}" y2="12.8" stroke="#475569" stroke-width="0.04" stroke-dasharray="0.2,0.2"/>
+                    <text x="${gx}" y="-1.0" fill="#94a3b8" font-size="0.25" font-family="monospace" text-anchor="middle">As X=${gx}m</text>
+                `).join('')}
 
-                <!-- Concrete Floor Slabs -->
-                <rect x="0" y="0" width="26" height="2.0" fill="url(#concretePatt)" stroke="#38bdf8" stroke-width="0.05" class="cad-element" data-title="Lantai Cor Semen Utara" data-info="26.0 x 2.0 m • Tebal 3 cm"/>
-                <rect x="0" y="2.2" width="26" height="3.8" fill="url(#concretePatt)" stroke="#38bdf8" stroke-width="0.05" class="cad-element" data-title="Lantai Cor Aisle 1-2" data-info="26.0 x 3.8 m • Tebal 3 cm"/>
-                <rect x="0" y="6.2" width="26" height="3.8" fill="url(#concretePatt)" stroke="#38bdf8" stroke-width="0.05" class="cad-element" data-title="Lantai Cor Aisle 2-3" data-info="26.0 x 3.8 m • Tebal 3 cm"/>
-                <rect x="0" y="10.2" width="26" height="1.8" fill="url(#concretePatt)" stroke="#38bdf8" stroke-width="0.05" class="cad-element" data-title="Lantai Cor Semen Selatan" data-info="26.0 x 1.8 m • Tebal 3 cm"/>
+                <!-- Grid Lines Y: 0, 4, 8, 12m -->
+                ${[
+                    {y: 0, label: "As A (Utara)"},
+                    {y: 4, label: "As B (Tengah)"},
+                    {y: 8, label: "As C (Tengah)"},
+                    {y: 12, label: "As D (Selatan)"}
+                ].map(gy => `
+                    <line x1="-0.8" y1="${gy.y}" x2="26.8" y2="${gy.y}" stroke="#475569" stroke-width="0.04" stroke-dasharray="0.2,0.2"/>
+                    <text x="-1.0" y="${gy.y + 0.1}" fill="#94a3b8" font-size="0.25" font-family="monospace" text-anchor="end">${gy.label}</text>
+                `).join('')}
 
-                <!-- Drainage Gutters (Got 1, 2, 3) -->
-                <rect x="1" y="2.0" width="25" height="0.20" fill="#94a3b8" stroke="#f59e0b" stroke-width="0.03" class="cad-element" data-title="Got Drainase #1 + Penutup Ulin" data-info="Panjang 25m • Lebar bersih 20cm • Papan kayu ulin t=2.5cm"/>
-                <rect x="1" y="6.0" width="25" height="0.20" fill="#94a3b8" stroke="#f59e0b" stroke-width="0.03" class="cad-element" data-title="Got Drainase #2 + Penutup Ulin" data-info="Panjang 25m • Lebar bersih 20cm • Papan kayu ulin t=2.5cm"/>
-                <rect x="1" y="10.0" width="25" height="0.20" fill="#94a3b8" stroke="#f59e0b" stroke-width="0.03" class="cad-element" data-title="Got Drainase #3 + Penutup Ulin" data-info="Panjang 25m • Lebar bersih 20cm • Papan kayu ulin t=2.5cm"/>
+                <!-- Concrete Floor Slabs (4 fields separated by Got) -->
+                <rect x="0" y="0" width="26" height="2.0" fill="url(#concretePatt)" stroke="#38bdf8" stroke-width="0.04" class="cad-element" data-title="Lantai Cor Utara" data-info="26.0 x 2.0 m • Tebal 3 cm"/>
+                <rect x="0" y="2.2" width="26" height="3.8" fill="url(#concretePatt)" stroke="#38bdf8" stroke-width="0.04" class="cad-element" data-title="Lantai Cor Aisle 1-2" data-info="26.0 x 3.8 m • Tebal 3 cm"/>
+                <rect x="0" y="6.2" width="26" height="3.8" fill="url(#concretePatt)" stroke="#38bdf8" stroke-width="0.04" class="cad-element" data-title="Lantai Cor Aisle 2-3" data-info="26.0 x 3.8 m • Tebal 3 cm"/>
+                <rect x="0" y="10.2" width="26" height="1.8" fill="url(#concretePatt)" stroke="#38bdf8" stroke-width="0.04" class="cad-element" data-title="Lantai Cor Selatan" data-info="26.0 x 1.8 m • Tebal 3 cm"/>
 
-                <!-- 6 Racks (Rak A, B1, B2, C1, C2, D) -->
-                <rect x="1" y="0.00" width="24" height="1.50" fill="#166534" fill-opacity="0.5" stroke="#22c55e" stroke-width="0.06" class="cad-element" data-title="Rak A (Utara)" data-info="L=24.0m, W=1.50m • 3 Susun Slat Plastik & Talang Pakan"/>
-                <rect x="1" y="2.50" width="24" height="1.50" fill="#166534" fill-opacity="0.5" stroke="#22c55e" stroke-width="0.06" class="cad-element" data-title="Rak B1 (Tengah-Kiri)" data-info="L=24.0m, W=1.50m • 3 Susun Slat Plastik & Talang Pakan"/>
-                <rect x="1" y="4.00" width="24" height="1.50" fill="#166534" fill-opacity="0.5" stroke="#22c55e" stroke-width="0.06" class="cad-element" data-title="Rak B2 (Tengah-Kanan)" data-info="L=24.0m, W=1.50m • 3 Susun Slat Plastik & Talang Pakan"/>
-                <rect x="1" y="6.50" width="24" height="1.50" fill="#166534" fill-opacity="0.5" stroke="#22c55e" stroke-width="0.06" class="cad-element" data-title="Rak C1 (Tengah-Kiri)" data-info="L=24.0m, W=1.50m • 3 Susun Slat Plastik & Talang Pakan"/>
-                <rect x="1" y="8.00" width="24" height="1.50" fill="#166534" fill-opacity="0.5" stroke="#22c55e" stroke-width="0.06" class="cad-element" data-title="Rak C2 (Tengah-Kanan)" data-info="L=24.0m, W=1.50m • 3 Susun Slat Plastik & Talang Pakan"/>
-                <rect x="1" y="10.50" width="24" height="1.50" fill="#166534" fill-opacity="0.5" stroke="#22c55e" stroke-width="0.06" class="cad-element" data-title="Rak D (Selatan)" data-info="L=24.0m, W=1.50m • 3 Susun Slat Plastik & Talang Pakan"/>
+                <!-- 3 Got Drainase with Ulin Covers -->
+                ${[2.0, 6.0, 10.0].map((gy, i) => `
+                    <rect x="1" y="${gy}" width="25" height="0.20" fill="#b45309" stroke="#f59e0b" stroke-width="0.03" class="cad-element" data-title="Got Drainase #${i+1} + Papan Ulin" data-info="L=25m, W=20cm • Penutup kayu ulin t=2.5cm"/>
+                `).join('')}
 
-                <!-- 3 Aisles (Lorong Inspeksi) -->
-                <text x="13" y="2.0" fill="#f8fafc" font-size="0.4" font-weight="bold" text-anchor="middle">LORONG 1 (1.00m)</text>
-                <text x="13" y="6.0" fill="#f8fafc" font-size="0.4" font-weight="bold" text-anchor="middle">LORONG 2 (1.00m)</text>
-                <text x="13" y="10.0" fill="#f8fafc" font-size="0.4" font-weight="bold" text-anchor="middle">LORONG 3 (1.00m)</text>
+                <!-- 6 Racks 3 Susun -->
+                ${[
+                    {y: 0.00, label: "Rak A (Utara)"},
+                    {y: 2.50, label: "Rak B1 (Tengah-Kiri)"},
+                    {y: 4.00, label: "Rak B2 (Tengah-Kanan)"},
+                    {y: 6.50, label: "Rak C1 (Tengah-Kiri)"},
+                    {y: 8.00, label: "Rak C2 (Tengah-Kanan)"},
+                    {y: 10.50, label: "Rak D (Selatan)"}
+                ].map(r => `
+                    <rect x="1" y="${r.y}" width="24" height="1.50" fill="#166534" fill-opacity="0.6" stroke="#22c55e" stroke-width="0.05" class="cad-element" data-title="${r.label}" data-info="L=24.0m, W=1.50m • 3 Susun Slat Mesh, Pintu Galvanis & Talang PVC"/>
+                    <text x="13" y="${r.y + 0.8}" fill="#bbf7d0" font-size="0.35" font-weight="bold" text-anchor="middle">${r.label} (24.0 × 1.50 m)</text>
+                `).join('')}
 
-                <!-- 32 Composite Posts (Umpak 30x30cm & Tiang 15x10cm) -->
+                <!-- 3 Aisles (Lorong) Labels -->
+                <text x="13" y="2.1" fill="#f8fafc" font-size="0.28" font-weight="bold" text-anchor="middle">LORONG 1 (1.00m)</text>
+                <text x="13" y="6.1" fill="#f8fafc" font-size="0.28" font-weight="bold" text-anchor="middle">LORONG 2 (1.00m)</text>
+                <text x="13" y="10.1" fill="#f8fafc" font-size="0.28" font-weight="bold" text-anchor="middle">LORONG 3 (1.00m)</text>
+
+                <!-- 32 Posts (Tiang Komposit 15x10cm + Umpak 30x30cm) -->
                 ${generatePostsSVG()}
 
-                <!-- Celldeck Cooling Pad (West X=25.80) -->
-                <rect x="25.80" y="0" width="0.20" height="12" fill="#d97706" stroke="#fbbf24" stroke-width="0.05" class="cad-element" data-title="Celldeck Cooling Pad 7090" data-info="12.0m x 1.7m Cellulose Fluted Pad + Talang Stainless"/>
+                <!-- Celldeck Cooling Pad at West End X=25.80 -->
+                <rect x="25.80" y="0" width="0.20" height="12" fill="#d97706" stroke="#fbbf24" stroke-width="0.05" class="cad-element" data-title="Celldeck Cooling Pad 7090" data-info="12.0m x 1.7m Cellulose Pad + Talang Stainless"/>
                 <text x="26.3" y="6" fill="#fbbf24" font-size="0.35" font-weight="bold" transform="rotate(90, 26.3, 6)" text-anchor="middle">CELLDECK COOLING PAD 12.0M</text>
 
-                <!-- 6 Exhaust Fans at East X=0 to -0.40 -->
-                <g class="cad-element" data-title="6 Unit Exhaust Fan Box 50 Inch" data-info="Dual Power: 4 Diesel Kinetik + 2 Motor Listrik">
-                    <rect x="-0.40" y="0.5" width="0.40" height="1.37" fill="#a855f7" stroke="#c084fc" stroke-width="0.04"/>
-                    <rect x="-0.40" y="2.5" width="0.40" height="1.37" fill="#a855f7" stroke="#c084fc" stroke-width="0.04"/>
-                    <rect x="-0.40" y="4.5" width="0.40" height="1.37" fill="#a855f7" stroke="#c084fc" stroke-width="0.04"/>
-                    <rect x="-0.40" y="6.5" width="0.40" height="1.37" fill="#a855f7" stroke="#c084fc" stroke-width="0.04"/>
-                    <rect x="-0.40" y="8.5" width="0.40" height="1.37" fill="#a855f7" stroke="#c084fc" stroke-width="0.04"/>
-                    <rect x="-0.40" y="10.5" width="0.40" height="1.37" fill="#a855f7" stroke="#c084fc" stroke-width="0.04"/>
-                </g>
+                <!-- 6 Exhaust Fan Boxes at East End X=0 to -0.40 -->
+                ${[1.0, 3.0, 5.0, 7.0, 9.0, 11.0].map((by, i) => `
+                    <rect x="-0.40" y="${by - 0.68}" width="0.40" height="1.37" fill="#6b21a8" stroke="#c084fc" stroke-width="0.03" class="cad-element" data-title="Blower #${i+1} 50 Inch" data-info="Box Fan 54x54x16 inch • Louver menghadap keluar"/>
+                `).join('')}
 
-                <!-- Kubota Diesel Engine & Shaft -->
-                <rect x="-1.25" y="5.65" width="0.70" height="0.70" fill="#ef4444" stroke="#f87171" stroke-width="0.05" class="cad-element" data-title="Mesin Diesel Kubota RD110TTB" data-info="11 HP Penggerak Kinetik 4 Blower"/>
-                <line x1="-0.65" y1="0.80" x2="-0.65" y2="11.20" stroke="#f1f5f9" stroke-width="0.08" class="cad-element" data-title="As Transmisi Puli 10.4m" data-info="Menyalurkan tenaga diesel ke 4 blower kinetik"/>
+                <!-- Kubota Engine & Shaft -->
+                <rect x="-1.25" y="5.65" width="0.70" height="0.70" fill="#dc2626" stroke="#fca5a5" stroke-width="0.04" class="cad-element" data-title="Mesin Kubota RD110TTB" data-info="11 HP Diesel Kinetik"/>
+                <line x1="-0.65" y1="0.80" x2="-0.65" y2="11.20" stroke="#f1f5f9" stroke-width="0.08" class="cad-element" data-title="As Transmisi Puli 10.4m" data-info="Menyalurkan daya diesel ke 4 blower"/>
 
-                <!-- Overall Dimension Labels -->
-                <line x1="0" y1="-1.5" x2="26" y2="-1.5" stroke="#00e5ff" stroke-width="0.08"/>
-                <text x="13" y="-1.8" fill="#00e5ff" font-size="0.6" font-weight="bold" font-family="monospace" text-anchor="middle">PANJANG TOTAL = 26.00 M</text>
+                <!-- Overall Dimension 26.00m -->
+                <line x1="0" y1="-1.6" x2="26" y2="-1.6" stroke="#00e5ff" stroke-width="0.08"/>
+                <text x="13" y="-1.9" fill="#00e5ff" font-size="0.6" font-weight="bold" font-family="monospace" text-anchor="middle">PANJANG TOTAL = 26.00 M</text>
                 
-                <line x1="28" y1="0" x2="28" y2="12" stroke="#00e5ff" stroke-width="0.08"/>
+                <!-- Overall Dimension 12.00m -->
+                <line x1="28.0" y1="0" x2="28.0" y2="12" stroke="#00e5ff" stroke-width="0.08"/>
                 <text x="28.8" y="6" fill="#00e5ff" font-size="0.6" font-weight="bold" font-family="monospace" transform="rotate(90, 28.8, 6)" text-anchor="middle">LEBAR TOTAL = 12.00 M</text>
-            </svg>
-            `;
+            </svg>`;
         }
 
         function generatePostsSVG() {
@@ -1724,7 +1925,7 @@ KandangBroiler_Lengkap.build
                 yCoords.forEach((y, r) => {
                     const px = (x === 0.0 ? 0.0 : (x === 26.0 ? 25.85 : x - 0.075));
                     const py = (r === 0 ? 0.0 : (r === 3 ? 11.90 : y - 0.05));
-                    svg += `<rect x="${px - 0.075}" y="${py - 0.10}" width="0.30" height="0.30" fill="#475569" stroke="#94a3b8" stroke-width="0.02"/>`;
+                    svg += `<rect x="${px - 0.075}" y="${py - 0.10}" width="0.30" height="0.30" fill="#334155" stroke="#64748b" stroke-width="0.02"/>`;
                     svg += `<rect x="${px}" y="${py}" width="0.15" height="0.10" fill="#ea580c" stroke="#fff" stroke-width="0.02" class="cad-element" data-title="Tiang #${pIdx} (Kayu Besi 15x10)" data-info="Posisi: X=${x}m, Y=${y}m • 2 Bilah Ulin 5x10 + Spacer"/>`;
                     pIdx++;
                 });
@@ -1732,141 +1933,115 @@ KandangBroiler_Lengkap.build
             return svg;
         }
 
-        // SVG 2: Potongan Melintang (Cross Section Y-Z looking along X)
-        function getCrossSectionSVG() {
-            return `
-            <svg class="cad-svg" viewBox="-2 -1 16 8">
-                <!-- Ground and Floor -->
-                <line x1="-1.5" y1="0" x2="13.5" y2="0" stroke="#475569" stroke-width="0.06"/>
-                <rect x="0" y="0" width="12" height="0.03" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.02"/>
-
-                <!-- Parit Got at Y=2, 6, 10 -->
-                <rect x="1.95" y="-0.25" width="0.30" height="0.25" fill="#64748b" stroke="#f59e0b" stroke-width="0.03" class="cad-element" data-title="Got Drainase Y=2.0m" data-info="Lebar 20cm, Dalam 25cm + Papan Ulin 2.5cm"/>
-                <rect x="5.95" y="-0.25" width="0.30" height="0.25" fill="#64748b" stroke="#f59e0b" stroke-width="0.03" class="cad-element" data-title="Got Drainase Y=6.0m" data-info="Lebar 20cm, Dalam 25cm + Papan Ulin 2.5cm"/>
-                <rect x="9.95" y="-0.25" width="0.30" height="0.25" fill="#64748b" stroke="#f59e0b" stroke-width="0.03" class="cad-element" data-title="Got Drainase Y=10.0m" data-info="Lebar 20cm, Dalam 25cm + Papan Ulin 2.5cm"/>
-
-                <!-- 4 Columns at Y=0, 4, 8, 12 -->
-                <rect x="-0.05" y="0.03" width="0.10" height="2.97" fill="#c2410c" stroke="#fff" stroke-width="0.03" class="cad-element" data-title="Tiang Kolom A (Utara)" data-info="Tinggi 2.97m • Kayu Besi 15x10"/>
-                <rect x="3.95" y="0.03" width="0.10" height="4.27" fill="#c2410c" stroke="#fff" stroke-width="0.03" class="cad-element" data-title="Tiang Kolom B (Peninggi Kap Atas)" data-info="Menjulur hingga Z=4.30m menopang Kuda-Kuda"/>
-                <rect x="7.95" y="0.03" width="0.10" height="4.27" fill="#c2410c" stroke="#fff" stroke-width="0.03" class="cad-element" data-title="Tiang Kolom C (Peninggi Kap Atas)" data-info="Menjulur hingga Z=4.30m menopang Kuda-Kuda"/>
-                <rect x="11.95" y="0.03" width="0.10" height="2.97" fill="#c2410c" stroke="#fff" stroke-width="0.03" class="cad-element" data-title="Tiang Kolom D (Selatan)" data-info="Tinggi 2.97m • Kayu Besi 15x10"/>
-
-                <!-- Balok Tarik Kuda-Kuda Bentang 12m at Z=3.00 -->
-                <rect x="0" y="3.00" width="12" height="0.10" fill="#d97706" stroke="#fbbf24" stroke-width="0.03" class="cad-element" data-title="Balok Tarik Kuda-Kuda 12m" data-info="Kayu 5x10 cm • Elevasi Z=+3.00m"/>
-
-                <!-- Plafon Terpal Putih at Z=2.98 -->
-                <line x1="0" y1="2.98" x2="12" y2="2.98" stroke="#f8fafc" stroke-width="0.04" stroke-dasharray="0.1,0.1"/>
-
-                <!-- Sloped Rafters (Kaki Kuda-kuda) -->
-                <line x1="-0.80" y1="2.86" x2="6.00" y2="4.90" stroke="#d97706" stroke-width="0.10" class="cad-element" data-title="Kaki Kuda Sayap Kiri" data-info="Kemiringan 16.7° • Kayu 5x10"/>
-                <line x1="6.00" y1="4.90" x2="12.80" y2="2.86" stroke="#d97706" stroke-width="0.10" class="cad-element" data-title="Kaki Kuda Sayap Kanan" data-info="Kemiringan 16.7° • Kayu 5x10"/>
-
-                <!-- Monitor Roof Top -->
-                <rect x="4.75" y="4.64" width="0.10" height="0.76" fill="#b45309" stroke="#fff" stroke-width="0.02"/>
-                <rect x="7.15" y="4.64" width="0.10" height="0.76" fill="#b45309" stroke="#fff" stroke-width="0.02"/>
-                <line x1="4.20" y1="5.22" x2="6.00" y2="5.76" stroke="#d97706" stroke-width="0.08"/>
-                <line x1="6.00" y1="5.76" x2="7.80" y2="5.22" stroke="#d97706" stroke-width="0.08"/>
-                <line x1="4.20" y1="5.37" x2="6.00" y2="5.92" stroke="#0284c7" stroke-width="0.06"/>
-                <line x1="6.00" y1="5.92" x2="7.80" y2="5.37" stroke="#0284c7" stroke-width="0.06"/>
-
-                <!-- Spandek Sheets Main Wings -->
-                <line x1="-0.80" y1="3.06" x2="4.95" y2="4.85" stroke="#0284c7" stroke-width="0.08" class="cad-element" data-title="Spandek Galvalum 6m (Sayap Kiri)" data-info="Kemiringan 16.7° • Overstek 0.8m"/>
-                <line x1="7.05" y1="4.85" x2="12.80" y2="3.06" stroke="#0284c7" stroke-width="0.08" class="cad-element" data-title="Spandek Galvalum 6m (Sayap Kanan)" data-info="Kemiringan 16.7° • Overstek 0.8m"/>
-
-                <!-- 6 Racks 3 Tiers (Y: 0..1.5, 2.5..4, 4..5.5, 6.5..8, 8..9.5, 10.5..12) -->
-                ${generateRackCrossSectionSVG()}
-
-                <!-- Elevation Markers -->
-                <text x="-1.2" y="5.92" fill="#f59e0b" font-size="0.25" font-family="monospace">+5.92m (Puncak Monitor)</text>
-                <text x="-1.2" y="4.90" fill="#f59e0b" font-size="0.25" font-family="monospace">+4.90m (Sayap Atap)</text>
-                <text x="-1.2" y="3.00" fill="#f59e0b" font-size="0.25" font-family="monospace">+3.00m (Balok Tarik)</text>
-                <text x="-1.2" y="2.15" fill="#f59e0b" font-size="0.25" font-family="monospace">+2.15m (Lantai T3)</text>
-                <text x="-1.2" y="1.20" fill="#f59e0b" font-size="0.25" font-family="monospace">+1.20m (Lantai T2)</text>
-                <text x="-1.2" y="0.25" fill="#f59e0b" font-size="0.25" font-family="monospace">+0.25m (Lantai T1)</text>
-            </svg>
-            `;
-        }
-
-        function generateRackCrossSectionSVG() {
-            const rackYs = [
-                {ys:0.0, ye:1.5, label:"Rak A"},
-                {ys:2.5, ye:4.0, label:"Rak B1"},
-                {ys:4.0, ye:5.5, label:"Rak B2"},
-                {ys:6.5, ye:8.0, label:"Rak C1"},
-                {ys:8.0, ye:9.5, label:"Rak C2"},
-                {ys:10.5, ye:12.0, label:"Rak D"}
-            ];
-            let svg = '';
-            rackYs.forEach(r => {
-                // Posts
-                svg += `<rect x="${r.ys}" y="0.03" width="0.05" height="2.94" fill="#78350f"/>`;
-                svg += `<rect x="${r.ye - 0.05}" y="0.03" width="0.05" height="2.94" fill="#78350f"/>`;
-                // Floors T1, T2, T3
-                svg += `<rect x="${r.ys}" y="0.25" width="${r.ye - r.ys}" height="0.04" fill="#15803d" class="cad-element" data-title="${r.label} - Lantai 1 (+0.25m)" data-info="Slat Mesh Plastik Hijau"/>`;
-                svg += `<rect x="${r.ys}" y="0.95" width="${r.ye - r.ys}" height="0.02" fill="#eab308" class="cad-element" data-title="${r.label} - Alas Kotoran 2 (+0.95m)" data-info="Tripleks 8mm"/>`;
-                svg += `<rect x="${r.ys}" y="1.20" width="${r.ye - r.ys}" height="0.04" fill="#15803d" class="cad-element" data-title="${r.label} - Lantai 2 (+1.20m)" data-info="Slat Mesh Plastik Hijau"/>`;
-                svg += `<rect x="${r.ys}" y="1.90" width="${r.ye - r.ys}" height="0.02" fill="#eab308" class="cad-element" data-title="${r.label} - Alas Kotoran 3 (+1.90m)" data-info="Tripleks 8mm"/>`;
-                svg += `<rect x="${r.ys}" y="2.15" width="${r.ye - r.ys}" height="0.04" fill="#15803d" class="cad-element" data-title="${r.label} - Lantai 3 (+2.15m)" data-info="Slat Mesh Plastik Hijau"/>`;
-            });
-            return svg;
-        }
-
-        // SVG 3: Tampak Depan (Celldeck)
+        // SVG 3: Tampak Depan (West Elevation / Celldeck X=26m, Upright Z)
         function getFrontElevationSVG() {
             return `
-            <svg class="cad-svg" viewBox="-2 -1 16 8">
-                <line x1="-1" y1="0" x2="13" y2="0" stroke="#475569" stroke-width="0.06"/>
-                <!-- Celldeck Pad 12m x 1.7m -->
-                <rect x="0" y="0.55" width="12" height="0.10" fill="#94a3b8" stroke="#cbd5e1" stroke-width="0.02"/>
-                <rect x="0" y="0.65" width="12" height="1.70" fill="#b45309" stroke="#d97706" stroke-width="0.04" class="cad-element" data-title="Celldeck Cooling Pad 7090" data-info="Lebar 12.0m, Tinggi 1.7m, Tebal 15cm"/>
-                <rect x="0" y="2.35" width="12" height="0.10" fill="#94a3b8" stroke="#cbd5e1" stroke-width="0.02"/>
-                <!-- Roof Profile Above -->
-                <polygon points="-0.8,2.86 6.0,4.90 12.8,2.86 12.8,3.16 6.0,5.20 -0.8,3.16" fill="#0284c7" stroke="#38bdf8" stroke-width="0.03"/>
-                <polygon points="4.2,5.22 6.0,5.76 7.8,5.22 7.8,5.42 6.0,5.96 4.2,5.42" fill="#0284c7" stroke="#38bdf8" stroke-width="0.03"/>
-                <text x="6" y="1.5" fill="#f8fafc" font-size="0.5" font-weight="bold" text-anchor="middle">CELLDECK COOLING PAD 12.0 × 1.7 M</text>
-            </svg>
-            `;
+            <svg class="cad-svg" viewBox="-2 0 16 8.5">
+                <text x="6" y="0.5" fill="#00e5ff" font-size="0.45" font-weight="bold" text-anchor="middle">TAMPAK DEPAN - SISI BARAT (CELLDECK COOLING PAD)</text>
+                <text x="6" y="0.85" fill="#94a3b8" font-size="0.25" text-anchor="middle">Lebar 12.00m • Celldeck 7090 Cellulose (12.0 x 1.70m)</text>
+
+                <!-- Ground Line Z=0 -->
+                <line x1="-1" y1="${zToY(0)}" x2="13" y2="${zToY(0)}" stroke="#475569" stroke-width="0.06"/>
+
+                <!-- Celldeck Talang Bawah Z=0.55..0.65m -->
+                ${rectZ(0.0, 0.55, 12.0, 0.10, '#94a3b8', '#cbd5e1', 0.02, 'cad-element', 'Talang Bawah Celldeck Stainless', 'Panjang 12.0m • Penampung sirkulasi air')}
+                <!-- Celldeck Pad Z=0.65..2.35m -->
+                ${rectZ(0.0, 0.65, 12.0, 1.70, '#b45309', '#d97706', 0.04, 'cad-element', 'Celldeck Cooling Pad 7090', 'Lebar 12.0m, Tinggi 1.7m, Tebal 15cm Cellulose')}
+                <!-- Celldeck Talang Atas Z=2.35..2.45m -->
+                ${rectZ(0.0, 2.35, 12.0, 0.10, '#94a3b8', '#cbd5e1', 0.02, 'cad-element', 'Talang Atas Celldeck Stainless', 'Panjang 12.0m • Pipa distribusi air')}
+
+                <!-- 41 Vertical Panel Dividers -->
+                ${Array.from({length: 41}, (_, i) => `<line x1="${i * 0.30}" y1="${zToY(0.65)}" x2="${i * 0.30}" y2="${zToY(2.35)}" stroke="#fcd34d" stroke-width="0.02"/>`).join('')}
+
+                <!-- Gable Wall & Roof Rafters Upright -->
+                ${lineZ(-0.80, 2.86, 6.00, 4.90, '#0284c7', 0.12, null, 'cad-element', 'Atap Spandek Sayap Kiri', 'Kemiringan 16.7°')}
+                ${lineZ(6.00, 4.90, 12.80, 2.86, '#0284c7', 0.12, null, 'cad-element', 'Atap Spandek Sayap Kanan', 'Kemiringan 16.7°')}
+                ${lineZ(4.20, 5.37, 6.00, 5.92, '#0284c7', 0.12, null, 'cad-element', 'Topi Monitor Kiri', 'Puncak Nok +5.92m')}
+                ${lineZ(6.00, 5.92, 7.80, 5.37, '#0284c7', 0.12, null, 'cad-element', 'Topi Monitor Kanan', 'Puncak Nok +5.92m')}
+
+                <!-- Elevation Markers -->
+                <text x="-1.2" y="${zToY(5.92) + 0.06}" fill="#f59e0b" font-size="0.22" font-family="monospace">+5.92m Nok</text>
+                <text x="-1.2" y="${zToY(2.35) + 0.06}" fill="#f59e0b" font-size="0.22" font-family="monospace">+2.35m Top Pad</text>
+                <text x="-1.2" y="${zToY(0.65) + 0.06}" fill="#f59e0b" font-size="0.22" font-family="monospace">+0.65m Bottom Pad</text>
+            </svg>`;
         }
 
-        // SVG 4: Tampak Belakang (6 Blower)
+        // SVG 4: Tampak Belakang (East Elevation / 6 Blower X=0m, Upright Z)
         function getBackElevationSVG() {
             return `
-            <svg class="cad-svg" viewBox="-2 -1 16 8">
-                <line x1="-1" y1="0" x2="13" y2="0" stroke="#475569" stroke-width="0.06"/>
-                <!-- 6 Exhaust Fan Boxes -->
-                ${[1.0, 3.0, 5.0, 7.0, 9.0, 11.0].map((y, i) => `
-                    <rect x="${y - 0.68}" y="0.82" width="1.37" height="1.37" fill="#6b21a8" stroke="#c084fc" stroke-width="0.04" class="cad-element" data-title="Blower #${i+1} 50 Inch" data-info="Heavy Duty Box Fan 54x54x16 inch • 11 Louvers, 6 Blade Propeller"/>
-                    <circle cx="${y}" cy="1.50" r="0.60" fill="#581c87" stroke="#a855f7" stroke-width="0.03"/>
-                    <circle cx="${y}" cy="1.50" r="0.15" fill="#ef4444"/>
+            <svg class="cad-svg" viewBox="-2 0 16 8.5">
+                <text x="6" y="0.5" fill="#00e5ff" font-size="0.45" font-weight="bold" text-anchor="middle">TAMPAK BELAKANG - SISI TIMUR (6 UNIT BLOWER 50")</text>
+                <text x="6" y="0.85" fill="#94a3b8" font-size="0.25" text-anchor="middle">4 Unit Penggerak Diesel Kinetik + 2 Unit Motor Listrik</text>
+
+                <!-- Ground Line Z=0 -->
+                <line x1="-1" y1="${zToY(0)}" x2="13" y2="${zToY(0)}" stroke="#475569" stroke-width="0.06"/>
+
+                <!-- 4 Tiang Penyangga Belakang at Y=0, 4, 8, 12m -->
+                ${[0.0, 4.0, 8.0, 12.0].map(y => rectZ(y - 0.05, 0.03, 0.10, 2.97, '#ea580c', '#fff', 0.02, 'cad-element', 'Tiang Rangka Blower', 'Kayu Besi 15x10cm')).join('')}
+
+                <!-- Balok Dudukan Blower at Z=0.80m -->
+                ${rectZ(0.0, 0.80, 12.0, 0.05, '#d97706', '#fbbf24', 0.02, 'cad-element', 'Balok Dudukan Blower', 'Kayu 5x10 cm L=12m')}
+
+                <!-- 6 Exhaust Fan Boxes 50" (Center Z=1.50m, Box 1.37x1.37m -> Z=0.82 to 2.19m) -->
+                ${[1.0, 3.0, 5.0, 7.0, 9.0, 11.0].map((by, i) => `
+                    ${rectZ(by - 0.685, 0.814, 1.37, 1.37, '#581c87', '#a855f7', 0.03, 'cad-element', `Blower #${i+1} 50 Inch`, 'Heavy Duty Box Fan 54x54x16 inch • 11 Louver Sirip & 6 Baling Propeller')}
+                    <!-- Louver Blades horizontal lines -->
+                    ${Array.from({length: 11}, (_, li) => `<line x1="${by - 0.65}" y1="${zToY(0.85 + li * 0.12)}" x2="${by + 0.65}" y2="${zToY(0.85 + li * 0.12)}" stroke="#c084fc" stroke-width="0.015"/>`).join('')}
+                    <!-- Propeller Circle -->
+                    <circle cx="${by}" cy="${zToY(1.50)}" r="0.60" fill="none" stroke="#e9d5ff" stroke-width="0.02"/>
+                    <circle cx="${by}" cy="${zToY(1.50)}" r="0.15" fill="#ef4444"/>
                 `).join('')}
-                <!-- Kubota Engine -->
-                <rect x="5.65" y="0.03" width="0.70" height="0.75" fill="#dc2626" stroke="#fca5a5" stroke-width="0.04" class="cad-element" data-title="Mesin Kubota RD110TTB" data-info="11 HP Diesel Kinetik"/>
-                <!-- Transmission line -->
-                <line x1="0.8" y1="0.50" x2="11.2" y2="0.50" stroke="#f8fafc" stroke-width="0.06"/>
-                <!-- Roof Profile -->
-                <polygon points="-0.8,2.86 6.0,4.90 12.8,2.86 12.8,3.16 6.0,5.20 -0.8,3.16" fill="#0284c7" stroke="#38bdf8" stroke-width="0.03"/>
-                <text x="6" y="2.7" fill="#f8fafc" font-size="0.4" font-weight="bold" text-anchor="middle">6 UNIT EXHAUST FAN BOX 50" DUAL POWER</text>
-            </svg>
-            `;
+
+                <!-- Kubota Diesel Engine at Y=5.65m, Z=0.03 to 0.78m -->
+                ${rectZ(5.65, 0.03, 0.70, 0.75, '#dc2626', '#fca5a5', 0.03, 'cad-element', 'Mesin Kubota RD110TTB (11 HP)', 'Diesel Kinetik Penggerak 4 Blower')}
+
+                <!-- As Transmisi Panjang 10.4m at Z=0.50m -->
+                ${lineZ(0.80, 0.50, 11.20, 0.50, '#f8fafc', 0.08, null, 'cad-element', 'As Transmisi Puli 10.4m', 'Baja As Transmisi Kinetik')}
+
+                <!-- Roof Profile Upright -->
+                ${lineZ(-0.80, 2.86, 6.00, 4.90, '#0284c7', 0.12, null, 'cad-element', 'Atap Spandek Sayap Kiri', '')}
+                ${lineZ(6.00, 4.90, 12.80, 2.86, '#0284c7', 0.12, null, 'cad-element', 'Atap Spandek Sayap Kanan', '')}
+                ${lineZ(4.20, 5.37, 6.00, 5.92, '#0284c7', 0.12, null, 'cad-element', 'Monitor Roof Top', 'Puncak Nok +5.92m')}
+                ${lineZ(6.00, 5.92, 7.80, 5.37, '#0284c7', 0.12, null, 'cad-element', 'Monitor Roof Top', 'Puncak Nok +5.92m')}
+            </svg>`;
         }
 
-        // SVG 5: Tampak Samping (26m Length)
+        // SVG 5: Tampak Samping Memanjang (26m Length, Upright Z)
         function getSideElevationSVG() {
             return `
-            <svg class="cad-svg" viewBox="-2 -1 30 8">
-                <line x1="-1" y1="0" x2="27" y2="0" stroke="#475569" stroke-width="0.06"/>
-                <!-- 87 Vertical studs -->
-                ${Array.from({length: 87}, (_, i) => `<line x1="${i * 0.30}" y1="0.03" x2="${i * 0.30}" y2="2.97" stroke="#d97706" stroke-width="0.03"/>`).join('')}
-                <!-- 3 Horizontal girts -->
-                <line x1="0" y1="0.10" x2="26" y2="0.10" stroke="#b45309" stroke-width="0.06"/>
-                <line x1="0" y1="1.50" x2="26" y2="1.50" stroke="#b45309" stroke-width="0.06"/>
-                <line x1="0" y1="2.95" x2="26" y2="2.95" stroke="#b45309" stroke-width="0.06"/>
-                <!-- Roof Spandek Slope Profile -->
-                <line x1="-0.8" y1="3.06" x2="26.8" y2="3.06" stroke="#0284c7" stroke-width="0.12"/>
-                <line x1="-0.8" y1="5.92" x2="26.8" y2="5.92" stroke="#0284c7" stroke-width="0.08" stroke-dasharray="0.3,0.3"/>
-                <text x="13" y="4.5" fill="#f8fafc" font-size="0.6" font-weight="bold" text-anchor="middle">TAMPAK SAMPING MEMANJANG (PANJANG 26.00 METER)</text>
-            </svg>
-            `;
+            <svg class="cad-svg" viewBox="-3 0 32 8.5">
+                <text x="13" y="0.5" fill="#00e5ff" font-size="0.45" font-weight="bold" text-anchor="middle">TAMPAK SAMPING MEMANJANG (PANJANG TOTAL 26.00 METER)</text>
+                <text x="13" y="0.85" fill="#94a3b8" font-size="0.25" text-anchor="middle">Rangka Dinding Vertikal Kayu Papan 1.5x6cm Spasi 30cm • 3 Lapis Sabuk Keliling</text>
+
+                <!-- Ground Line Z=0 -->
+                <line x1="-1.5" y1="${zToY(0)}" x2="27.5" y2="${zToY(0)}" stroke="#475569" stroke-width="0.06"/>
+
+                <!-- 87 Vertical Wall Studs 1.5x6cm H=2.97m -->
+                ${Array.from({length: 87}, (_, i) => lineZ(i * 0.30, 0.03, i * 0.30, 2.97, '#d97706', 0.03, null, 'cad-element', `Tiang Dinding #${i+1}`, 'Kayu Papan 1.5x6cm H=2.97m')).join('')}
+
+                <!-- 3 Sabuk Dinding Horizontal at Z=0.10, 1.50, 2.95m -->
+                ${lineZ(0.0, 0.10, 26.0, 0.10, '#b45309', 0.06, null, 'cad-element', 'Sabuk Dinding Bawah (26m)', 'Kayu 5x10 cm')}
+                ${lineZ(0.0, 1.50, 26.0, 1.50, '#b45309', 0.06, null, 'cad-element', 'Sabuk Dinding Tengah (26m)', 'Kayu 5x10 cm')}
+                ${lineZ(0.0, 2.95, 26.0, 2.95, '#b45309', 0.06, null, 'cad-element', 'Sabuk Dinding Atas (26m)', 'Kayu 5x10 cm')}
+
+                <!-- 8 Column positions along length X: 0, 2, 6, 10, 14, 18, 22, 26m -->
+                ${[0, 2, 6, 10, 14, 18, 22, 26].map((gx, idx) => `
+                    ${rectZ(gx - 0.075, -0.40, 0.15, 0.40, '#334155', '#64748b', 0.03, 'cad-element', `Pondasi As X${idx+1}`, 'Umpak beton 30x30x40cm')}
+                    ${rectZ(gx - 0.05, 0.03, 0.10, 2.97, '#ea580c', '#fff', 0.02, 'cad-element', `Tiang As X${idx+1}`, 'Tiang Komposit Kayu Besi 15x10')}
+                `).join('')}
+
+                <!-- Roof Eave & Ridge Lines -->
+                ${lineZ(-0.8, 3.06, 26.8, 3.06, '#0284c7', 0.12, null, 'cad-element', 'Garis Lisplang Atap Spandek', 'Elevasi Z=+3.06m • Overstek 0.80m')}
+                ${lineZ(-0.8, 5.92, 26.8, 5.92, '#0284c7', 0.08, '0.3,0.3', 'cad-element', 'Garis Puncak Nok Monitor Roof', 'Elevasi Z=+5.92m Puncak Tertinggi')}
+
+                <!-- Entrance Door Kusen at X=0..1m and X=25..26m -->
+                ${rectZ(0.0, 0.03, 1.0, 2.00, '#15803d', '#4ade80', 0.04, 'cad-element', 'Pintu Masuk Belakang', 'Lebar 1.0m, Tinggi 2.0m')}
+                ${rectZ(25.0, 0.03, 1.0, 2.00, '#15803d', '#4ade80', 0.04, 'cad-element', 'Pintu Masuk Depan', 'Lebar 1.0m, Tinggi 2.0m')}
+
+                <!-- Overall Dimension 26.00m at Bottom -->
+                <line x1="0" y1="${zToY(-0.8)}" x2="26" y2="${zToY(-0.8)}" stroke="#00e5ff" stroke-width="0.06"/>
+                <text x="13" y="${zToY(-0.95)}" fill="#00e5ff" font-size="0.4" font-weight="bold" font-family="monospace" text-anchor="middle">PANJANG TOTAL = 26.00 M</text>
+            </svg>`;
         }
 
         // Tooltip handler for SVG CAD elements

@@ -92,9 +92,6 @@ export class SceneModel {
         const objects = this.data.objects;
         const total = objects.length;
 
-        // Shared unit box geometry for box-type items to maximize efficiency
-        const unitBoxGeo = new THREE.BoxGeometry(1, 1, 1);
-
         for (let i = 0; i < total; i++) {
             const obj = objects[i];
             const mat = this.matMgr.getMaterial(obj.material);
@@ -104,21 +101,16 @@ export class SceneModel {
 
             if (obj.type === 'box') {
                 const g = obj.geom;
-                // Check if this is an exhaust fan propeller blade
-                if (obj.name.includes('Blade #')) {
-                    // Create standalone propeller blade under rotating fan hub
-                    const bGeo = new THREE.BoxGeometry(g.w, g.d, g.h);
-                    mesh = new THREE.Mesh(bGeo, mat);
-                    mesh.position.set(g.cx, g.cy, g.cz);
-                } else {
-                    mesh = new THREE.Mesh(unitBoxGeo, mat);
-                    mesh.scale.set(g.w, g.d, g.h);
-                    mesh.position.set(g.cx, g.cy, g.cz);
-                }
+                const bGeo = new THREE.BoxGeometry(g.w, g.d, g.h);
+                mesh = new THREE.Mesh(bGeo, mat);
+                mesh.position.set(g.cx, g.cy, g.cz);
+                mesh.scale.set(1, 1, 1);
             } else if (obj.type === 'sloped_beam' || obj.type === 'canted_gording') {
                 mesh = this.createPrismMesh(obj.geom.pts, mat);
+                mesh.scale.set(1, 1, 1);
             } else if (obj.type === 'quad_sheet') {
                 mesh = this.createQuadMesh(obj.geom.pts, mat);
+                mesh.scale.set(1, 1, 1);
             }
 
             if (mesh) {
