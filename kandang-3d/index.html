@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Digital Twin: Kandang Broiler 26x12m (3 Susun, 7.000 Ekor)</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Offline-first Three.js and OrbitControls with CDN fallback -->
+    <script src="assets/js/three.min.js"></script>
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');
+        }
+    </script>
+    <script src="assets/js/OrbitControls.js"></script>
+    <script>
+        if (typeof THREE.OrbitControls === 'undefined') {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>');
+        }
+    </script>
+    <!-- Digital Twin Data from Ruby Source of Truth -->
+    <script src="data/kandang-data.js"></script>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+        <div style="font-weight:700;letter-spacing:1px;font-size:14px;color:var(--accent-cyan);">
+            MEMUAT DIGITAL TWIN 3D KANDANG BROILER 26x12M...
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">
+            Parsing 8.564 Komponen & Material dari build_kandang_LENGKAP.rb
+        </div>
+    </div>
+
+    <!-- 3D WebGL Canvas & Overlay -->
+    <div id="canvas-container">
+        <canvas id="three-canvas"></canvas>
+        <div id="canvas-overlay"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header id="top-header">
+        <div class="brand-section">
+            <div class="brand-logo">TF</div>
+            <div>
+                <div class="brand-title">
+                    Kandang Broiler 26×12m (3 Susun, 7.000 Ekor)
+                    <span class="badge-tag">Ruby Source of Truth</span>
+                    <span class="badge-tag" style="color:var(--accent-gold);border-color:rgba(255,179,0,0.4)">Closed House</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camera & Display Presets -->
+        <div class="header-center-tools">
+            <button class="btn-secondary" data-camera="isometric">Isometric</button>
+            <button class="btn-secondary" data-camera="top">Atas</button>
+            <button class="btn-secondary" data-camera="front">Depan</button>
+            <button class="btn-secondary" data-camera="back">Belakang</button>
+            <button class="btn-secondary" data-camera="left">Kiri</button>
+            <button class="btn-secondary" data-camera="right">Kanan</button>
+            <button class="btn-secondary" data-camera="interior" style="color:var(--accent-gold)">🚶 Masuk Interior</button>
+
+            <select class="cad-select" id="select-display-mode" title="Mode Tampilan">
+                <option value="realistic">Mode Realistis (PBR)</option>
+                <option value="technical">Mode Teknis (Kategori)</option>
+                <option value="wireframe">Mode Wireframe</option>
+                <option value="xray">Mode X-Ray</option>
+                <option value="transparent">Mode Transparan</option>
+            </select>
+
+            <label style="display:flex;align-items:center;gap:6px;font-size:11px;cursor:pointer;margin-left:8px;">
+                <input type="checkbox" id="toggle-dimensions" checked> Dimensi CAD
+            </label>
+            <button class="btn-secondary" id="btn-measure" title="Ukur Jarak Titik ke Titik">📏 Ukur</button>
+        </div>
+
+        <!-- Right Header Tools -->
+        <div class="header-right-tools">
+            <select class="cad-select" id="select-video-duration" title="Durasi Video Animasi">
+                <option value="30">Durasi: 30 Detik</option>
+                <option value="60" selected>Durasi: 60 Detik</option>
+                <option value="90">Durasi: 90 Detik</option>
+            </select>
+            <button class="btn-danger" id="btn-record-video" title="Rekam Animasi Pembangunan Kandang">🎥 Rekam Video</button>
+            <button class="btn-secondary" id="btn-screenshot" title="Ambil Screenshot Gambar">📸 Foto</button>
+            <button class="btn-secondary" id="btn-presentation" title="Mode Presentasi Bersih (P)">📺 Presentasi</button>
+            <a href="../sketsa-rab-26x12.html" class="btn-primary" style="text-decoration:none;">📑 Sketsa 2D & RAB</a>
+            <a href="../index.html" class="btn-secondary" style="text-decoration:none;">🏠 Portal Utama</a>
+            <button class="btn-icon btn-secondary" id="btn-fullscreen" title="Layar Penuh">⛶</button>
+        </div>
+    </header>
+
+    <!-- Left Panel: Layers, Tree, Search, Construction Steps -->
+    <aside class="cad-panel" id="left-panel">
+        <div class="panel-tabs">
+            <button class="tab-btn active" data-tab="layers">LAYERS</button>
+            <button class="tab-btn" data-tab="search">CARI KOMPONEN</button>
+            <button class="tab-btn" data-tab="steps">TAHAP KONSTRUKSI</button>
+        </div>
+
+        <div class="panel-content">
+            <!-- Layers Tab -->
+            <div class="tab-pane active" id="pane-layers">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="font-size:11px;font-weight:700;color:var(--text-muted);">19 LAYER CAD SKETCHUP</span>
+                    <button class="btn-micro" id="btn-show-all-layers">Tampilkan Semua</button>
+                </div>
+                <div id="layer-list"></div>
+            </div>
+
+            <!-- Search Tab -->
+            <div class="tab-pane" id="pane-search">
+                <div class="search-wrapper">
+                    <input type="text" id="object-search" class="search-input" placeholder="Ketik nama komponen (misal: Tiang 17, Blower A, Rak B1, Nipple, Talang)...">
+                    <div id="search-results" class="search-dropdown" style="display:none;"></div>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">
+                    💡 Ketik nomor atau nama komponen untuk mencari objek secara instan. Kamera akan otomatis bergerak memusatkan pandangan ke objek yang dipilih.
+                </div>
+            </div>
+
+            <!-- Steps Tab -->
+            <div class="tab-pane" id="pane-steps">
+                <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">
+                    URUTAN PEMBANGUNAN KANDANG [1/8 s.d 8/8]
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                    <button class="btn-secondary" onclick="app.constrMgr.setStage(1)">[1/8] Pondasi Umpak & Lantai Cor</button>
+                    <button class="btn-secondary" onclick="app.constrMgr.setStage(2)">[2/8] Got Drainase & Papan Ulin</button>
+                    <button class="btn-secondary" onclick="app.constrMgr.setStage(3)">[3/8] 32 Tiang Komposit Kayu Besi</button>
+                    <button class="btn-secondary" onclick="app.constrMgr.setStage(4)">[4/8] Rangka Dinding Vertikal & Sabuk</button>
+                    <button class="btn-secondary" onclick="app.constrMgr.setStage(5)">[5/8] Rak 3 Susun, Slat, Pintu & Talang</button>
+                    <button class="btn-secondary" onclick="app.constrMgr.setStage(6)">[6/8] 6 Exhaust Fan 50in & Kubota</button>
+                    <button class="btn-secondary" onclick="app.constrMgr.setStage(7)">[7/8] Terpal Dinding & Celldeck Cooling Pad</button>
+                    <button class="btn-secondary" onclick="app.constrMgr.setStage(8)">[8/8] Kuda-kuda, Gording & Spandek</button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Right Panel: Inspector, Simulation, BOM / Technical Report, Validation -->
+    <aside class="cad-panel" id="right-panel">
+        <div class="panel-tabs">
+            <button class="tab-btn active" data-tab="inspector">INSPEKTOR</button>
+            <button class="tab-btn" data-tab="simulation">SIMULASI</button>
+            <button class="tab-btn" data-tab="bom">QTO / BOM</button>
+            <button class="tab-btn" data-tab="validation">VALIDASI</button>
+        </div>
+
+        <div class="panel-content">
+            <!-- Inspector Tab -->
+            <div class="tab-pane active" id="pane-inspector">
+                <div id="inspector-content">
+                    <div style="text-align:center;padding:40px 10px;color:var(--text-muted);">
+                        <div style="font-size:32px;margin-bottom:12px;">👆</div>
+                        <div style="font-weight:600;font-size:13px;margin-bottom:6px;">PILIH OBJEK DI CANVAS 3D</div>
+                        <div style="font-size:11px;">Klik sembarang tiang, rak, fan, nipple, kuda-kuda, atau spandek untuk melihat data teknik dan sumber baris kodenya.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation Tab -->
+            <div class="tab-pane" id="pane-simulation">
+                <div style="font-size:12px;font-weight:700;color:var(--accent-cyan);margin-bottom:8px;">
+                    🌀 SIMULASI DINAMIS & VENTILASI
+                </div>
+                
+                <div class="meta-card" style="margin-bottom:10px;">
+                    <div class="meta-subtitle">SISTEM VENTILASI EXHAUST FAN 50"</div>
+                    <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-top:6px;cursor:pointer;">
+                        <input type="checkbox" id="toggle-ventilation" checked> Blower & Aliran Udara Aktif
+                    </label>
+                    <div style="margin-top:10px;">
+                        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;">
+                            <span>Kecepatan Aliran Udara:</span>
+                            <strong id="airflow-speed-val">1.0x (2.2 m/s)</strong>
+                        </div>
+                        <input type="range" id="airflow-speed" class="range-slider" min="0.2" max="2.5" step="0.1" value="1.0">
+                    </div>
+                    <div style="font-size:10px;color:var(--text-muted);margin-top:8px;">
+                        *Visualisasi partikel udara bergerak dari Celldeck (X=26m) menuju 6 unit Blower (X=0m). <em>Bukan simulasi CFD</em>.
+                    </div>
+                </div>
+
+                <div class="meta-card" style="margin-bottom:10px;">
+                    <div class="meta-subtitle">TRANSMISI DIESEL KUBOTA</div>
+                    <div style="font-size:11px;color:var(--text-muted);line-height:1.5;margin-top:4px;">
+                        Mesin Kubota RD110TTB (11 HP) menggerakkan as transmisi sepanjang 10.4 meter yang memutar 4 unit blower kinetik secara serentak melalui sistem sabuk puli.
+                    </div>
+                </div>
+
+                <div class="meta-card">
+                    <div class="meta-subtitle">CELLDECK COOLING PAD 7090</div>
+                    <div style="font-size:11px;color:var(--text-muted);line-height:1.5;margin-top:4px;">
+                        Air didistribusikan dari talang atas stainless ke media selulosa fluted 7090 setebal 15cm dengan panjang 12 meter dan tinggi 1.70 meter.
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOM Tab -->
+            <div class="tab-pane" id="pane-bom">
+                <div style="font-size:12px;font-weight:700;color:var(--accent-cyan);margin-bottom:8px;">
+                    📊 QUANTITY TAKE-OFF & REKAP MATERIAL
+                </div>
+                <div id="bom-container"></div>
+            </div>
+
+            <!-- Validation Tab -->
+            <div class="tab-pane" id="pane-validation">
+                <div style="font-size:12px;font-weight:700;color:var(--accent-cyan);margin-bottom:8px;">
+                    🔍 VALIDASI GEOMETRI MODEL (RUBY VS THREE.JS)
+                </div>
+                <div id="validation-container"></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Bottom Control Bar -->
+    <footer id="bottom-toolbar">
+        <!-- Construction Timeline -->
+        <div class="timeline-module">
+            <div class="timeline-info">
+                <div>
+                    <strong>TIMELINE KONSTRUKSI:</strong>
+                    <span id="current-stage-badge" style="color:var(--accent-cyan);font-weight:700;margin-left:6px;">[8/8] Selesai</span>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);" id="stage-desc">
+                    14 bentang kuda-kuda, gording miring, 180 spandek bergelombang & plafon
+                </div>
+                <div>
+                    <span id="timeline-percent" style="font-family:var(--font-mono);font-weight:700;color:var(--accent-gold);">100%</span>
+                </div>
+            </div>
+            <div class="timeline-controls">
+                <button class="btn-primary" id="btn-play-construction">▶ Putar</button>
+                <button class="btn-secondary" id="btn-reset-construction">⏹ Reset</button>
+                <input type="range" id="construction-slider" class="range-slider" min="0" max="100" value="100">
+                <select class="cad-select" id="select-speed">
+                    <option value="0.5">0.5x</option>
+                    <option value="1.0" selected>1.0x</option>
+                    <option value="2.0">2.0x</option>
+                    <option value="4.0">4.0x</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Exploded & Cutaway Tools -->
+        <div class="quick-tools">
+            <div style="display:flex;flex-direction:column;gap:2px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;">
+                    <span>Exploded:</span>
+                    <strong id="exploded-val" style="color:var(--accent-cyan);">0%</strong>
+                </div>
+                <input type="range" id="exploded-slider" class="range-slider" min="0" max="100" value="0" style="width:110px;">
+            </div>
+
+            <div style="display:flex;align-items:center;gap:6px;">
+                <label style="font-size:11px;cursor:pointer;display:flex;align-items:center;gap:4px;">
+                    <input type="checkbox" id="toggle-section"> Section
+                </label>
+                <div id="section-controls" style="display:none;">
+                    <div style="display:flex;gap:6px;align-items:center;font-size:10px;">
+                        <span>X:</span><input type="range" id="sec-x" class="range-slider" min="0" max="26" step="0.5" value="26" style="width:60px;"><span id="sec-x-val">26m</span>
+                        <span>Y:</span><input type="range" id="sec-y" class="range-slider" min="0" max="12" step="0.5" value="12" style="width:60px;"><span id="sec-y-val">12m</span>
+                        <span>Z:</span><input type="range" id="sec-z" class="range-slider" min="0" max="6" step="0.2" value="6" style="width:50px;"><span id="sec-z-val">6m</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Presentation Mode Overlay Watermark -->
+    <div id="presentation-badge">
+        <div style="font-weight:800;font-size:14px;color:var(--accent-cyan);">KANDANG BROILER 26×12M (3 SUSUN, 7.000 EKOR)</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Closed House System • Source: build_kandang_LENGKAP.rb</div>
+        <div style="font-size:10px;color:var(--accent-gold);margin-top:4px;">Tekan [P] atau [ESC] untuk keluar dari Mode Presentasi</div>
+    </div>
+
+    <!-- Application Script Bootstrap -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>

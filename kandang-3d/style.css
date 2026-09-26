@@ -1,0 +1,658 @@
+/* ==============================================================================
+   Kandang Broiler 26x12m - 3D CAD/BIM Viewer Stylesheet
+   Modern Engineering & Dark Glassmorphism Blueprint Theme
+   ============================================================================== */
+
+:root {
+    --bg-dark: #0e1117;
+    --panel-bg: rgba(18, 22, 32, 0.88);
+    --panel-border: rgba(56, 75, 102, 0.4);
+    --accent-cyan: #00e5ff;
+    --accent-blue: #0288d1;
+    --accent-gold: #ffb300;
+    --accent-green: #00e676;
+    --accent-red: #ff1744;
+    --text-main: #f0f4f8;
+    --text-muted: #8b9bb4;
+    --font-mono: 'Consolas', 'Monaco', 'Courier New', monospace;
+    --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+    font-family: var(--font-ui);
+    color: var(--text-main);
+}
+
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#three-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#canvas-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+/* ==============================================================================
+   Top Navigation Header
+   ============================================================================== */
+#top-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    background: linear-gradient(180deg, rgba(14, 17, 23, 0.95) 0%, rgba(14, 17, 23, 0.75) 100%);
+    border-bottom: 1px solid var(--panel-border);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 10;
+}
+
+.brand-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    color: #000;
+    font-size: 16px;
+}
+
+.brand-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(0, 229, 255, 0.15);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.header-center-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-right-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ==============================================================================
+   CAD Panels (Left & Right)
+   ============================================================================== */
+.cad-panel {
+    position: absolute;
+    top: 68px;
+    bottom: 84px;
+    width: 340px;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    backdrop-filter: blur(12px);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    transition: transform 0.3s ease;
+}
+
+#left-panel {
+    left: 14px;
+}
+
+#right-panel {
+    right: 14px;
+    width: 380px;
+}
+
+.panel-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--panel-border);
+    background: rgba(0, 0, 0, 0.25);
+    overflow-x: auto;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px 8px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    color: var(--text-main);
+}
+
+.tab-btn.active {
+    color: var(--accent-cyan);
+    border-bottom-color: var(--accent-cyan);
+    background: rgba(0, 229, 255, 0.05);
+}
+
+.panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* ==============================================================================
+   Layer List Styles
+   ============================================================================== */
+.layer-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 12px;
+}
+
+.layer-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.layer-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+}
+
+.layer-badge {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.layer-info label {
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.layer-info small {
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+.layer-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.btn-micro {
+    padding: 2px 6px;
+    font-size: 10px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+.btn-micro:hover {
+    background: var(--accent-cyan);
+    color: #000;
+}
+
+/* ==============================================================================
+   Bottom Control Bar & Timeline
+   ============================================================================== */
+#bottom-toolbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 72px;
+    background: linear-gradient(0deg, rgba(14, 17, 23, 0.98) 0%, rgba(14, 17, 23, 0.85) 100%);
+    border-top: 1px solid var(--panel-border);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 10;
+    gap: 16px;
+}
+
+.timeline-module {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.timeline-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.timeline-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.range-slider {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.15);
+    accent-color: var(--accent-cyan);
+    cursor: pointer;
+}
+
+.quick-tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ==============================================================================
+   Buttons & Controls
+   ============================================================================== */
+.btn-primary, .btn-secondary, .btn-icon {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--accent-cyan);
+    color: #000;
+}
+
+.btn-primary:hover {
+    background: #40efff;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--panel-border);
+    color: var(--text-main);
+}
+
+.btn-secondary:hover, .btn-secondary.active {
+    background: rgba(0, 229, 255, 0.15);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+}
+
+.btn-danger {
+    background: rgba(255, 23, 68, 0.2);
+    border: 1px solid var(--accent-red);
+    color: #ff5252;
+}
+
+.btn-danger.recording {
+    background: var(--accent-red);
+    color: #fff;
+    animation: pulseRed 1s infinite alternate;
+}
+
+@keyframes pulseRed {
+    from { opacity: 0.8; }
+    to { opacity: 1.0; box-shadow: 0 0 16px rgba(255, 23, 68, 0.8); }
+}
+
+select.cad-select {
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    color: var(--text-main);
+    font-size: 11px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* ==============================================================================
+   Meta Card & Inspector
+   ============================================================================== */
+.meta-card {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.meta-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+
+.meta-header h4 {
+    font-size: 14px;
+    color: var(--accent-cyan);
+}
+
+.meta-id {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+}
+
+.meta-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.meta-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.meta-row span {
+    color: var(--text-muted);
+}
+
+.meta-subtitle {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin: 4px 0;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 6px 0;
+}
+
+code {
+    font-family: var(--font-mono);
+    color: var(--accent-cyan);
+    background: rgba(0, 229, 255, 0.1);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+/* ==============================================================================
+   CAD Dimension Tags (Overlay)
+   ============================================================================== */
+.cad-dimension-tag {
+    background: rgba(14, 17, 23, 0.88);
+    border: 1px solid var(--accent-cyan);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.cad-measure-info {
+    position: absolute;
+    top: 70px;
+    right: 410px;
+    background: rgba(18, 22, 32, 0.95);
+    border: 1px solid #ff0055;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 12px;
+    z-index: 15;
+    box-shadow: 0 4px 20px rgba(255, 0, 85, 0.35);
+}
+
+.measure-title {
+    font-weight: 700;
+    color: #ff0055;
+    margin-bottom: 6px;
+}
+
+.measure-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 4px;
+}
+
+.measure-hint {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+/* ==============================================================================
+   Tables (Validation & BOM)
+   ============================================================================== */
+.cad-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+.cad-table th, .cad-table td {
+    padding: 8px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+}
+
+.cad-table th {
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--text-muted);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+.status-badge {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.status-badge.valid {
+    background: rgba(0, 230, 118, 0.15);
+    color: var(--accent-green);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+/* ==============================================================================
+   Search Input & Results
+   ============================================================================== */
+.search-wrapper {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 12px;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: var(--accent-cyan);
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    width: 100%;
+    max-height: 240px;
+    overflow-y: auto;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    z-index: 20;
+}
+
+.search-result-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.search-result-item:hover {
+    background: rgba(0, 229, 255, 0.1);
+}
+
+.sr-name {
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.sr-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* ==============================================================================
+   Presentation Mode
+   ============================================================================== */
+body.presentation-mode #left-panel,
+body.presentation-mode #right-panel,
+body.presentation-mode #top-header,
+body.presentation-mode #bottom-toolbar,
+body.presentation-mode .cad-dimension-tag {
+    display: none !important;
+}
+
+#presentation-badge {
+    display: none;
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background: rgba(14, 17, 23, 0.85);
+    border: 1px solid var(--accent-cyan);
+    padding: 12px 18px;
+    border-radius: 6px;
+    z-index: 50;
+    backdrop-filter: blur(8px);
+}
+
+body.presentation-mode #presentation-badge {
+    display: block;
+}
+
+/* Preloader */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0e1117;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    transition: opacity 0.5s ease;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(0, 229, 255, 0.2);
+    border-top-color: var(--accent-cyan);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
