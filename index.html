@@ -106,7 +106,8 @@
                     <a href="#dashboard" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Dashboard</a>
                     <a href="#calculator" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Kalkulator IP</a>
                     <a href="#about" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Fasilitas</a>
-                    <a href="kandang-3d/index.html" class="bg-sky-500/10 border border-sky-400/30 hover:bg-sky-500/20 px-3 py-2 rounded-xl text-sm font-bold transition text-sky-300 hover:text-white"><i class="fa-solid fa-cube text-sky-400 mr-1"></i> 3D 26x12m</a>
+                    <a href="kandang_broiler_3d.html" class="bg-emerald-500/10 border border-emerald-400/30 hover:bg-emerald-500/20 px-3 py-2 rounded-xl text-sm font-bold transition text-emerald-300 hover:text-white"><i class="fa-solid fa-mobile-screen-button text-emerald-400 mr-1"></i> 3D Mobile</a>
+                    <a href="kandang-3d/index.html" class="bg-sky-500/10 border border-sky-400/30 hover:bg-sky-500/20 px-3 py-2 rounded-xl text-sm font-bold transition text-sky-300 hover:text-white"><i class="fa-solid fa-desktop text-sky-400 mr-1"></i> 3D Desktop</a>
                     <a href="sketsa-rab-26x12.html" class="bg-emerald-500/10 border border-emerald-400/30 hover:bg-emerald-500/20 px-3 py-2 rounded-xl text-sm font-bold transition text-emerald-300 hover:text-white"><i class="fa-solid fa-file-invoice text-emerald-400 mr-1"></i> Sketsa & RAB</a>
                     <a href="#construction" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Pembangunan</a>
                     <a href="#gallery" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Galeri</a>
@@ -138,7 +139,8 @@
         <div id="mobile-menu" class="hidden lg:hidden bg-slate-950 border-t border-slate-800 px-4 pt-3 pb-6 space-y-2 shadow-2xl">
             <a href="#dashboard" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-slate-800/60 hover:bg-slate-800">Dashboard Performa</a>
             <a href="#calculator" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:bg-slate-800/60">Kalkulator IP Broiler</a>
-            <a href="kandang-3d/index.html" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-sky-300 bg-sky-950/60 border border-sky-500/30"><i class="fa-solid fa-cube text-sky-400 mr-2"></i> 3D Digital Twin (26x12m, 3 Susun)</a>
+            <a href="kandang_broiler_3d.html" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-emerald-300 bg-emerald-950/60 border border-emerald-500/30"><i class="fa-solid fa-mobile-screen-button text-emerald-400 mr-2"></i> 📱 3D Mobile Viewer (26x12m, 3 Susun)</a>
+            <a href="kandang-3d/index.html" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-sky-300 bg-sky-950/60 border border-sky-500/30"><i class="fa-solid fa-desktop text-sky-400 mr-2"></i> 💻 3D Desktop CAD Twin</a>
             <a href="sketsa-rab-26x12.html" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-emerald-300 bg-emerald-950/60 border border-emerald-500/30"><i class="fa-solid fa-file-invoice text-emerald-400 mr-2"></i> Sketsa Teknis 2D & RAB Lengkap</a>
             <a href="#about" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:bg-slate-800/60">Fasilitas Kandang</a>
             <a href="#construction" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:bg-slate-800/60">Jurnal Pembangunan (23 Foto)</a>
@@ -656,11 +658,14 @@
                         </p>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto flex-shrink-0">
+                        <a href="kandang_broiler_3d.html" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-extrabold px-6 py-3.5 rounded-2xl text-sm shadow-xl transition transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-mobile-screen-button text-base"></i> 📱 Buka 3D Mobile App
+                        </a>
                         <a href="kandang-3d/index.html" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-300 hover:to-sky-400 text-slate-950 font-extrabold px-6 py-3.5 rounded-2xl text-sm shadow-xl transition transform hover:-translate-y-0.5">
-                            <i class="fa-solid fa-cube text-base"></i> Buka 3D Digital Twin Viewer
+                            <i class="fa-solid fa-desktop text-base"></i> 💻 3D Mode Desktop
                         </a>
                         <a href="sketsa-rab-26x12.html" class="inline-flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/40 font-bold px-5 py-3.5 rounded-2xl text-sm transition shadow-lg">
-                            <i class="fa-solid fa-file-invoice text-base"></i> Sketsa 2D & RAB Material
+                            <i class="fa-solid fa-file-invoice text-base"></i> Sketsa 2D & RAB
                         </a>
                     </div>
                 </div>

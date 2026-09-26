@@ -29,9 +29,9 @@ export class DimensionManager {
             this.rootGroup.add(this.groups[key]);
         }
 
-        // Visibility states (Main & Selected on by default, others off to prevent clutter)
+        // Visibility states (Clean default, no clutter)
         this.visibility = {
-            main: true,
+            main: false,
             selected: true,
             elevations: false,
             grid: false,
@@ -226,90 +226,22 @@ export class DimensionManager {
         const box = new THREE.Box3().setFromObject(mesh);
         if (box.isEmpty()) return;
 
-        const min = box.min;
-        const max = box.max;
-        const meta = (mesh.userData && mesh.userData.metadata) ? mesh.userData.metadata : { name: mesh.name || "Komponen Terpilih" };
+        // Clean, crisp CAD Bounding Box Helper (0x00e5ff) without cluttering lines
+        const boxHelper = new THREE.Box3Helper(box, 0x00e5ff);
+        this.groups.selected.add(boxHelper);
 
-        const dx = Math.max(0.01, max.x - min.x);
-        const dy = Math.max(0.01, max.y - min.y);
-        const dz = Math.max(0.01, max.z - min.z);
-
-        const group = this.groups.selected;
-        const mat = this.lineMatGold;
-
-        // 1. Length (Sumbu X) Dimension Line: from min.x to max.x
-        const offset = 0.15;
-        this.addDimensionLine(
-            group,
-            new THREE.Vector3(min.x, min.y - offset, min.z),
-            new THREE.Vector3(max.x, min.y - offset, min.z),
-            `Panjang (X): ${dx.toFixed(2)}m (dari X=${min.x.toFixed(2)} ke X=${max.x.toFixed(2)}m)`,
-            new THREE.Vector3(0, -1, 0),
-            mat,
-            'selected',
-            10,
-            'tag-selected-dim'
-        );
-
-        // 2. Width (Sumbu Y) Dimension Line: from min.y to max.y
-        this.addDimensionLine(
-            group,
-            new THREE.Vector3(min.x - offset, min.y, min.z),
-            new THREE.Vector3(min.x - offset, max.y, min.z),
-            `Lebar (Y): ${dy.toFixed(2)}m (dari Y=${min.y.toFixed(2)} ke Y=${max.y.toFixed(2)}m)`,
-            new THREE.Vector3(-1, 0, 0),
-            mat,
-            'selected',
-            10,
-            'tag-selected-dim'
-        );
-
-        // 3. Height (Sumbu Z) Dimension Line: from min.z to max.z
-        this.addDimensionLine(
-            group,
-            new THREE.Vector3(min.x - offset, min.y - offset, min.z),
-            new THREE.Vector3(min.x - offset, min.y - offset, max.z),
-            `Tinggi (Z): ${dz.toFixed(2)}m (Elevasi Z=+${min.z.toFixed(2)} ke +${max.z.toFixed(2)}m)`,
-            new THREE.Vector3(0, -1, 0),
-            mat,
-            'selected',
-            10,
-            'tag-selected-dim'
-        );
-
-        // 4. Ground Datum Leader (from Z=0 to bottom of component)
-        if (min.z > 0.08) {
-            const datumGeo = new THREE.BufferGeometry().setFromPoints([
-                new THREE.Vector3(min.x, min.y, 0),
-                new THREE.Vector3(min.x, min.y, min.z)
-            ]);
-            const datumLine = new THREE.Line(datumGeo, this.lineMatLeader);
-            datumLine.computeLineDistances();
-            group.add(datumLine);
-
-            this.createOverlayLabel(
-                new THREE.Vector3(min.x, min.y, min.z * 0.5),
-                `Elevasi Dasar: +${min.z.toFixed(2)}m dari tanah ±0.00`,
-                'selected',
-                9,
-                'tag-selected-datum'
-            );
-        }
-
-        // Show selected group
         this.visibility.selected = true;
         this.groups.selected.visible = true;
     }
 
     clearObjectDimensions() {
         this.activeSelectedMesh = null;
-        // Clear 3D lines in selected group
         while (this.groups.selected.children.length > 0) {
             const child = this.groups.selected.children[0];
             this.groups.selected.remove(child);
             if (child.geometry) child.geometry.dispose();
+            if (child.dispose) child.dispose();
         }
-        // Remove DOM labels of selected category
         this.labels = this.labels.filter(item => {
             if (item.category === 'selected') {
                 if (item.el && item.el.parentNode) {

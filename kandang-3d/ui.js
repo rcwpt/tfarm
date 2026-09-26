@@ -572,12 +572,13 @@ export class UIManager {
     }
 
     isolateComponentType(name) {
-        let count = 0;
-        this.sceneModel.meshList.forEach(item => {
-            const match = (item.metadata.name === name);
-            item.mesh.visible = match;
-            if (match) count++;
-        });
+        // Ensure all building meshes remain fully visible!
+        this.sceneModel.showAllLayers();
+        const matches = this.sceneModel.meshList.filter(item => item.metadata.name === name);
+        if (matches.length > 0) {
+            this.inspectObject(matches[0].mesh);
+            this.cameraMgr.focusObject(matches[0].mesh);
+        }
     }
 
     initDenahModal() {

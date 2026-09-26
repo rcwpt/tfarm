@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0e17">
+    <title>Kandang Broiler 26×12m (3 Susun) - Mobile 3D CAD Viewer</title>
+
+    <style>
+        /* CSS Reset & Mobile Ergonomics */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        :root {
+            --bg-dark: #0a0e17;
+            --bg-card: rgba(18, 24, 38, 0.94);
+            --bg-elevated: rgba(26, 35, 54, 0.98);
+            --border-card: rgba(0, 229, 255, 0.22);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #00e5ff;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --font-mono: 'Consolas', 'Fira Code', 'SF Mono', monospace;
+            --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --bottom-nav-h: 56px;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            font-size: 14px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            touch-action: none;
+        }
+
+        /* 3D Canvas Container */
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            touch-action: none;
+        }
+
+        /* Top Header Bar */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 52px;
+            padding: 0 12px;
+            padding-top: env(safe-area-inset-top, 0px);
+            background: linear-gradient(180deg, rgba(10, 14, 23, 0.95) 0%, rgba(10, 14, 23, 0.8) 75%, transparent 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 20;
+            pointer-events: auto;
+        }
+
+        .brand-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .brand-title span.badge-spec {
+            font-size: 9px;
+            font-weight: 700;
+            color: #050e18;
+            background: var(--accent-cyan);
+            padding: 1px 6px;
+            border-radius: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .brand-sub {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-icon-top {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(26, 35, 54, 0.8);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon-top:active {
+            transform: scale(0.92);
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        .btn-desktop-link {
+            padding: 0 10px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            background: rgba(0, 229, 255, 0.12);
+            color: var(--accent-cyan);
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            backdrop-filter: blur(8px);
+        }
+
+        /* Camera Pills Quick Bar */
+        .camera-bar {
+            position: absolute;
+            top: 56px;
+            left: 0;
+            right: 0;
+            height: 36px;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            z-index: 18;
+            pointer-events: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .camera-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cam-pill {
+            padding: 5px 10px;
+            border-radius: 14px;
+            background: rgba(18, 24, 38, 0.85);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .cam-pill.active, .cam-pill:active {
+            background: var(--accent-cyan);
+            color: #050e18;
+            border-color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        /* Floating Action Buttons (FAB Column Right) */
+        .fab-column {
+            position: absolute;
+            right: 12px;
+            bottom: calc(var(--bottom-nav-h) + 60px);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 15;
+            pointer-events: auto;
+        }
+
+        .fab-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .fab-btn span.fab-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .fab-btn span.fab-label {
+            font-size: 7.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: 2px;
+            text-transform: uppercase;
+        }
+
+        .fab-btn:active, .fab-btn.active {
+            transform: scale(0.92);
+            background: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            color: #000;
+        }
+        .fab-btn.active span.fab-label {
+            color: #000;
+        }
+
+        .fab-btn.pulse::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--accent-cyan);
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+
+        /* Bottom Sheet Drawer */
+        .bottom-sheet {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--border-card);
+            border-radius: 18px 18px 0 0;
+            z-index: 30;
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            max-height: 84vh;
+            pointer-events: auto;
+        }
+
+        /* Three Snap States: Peek (~50px), Half (~48vh), Full (~82vh) */
+        .bottom-sheet.state-peek {
+            transform: translateY(calc(100% - 50px));
+        }
+        .bottom-sheet.state-half {
+            transform: translateY(calc(100% - 48vh));
+        }
+        .bottom-sheet.state-full {
+            transform: translateY(calc(100% - 82vh));
+        }
+
+        /* Drag Handle Bar */
+        .sheet-handle-bar {
+            width: 100%;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            flex-shrink: 0;
+            padding-top: 4px;
+        }
+
+        .sheet-handle-pill {
+            width: 36px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.35);
+            border-radius: 2px;
+        }
+
+        /* Sheet Quick Peek Header */
+        .sheet-peek-row {
+            height: 28px;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .sheet-peek-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .sheet-peek-title {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        /* Sheet Tab Navigation */
+        .sheet-nav-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex-shrink: 0;
+            background: rgba(10, 14, 23, 0.4);
+        }
+        .sheet-nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sheet-tab-btn {
+            padding: 10px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .sheet-tab-btn.active {
+            color: var(--accent-cyan);
+            border-bottom-color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        /* Sheet Body Content */
+        .sheet-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 14px;
+            -webkit-overflow-scrolling: touch;
+            max-height: calc(82vh - 84px);
+        }
+
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Component Info Cards */
+        .info-card {
+            background: rgba(18, 24, 38, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .info-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .info-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(0, 229, 255, 0.15);
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+            font-size: 11px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .info-lbl {
+            font-size: 9.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .info-val {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #fff;
+            font-family: var(--font-mono);
+        }
+
+        .info-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn-sheet-action {
+            flex: 1;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(26, 35, 54, 0.9);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .btn-sheet-action.primary {
+            background: var(--accent-cyan);
+            color: #050e18;
+            border-color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        /* 2D Denah Canvas Box */
+        .denah-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .denah-canvas-wrapper {
+            width: 100%;
+            background: #06090e;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            touch-action: manipulation;
+        }
+
+        #denah-canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            cursor: crosshair;
+        }
+
+        .denah-tip {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Timeline Slider & Controls */
+        .timeline-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .timeline-ctrl-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .btn-timeline-play {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--accent-green);
+            color: #050e18;
+            font-weight: 700;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .timeline-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.15);
+            outline: none;
+        }
+
+        .timeline-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .stage-card-active {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .stage-title {
+            font-weight: 700;
+            color: var(--accent-cyan);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .stage-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Layer List Item */
+        .layer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .layer-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(18, 24, 38, 0.6);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 8px 10px;
+        }
+
+        .layer-item-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+        }
+
+        .layer-color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .layer-badge-count {
+            font-size: 9.5px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 5px;
+            border-radius: 4px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .btn-layer-eye {
+            background: transparent;
+            border: none;
+            color: var(--accent-cyan);
+            font-size: 15px;
+            cursor: pointer;
+            padding: 2px 6px;
+        }
+
+        /* Sliders for Slicing / Section */
+        .slice-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .slice-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .slice-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+        }
+
+        /* Toast / Notification Popup */
+        #mobile-toast {
+            position: absolute;
+            top: 96px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
+            background: rgba(10, 14, 23, 0.95);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 20px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            z-index: 50;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+        #mobile-toast.show {
+            opacity: 1;
+        }
+
+        /* Loading Overlay */
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0e17;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: #fff;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(0, 229, 255, 0.2);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-title {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .loading-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <div class="loading-title">MEMUAT MODEL 3D CAD KANDANG</div>
+        <div class="loading-sub" id="loading-status">Mengurai 8.564 Komponen SketchUp Ruby...</div>
+    </div>
+
+    <!-- 3D Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- Top Header Bar -->
+    <header class="top-bar">
+        <div class="brand-box">
+            <div class="brand-title">
+                🐔 KANDANG BROILER <span class="badge-spec">26×12M</span>
+            </div>
+            <div class="brand-sub">Closed House 3 Susun • 7.000 Ekor</div>
+        </div>
+        <div class="top-actions">
+            <a href="kandang-3d/index.html" class="btn-desktop-link" id="link-desktop">💻 Desktop</a>
+            <button class="btn-icon-top" id="btn-reset-cam" title="Reset Kamera">🔄</button>
+            <button class="btn-icon-top" id="btn-fullscreen" title="Layar Penuh">⛶</button>
+        </div>
+    </header>
+
+    <!-- Camera Quick Pills -->
+    <div class="camera-bar">
+        <button class="cam-pill active" data-cam="iso">🎯 Isometrik</button>
+        <button class="cam-pill" data-cam="front">👁️ Celldeck (Timur)</button>
+        <button class="cam-pill" data-cam="back">🌪️ Blower (Barat)</button>
+        <button class="cam-pill" data-cam="side">🧭 Samping Utara</button>
+        <button class="cam-pill" data-cam="top">📐 Denah Atas</button>
+        <button class="cam-pill" data-cam="inside">🚶‍♂️ Lorong Dalam</button>
+        <button class="cam-pill" data-cam="rack">🐔 Rak 3 Susun</button>
+    </div>
+
+    <!-- Floating Action Buttons (Thumb Column Right) -->
+    <div class="fab-column">
+        <button class="fab-btn" id="fab-denah" title="Denah 2D">
+            <span class="fab-icon">🗺️</span>
+            <span class="fab-label">Denah</span>
+        </button>
+        <button class="fab-btn" id="fab-tahap" title="Tahapan Konstruksi">
+            <span class="fab-icon">🏗️</span>
+            <span class="fab-label">Tahap</span>
+        </button>
+        <button class="fab-btn" id="fab-layer" title="Layer Struktur">
+            <span class="fab-icon">🏢</span>
+            <span class="fab-label">Layer</span>
+        </button>
+        <button class="fab-btn" id="fab-dimensi" title="Ukuran CAD">
+            <span class="fab-icon">📐</span>
+            <span class="fab-label">Ukuran</span>
+        </button>
+        <button class="fab-btn" id="fab-blower" title="Simulasi Blower & Angin">
+            <span class="fab-icon">🌀</span>
+            <span class="fab-label">Blower</span>
+        </button>
+        <button class="fab-btn" id="fab-potong" title="Potongan X-Ray">
+            <span class="fab-icon">✂️</span>
+            <span class="fab-label">Potong</span>
+        </button>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="mobile-toast">Komponen Terpilih</div>
+
+    <!-- Touch Bottom Sheet Drawer -->
+    <div class="bottom-sheet state-peek" id="bottom-sheet">
+        <!-- Grab Handle -->
+        <div class="sheet-handle-bar" id="sheet-handle">
+            <div class="sheet-handle-pill"></div>
+        </div>
+
+        <!-- Peek Row (Visible when collapsed) -->
+        <div class="sheet-peek-row" id="sheet-peek-toggle">
+            <div class="sheet-peek-left">
+                <span style="font-size:14px;">🎯</span>
+                <span class="sheet-peek-title" id="peek-item-name">Ketuk komponen 3D untuk melihat info</span>
+            </div>
+            <div style="font-size: 10px; color: var(--accent-cyan); font-weight:700;">▲ TARIK DETAIL</div>
+        </div>
+
+        <!-- Sheet Nav Tabs -->
+        <div class="sheet-nav-tabs">
+            <button class="sheet-tab-btn active" data-tab="tab-info">ℹ️ Info Bahan</button>
+            <button class="sheet-tab-btn" data-tab="tab-denah">🗺️ Denah 2D</button>
+            <button class="sheet-tab-btn" data-tab="tab-tahap">🏗️ 24 Tahap</button>
+            <button class="sheet-tab-btn" data-tab="tab-layer">🏢 20 Layer</button>
+            <button class="sheet-tab-btn" data-tab="tab-ukuran">📐 Ukuran CAD</button>
+            <button class="sheet-tab-btn" data-tab="tab-potong">✂️ Potongan</button>
+            <button class="sheet-tab-btn" data-tab="tab-spek">📑 Spesifikasi</button>
+        </div>
+
+        <!-- Sheet Content Body -->
+        <div class="sheet-content">
+
+            <!-- TAB 1: INFO BAHAN TERPILIH -->
+            <div class="tab-pane active" id="tab-info">
+                <div class="info-card">
+                    <div class="info-header">
+                        <span id="card-obj-name">Silakan Pilih Komponen</span>
+                        <span class="info-badge" id="card-obj-id">CAD-REF</span>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;" id="card-obj-desc">
+                        Ketuk komponen apapun pada gambar 3D untuk mengukur dan memeriksa spesifikasi material aslinya.
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-lbl">Ukuran Dimensi (P × L × T)</span>
+                            <span class="info-val" id="card-obj-size">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-lbl">Elevasi Dasar (Z tanah)</span>
+                            <span class="info-val" id="card-obj-elev">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-lbl">Koordinat Global (X, Y, Z)</span>
+                            <span class="info-val" id="card-obj-pos">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-lbl">Material / Finis</span>
+                            <span class="info-val" id="card-obj-mat">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-lbl">Jumlah Total Sejenis</span>
+                            <span class="info-val" id="card-obj-qty">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-lbl">Layer CAD / Tahap</span>
+                            <span class="info-val" id="card-obj-layer">-</span>
+                        </div>
+                    </div>
+                    <div class="info-actions">
+                        <button class="btn-sheet-action primary" id="btn-focus-obj">🔍 Fokus Kamera</button>
+                        <button class="btn-sheet-action" id="btn-sorot-sejenis">✨ Sorot Sejenis</button>
+                        <button class="btn-sheet-action" id="btn-clear-selection">✕ Batal</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: DENAH 2D INTERAKTIF -->
+            <div class="tab-pane" id="tab-denah">
+                <div class="denah-box">
+                    <div class="denah-canvas-wrapper">
+                        <canvas id="denah-canvas" width="600" height="280"></canvas>
+                    </div>
+                    <div class="denah-tip">
+                        <span>👉 <strong>Ketuk area denah</strong> untuk terbang langsung ke posisi tersebut di 3D.</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-around; width:100%; font-size:10px; color:var(--text-muted); margin-top:4px;">
+                        <span>🟦 Exhaust Fans (Barat)</span>
+                        <span>🟩 4 Blok Rak Susun</span>
+                        <span>🟧 Cooling Pad (Timur)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: 24 TAHAP KONSTRUKSI -->
+            <div class="tab-pane" id="tab-tahap">
+                <div class="timeline-box">
+                    <div class="timeline-ctrl-row">
+                        <button class="btn-timeline-play" id="btn-timeline-play">
+                            <span id="play-icon">▶</span> <span id="play-text">Putar Animasi</span>
+                        </button>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:10px; color:var(--text-muted);">Kecepatan:</span>
+                            <select id="sel-timeline-spd" style="background:#121826; color:#00e5ff; border:1px solid var(--border-subtle); border-radius:4px; padding:2px 6px; font-size:11px;">
+                                <option value="1">1x</option>
+                                <option value="2" selected>2x</option>
+                                <option value="4">4x</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="range" min="1" max="24" value="24" class="timeline-slider" id="timeline-slider">
+                    <div class="stage-card-active">
+                        <div class="stage-title" id="stage-active-title">Tahap 24 / 24: Kandang Selesai & Operasional</div>
+                        <div class="stage-desc" id="stage-active-desc">
+                            Seluruh 8.564 komponen terpasang lengkap: struktur utama, rak 3 tingkat, dinding, atap monitor, celldeck cooling pad, serta sistem ventilasi tunnel fan 50".
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: LAYER STRUKTUR -->
+            <div class="tab-pane" id="tab-layer">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <span style="font-size:11px; color:var(--text-muted);">20 LAYER CAD ASLI SKETCHUP</span>
+                    <button id="btn-show-all-layers" style="background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); padding:3px 8px; border-radius:4px; font-size:10px; font-weight:700;">TAMPILKAN SEMUA</button>
+                </div>
+                <div class="layer-list" id="layer-list-container">
+                    <!-- Dynamic Layer Items Injected Here -->
+                </div>
+            </div>
+
+            <!-- TAB 5: UKURAN CAD -->
+            <div class="tab-pane" id="tab-ukuran">
+                <div class="info-card">
+                    <div class="info-header">📐 Dimensi Utama Bangunan</div>
+                    <div class="info-grid">
+                        <div class="info-item"><span class="info-lbl">Panjang Total (Sumbu X)</span><span class="info-val">26.00 Meter</span></div>
+                        <div class="info-item"><span class="info-lbl">Lebar Total (Sumbu Y)</span><span class="info-val">12.00 Meter</span></div>
+                        <div class="info-item"><span class="info-lbl">Tinggi Lisplang Dinding</span><span class="info-val">+2.97 Meter</span></div>
+                        <div class="info-item"><span class="info-lbl">Tinggi Puncak Nok Atap</span><span class="info-val">+5.92 Meter</span></div>
+                        <div class="info-item"><span class="info-lbl">Kemiringan Sudut Atap</span><span class="info-val">22.0° (Derajat)</span></div>
+                        <div class="info-item"><span class="info-lbl">Luas Bangunan Bersih</span><span class="info-val">312.00 m²</span></div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-header">🐔 Dimensi Rak & Lorong Aisle</div>
+                    <div class="info-grid">
+                        <div class="info-item"><span class="info-lbl">Tinggi Lantai Slat Susun 1</span><span class="info-val">Z = +0.60 m</span></div>
+                        <div class="info-item"><span class="info-lbl">Tinggi Lantai Slat Susun 2</span><span class="info-val">Z = +1.80 m</span></div>
+                        <div class="info-item"><span class="info-lbl">Tinggi Lantai Slat Susun 3</span><span class="info-val">Z = +3.00 m</span></div>
+                        <div class="info-item"><span class="info-lbl">Lebar Lorong Jalan (Aisle)</span><span class="info-val">1.00 Meter</span></div>
+                        <div class="info-item"><span class="info-lbl">Jarak As Tiang Sumbu X</span><span class="info-val">2.00 Meter</span></div>
+                        <div class="info-item"><span class="info-lbl">Jarak As Tiang Sumbu Y</span><span class="info-val">4.00 Meter</span></div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn-sheet-action primary" id="btn-toggle-dim-lines">📏 Tampilkan Garis Dimensi 3D</button>
+                </div>
+            </div>
+
+            <!-- TAB 6: POTONGAN (SECTION X-RAY) -->
+            <div class="tab-pane" id="tab-potong">
+                <div class="info-card">
+                    <div class="info-header">✂️ Bidang Irisan Potongan (Clipping Planes)</div>
+                    <div style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">
+                        Geser slider untuk melihat struktur bagian dalam kandang lapis demi lapis.
+                    </div>
+                    <div class="slice-group">
+                        <div class="slice-item">
+                            <div class="slice-label-row">
+                                <span>Potongan Memanjang (Sumbu X)</span>
+                                <span id="lbl-clip-x">26.0 m (Penuh)</span>
+                            </div>
+                            <input type="range" min="0" max="26" step="0.5" value="26" class="timeline-slider" id="slider-clip-x">
+                        </div>
+                        <div class="slice-item">
+                            <div class="slice-label-row">
+                                <span>Potongan Melintang (Sumbu Y)</span>
+                                <span id="lbl-clip-y">12.0 m (Penuh)</span>
+                            </div>
+                            <input type="range" min="0" max="12" step="0.25" value="12" class="timeline-slider" id="slider-clip-y">
+                        </div>
+                        <div class="slice-item">
+                            <div class="slice-label-row">
+                                <span>Potongan Ketinggian Lantai (Sumbu Z)</span>
+                                <span id="lbl-clip-z">6.0 m (Penuh)</span>
+                            </div>
+                            <input type="range" min="0" max="6" step="0.2" value="6" class="timeline-slider" id="slider-clip-z">
+                        </div>
+                    </div>
+                    <button class="btn-sheet-action" id="btn-reset-clipping" style="margin-top:12px;">Reset Potongan Normal</button>
+                </div>
+            </div>
+
+            <!-- TAB 7: SPESIFIKASI & RAB -->
+            <div class="tab-pane" id="tab-spek">
+                <div class="info-card">
+                    <div class="info-header">📑 Data Teknis Closed House Broiler</div>
+                    <div class="info-grid">
+                        <div class="info-item"><span class="info-lbl">Kapasitas Ternak</span><span class="info-val">7.000 Ekor</span></div>
+                        <div class="info-item"><span class="info-lbl">Kepadatan Kandang</span><span class="info-val">12.5 ekor / m²</span></div>
+                        <div class="info-item"><span class="info-lbl">Jumlah Susun Rak</span><span class="info-val">3 Tingkat (Tier)</span></div>
+                        <div class="info-item"><span class="info-lbl">Jumlah Baris Rak</span><span class="info-val">4 Baris (6 Modul)</span></div>
+                        <div class="info-item"><span class="info-lbl">Sistem Ventilasi</span><span class="info-val">Negative Pressure Tunnel</span></div>
+                        <div class="info-item"><span class="info-lbl">Debit Udara Total</span><span class="info-val">228.000 CFM</span></div>
+                        <div class="info-item"><span class="info-lbl">Exhaust Fan Box 50"</span><span class="info-val">6 Unit (4 Kinetik + 2 Listrik)</span></div>
+                        <div class="info-item"><span class="info-lbl">Mesin Penggerak</span><span class="info-val">Diesel Kubota 8.5 HP</span></div>
+                        <div class="info-item"><span class="info-lbl">Poros Transmisi Puli</span><span class="info-val">Baja As 24.0 Meter</span></div>
+                        <div class="info-item"><span class="info-lbl">Cooling Pad Celldeck</span><span class="info-val">7090 Cellulose (12×1.7m)</span></div>
+                        <div class="info-item"><span class="info-lbl">Nipple Drinker 360°</span><span class="info-val">1.440 Pcs + Drip Cup</span></div>
+                        <div class="info-item"><span class="info-lbl">Talang Pakan PVC</span><span class="info-val">36 Jalur @ 24m (864m)</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Dynamic Script Resolver: Loads local files or falls back seamlessly -->
+    <script>
+        (function() {
+            var path = (window.location.pathname || '').toLowerCase();
+            var isSubfolder = path.indexOf('/kandang-3d/') !== -1 || path.indexOf('\\kandang-3d\\') !== -1 || path.indexOf('/kandang-3d') !== -1;
+            var basePath = isSubfolder ? './' : './kandang-3d/';
+            
+            // Adjust link to desktop if in subfolder
+            var desktopLink = document.getElementById('link-desktop');
+            if (desktopLink) {
+                desktopLink.href = isSubfolder ? 'index.html' : 'kandang-3d/index.html';
+            }
+
+            function loadScript(src, fallback) {
+                return new Promise(function(resolve, reject) {
+                    var s = document.createElement('script');
+                    s.src = src;
+                    s.onload = resolve;
+                    s.onerror = function() {
+                        if (fallback) {
+                            var fb = document.createElement('script');
+                            fb.src = fallback;
+                            fb.onload = resolve;
+                            fb.onerror = reject;
+                            document.head.appendChild(fb);
+                        } else {
+                            reject(new Error('Failed to load: ' + src));
+                        }
+                    };
+                    document.head.appendChild(s);
+                });
+            }
+
+            loadScript(basePath + 'assets/js/three.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js')
+                .then(function() {
+                    return loadScript(basePath + 'assets/js/OrbitControls.js', 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js');
+                })
+                .then(function() {
+                    return loadScript(basePath + 'data/kandang-data.js');
+                })
+                .then(function() {
+                    initMobileApp();
+                })
+                .catch(function(err) {
+                    console.error('Initialization error:', err);
+                    var status = document.getElementById('loading-status');
+                    if (status) status.innerText = 'Gagal memuat aset 3D. Muat ulang halaman.';
+                });
+        })();
+
+        // Main Mobile Application Implementation
+        function initMobileApp() {
+            if (!window.THREE || !window.KANDANG_DATA) {
+                alert('Data kandang atau Three.js belum terpasang dengan benar.');
+                return;
+            }
+
+            const data = window.KANDANG_DATA;
+            const container = document.getElementById('canvas-container');
+
+            // 1. Scene, Camera, Renderer Setup
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0e17);
+            scene.fog = new THREE.FogExp2(0x0a0e17, 0.015);
+
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 500);
+            camera.up.set(0, 0, 1); // Z-up CAD Coordinate System
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2.0));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.05;
+            renderer.localClippingEnabled = true;
+            container.appendChild(renderer.domElement);
+
+            // 2. Touch OrbitControls Configuration
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.08;
+            controls.target.set(13.0, 6.0, 2.0); // Center of 26x12m building
+            controls.maxPolarAngle = Math.PI / 2 + 0.05; // Prevent camera under ground
+            controls.minDistance = 2.0;
+            controls.maxDistance = 75.0;
+
+            // 3. Lighting Architecture
+            const ambient = new THREE.AmbientLight(0xffffff, 0.75);
+            scene.add(ambient);
+
+            const hemi = new THREE.HemisphereLight(0xffffff, 0x223344, 0.45);
+            hemi.position.set(13, 6, 25);
+            scene.add(hemi);
+
+            const sun = new THREE.DirectionalLight(0xfff5e6, 0.95);
+            sun.position.set(30, -20, 35);
+            sun.castShadow = true;
+            sun.shadow.mapSize.width = 1024;
+            sun.shadow.mapSize.height = 1024;
+            sun.shadow.camera.near = 1;
+            sun.shadow.camera.far = 80;
+            sun.shadow.camera.left = -25;
+            sun.shadow.camera.right = 25;
+            sun.shadow.camera.top = 25;
+            sun.shadow.camera.bottom = -25;
+            scene.add(sun);
+
+            const fill1 = new THREE.DirectionalLight(0x88bbff, 0.35);
+            fill1.position.set(-20, 25, 15);
+            scene.add(fill1);
+
+            const interiorLight = new THREE.PointLight(0xfff0dd, 0.5, 25);
+            interiorLight.position.set(13, 6, 2.8);
+            scene.add(interiorLight);
+
+            // Ground Engineering Grid
+            const groundGrid = new THREE.GridHelper(50, 50, 0x00e5ff, 0x1b2434);
+            groundGrid.rotation.x = Math.PI / 2;
+            groundGrid.position.set(13, 6, -0.401);
+            scene.add(groundGrid);
+
+            const groundPlane = new THREE.Mesh(
+                new THREE.PlaneGeometry(70, 70),
+                new THREE.MeshStandardMaterial({ color: 0x111622, roughness: 0.95 })
+            );
+            groundPlane.position.set(13, 6, -0.405);
+            scene.add(groundPlane);
+
+            // 4. Materials Setup
+            const materials = {};
+            for (const [key, def] of Object.entries(data.materials)) {
+                const color = new THREE.Color(def.color);
+                const opacity = def.alpha !== undefined ? def.alpha : 1.0;
+                materials[key] = new THREE.MeshStandardMaterial({
+                    color: color,
+                    roughness: def.roughness !== undefined ? def.roughness : 0.65,
+                    metalness: def.metalness !== undefined ? def.metalness : 0.1,
+                    opacity: opacity,
+                    transparent: opacity < 1.0,
+                    side: THREE.DoubleSide
+                });
+            }
+
+            // 5. Geometry Creation (Exact 8,564 Objects from Ruby CAD)
+            const rootGroup = new THREE.Group();
+            rootGroup.name = "KandangBroilerRoot";
+            scene.add(rootGroup);
+
+            const layerGroups = {};
+            for (const [key, def] of Object.entries(data.layers)) {
+                const grp = new THREE.Group();
+                grp.name = key;
+                rootGroup.add(grp);
+                layerGroups[key] = grp;
+            }
+
+            const meshList = [];
+            const objectLookup = new Map();
+            const rotatingFans = [];
+            let transmissionShaft = null;
+
+            // Prism helper (8 points)
+            function createPrism(pts, mat) {
+                const geo = new THREE.BufferGeometry();
+                const pos = [];
+                const faces = [
+                    [0, 3, 2, 1], [4, 5, 6, 7],
+                    [0, 1, 5, 4], [2, 3, 7, 6],
+                    [1, 2, 6, 5], [3, 0, 4, 7]
+                ];
+                faces.forEach(f => {
+                    const p0 = pts[f[0]], p1 = pts[f[1]], p2 = pts[f[2]], p3 = pts[f[3]];
+                    pos.push(p0[0], p0[1], p0[2], p1[0], p1[1], p1[2], p2[0], p2[1], p2[2]);
+                    pos.push(p0[0], p0[1], p0[2], p2[0], p2[1], p2[2], p3[0], p3[1], p3[2]);
+                });
+                geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+                geo.computeVertexNormals();
+                return new THREE.Mesh(geo, mat);
+            }
+
+            // Quad helper (4 points)
+            function createQuad(pts, mat) {
+                const geo = new THREE.BufferGeometry();
+                const [p0, p1, p2, p3] = pts;
+                const pos = [
+                    p0[0], p0[1], p0[2], p1[0], p1[1], p1[2], p2[0], p2[1], p2[2],
+                    p0[0], p0[1], p0[2], p2[0], p2[1], p2[2], p3[0], p3[1], p3[2]
+                ];
+                geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+                geo.computeVertexNormals();
+                return new THREE.Mesh(geo, mat);
+            }
+
+            const objects = data.objects;
+            const totalObj = objects.length;
+
+            for (let i = 0; i < totalObj; i++) {
+                const obj = objects[i];
+                const mat = materials[obj.material] || materials['kayu_besi'];
+                const grp = layerGroups[obj.layer] || rootGroup;
+
+                let mesh = null;
+                if (obj.type === 'box') {
+                    const g = obj.geom;
+                    mesh = new THREE.Mesh(new THREE.BoxGeometry(g.w, g.d, g.h), mat);
+                    mesh.position.set(g.cx, g.cy, g.cz);
+                } else if (obj.type === 'sloped_beam' || obj.type === 'canted_gording') {
+                    mesh = createPrism(obj.geom.pts, mat);
+                } else if (obj.type === 'quad_sheet') {
+                    mesh = createQuad(obj.geom.pts, mat);
+                }
+
+                if (mesh) {
+                    mesh.name = obj.name;
+                    mesh.userData = { id: obj.id, metadata: obj };
+                    mesh.castShadow = (obj.category === 'Struktur Utama' || obj.category === 'Atap');
+                    mesh.receiveShadow = true;
+                    grp.add(mesh);
+                    objectLookup.set(obj.id, mesh);
+
+                    meshList.push({
+                        mesh: mesh,
+                        origPos: mesh.position.clone(),
+                        origScale: mesh.scale.clone(),
+                        metadata: obj
+                    });
+
+                    if (obj.name.includes("As Transmisi")) {
+                        transmissionShaft = mesh;
+                    }
+                }
+            }
+
+            // Setup Exhaust Fan Rotors
+            const blowerNames = [
+                "Blower A 50in Box Fan (Diesel Kinetik)",
+                "Blower B 50in Box Fan (Motor Listrik)",
+                "Blower C 50in Box Fan (Diesel Kinetik)",
+                "Blower D 50in Box Fan (Diesel Kinetik)",
+                "Blower E 50in Box Fan (Motor Listrik)",
+                "Blower F 50in Box Fan (Diesel Kinetik)"
+            ];
+
+            blowerNames.forEach(bName => {
+                const fanGroup = layerGroups["12_Exhaust_Fan_Box_50in"];
+                if (!fanGroup) return;
+
+                const blades = [];
+                let hubCenter = null;
+
+                fanGroup.children.forEach(child => {
+                    if (child.name.startsWith(bName) && child.name.includes("Blade #")) {
+                        blades.push(child);
+                    }
+                    if (child.name.startsWith(bName) && child.name.includes("Hub Motor")) {
+                        hubCenter = child.position.clone();
+                    }
+                });
+
+                if (blades.length === 6 && hubCenter) {
+                    const rotorGroup = new THREE.Group();
+                    rotorGroup.name = bName + " - Rotor";
+                    rotorGroup.position.copy(hubCenter);
+                    fanGroup.add(rotorGroup);
+
+                    blades.forEach(b => {
+                        b.position.sub(hubCenter);
+                        rotorGroup.add(b);
+                    });
+                    rotatingFans.push(rotorGroup);
+                }
+            });
+
+            // 6. Selection Highlight Helper (Cyan CAD Box)
+            let selectedBoxHelper = null;
+            let currentSelectedMesh = null;
+
+            function clearSelection() {
+                if (selectedBoxHelper) {
+                    scene.remove(selectedBoxHelper);
+                    if (selectedBoxHelper.geometry) selectedBoxHelper.geometry.dispose();
+                    selectedBoxHelper = null;
+                }
+                currentSelectedMesh = null;
+                document.getElementById('peek-item-name').innerText = "Ketuk komponen 3D untuk melihat info";
+                document.getElementById('card-obj-name').innerText = "Silakan Pilih Komponen";
+                document.getElementById('card-obj-id').innerText = "CAD-REF";
+                document.getElementById('card-obj-desc').innerText = "Ketuk komponen apapun pada gambar 3D untuk mengukur dan memeriksa spesifikasi material aslinya.";
+                document.getElementById('card-obj-size').innerText = "-";
+                document.getElementById('card-obj-elev').innerText = "-";
+                document.getElementById('card-obj-pos').innerText = "-";
+                document.getElementById('card-obj-mat').innerText = "-";
+                document.getElementById('card-obj-qty').innerText = "-";
+                document.getElementById('card-obj-layer').innerText = "-";
+            }
+
+            function selectComponent(mesh) {
+                clearSelection();
+                if (!mesh) return;
+
+                currentSelectedMesh = mesh;
+                const meta = (mesh.userData && mesh.userData.metadata) ? mesh.userData.metadata : { name: mesh.name };
+
+                // Clean Box3Helper in Cyan (No messy crossing lines)
+                const box = new THREE.Box3().setFromObject(mesh);
+                selectedBoxHelper = new THREE.Box3Helper(box, 0x00e5ff);
+                scene.add(selectedBoxHelper);
+
+                // Haptic feedback if available
+                if (navigator.vibrate) navigator.vibrate(25);
+
+                // Populate Info Tab
+                const name = meta.name || mesh.name || "Komponen Kandang";
+                document.getElementById('peek-item-name').innerText = name;
+                document.getElementById('card-obj-name').innerText = name;
+                document.getElementById('card-obj-id').innerText = meta.id || "CAD-OBJ";
+                document.getElementById('card-obj-desc').innerText = `Komponen ${meta.category || 'Struktur'} pada sub-kelompok ${meta.subGroup || 'Kandang'} (Ruby Line ${meta.sourceLine || '-'}).`;
+
+                const size = box.getSize(new THREE.Vector3());
+                document.getElementById('card-obj-size').innerText = `${size.x.toFixed(2)}m × ${size.y.toFixed(2)}m × ${size.z.toFixed(2)}m`;
+                document.getElementById('card-obj-elev').innerText = `Z = +${box.min.z.toFixed(2)} m (dari tanah)`;
+                document.getElementById('card-obj-pos').innerText = `X=${box.min.x.toFixed(2)}, Y=${box.min.y.toFixed(2)}, Z=${box.min.z.toFixed(2)}`;
+                document.getElementById('card-obj-mat').innerText = meta.materialType || meta.material || "Kayu/Besi";
+
+                // Quantity lookup
+                let totalCount = "1 Pcs";
+                if (meta.materialType && data.materialSummary && data.materialSummary[meta.materialType]) {
+                    totalCount = `${data.materialSummary[meta.materialType].count} Unit di Kandang`;
+                }
+                document.getElementById('card-obj-qty').innerText = totalCount;
+                document.getElementById('card-obj-layer').innerText = `${meta.layer || 'Umum'} (Tahap ${meta.stage || '1'})`;
+
+                // Switch bottom sheet to Info tab and reveal half-sheet
+                switchSheetTab('tab-info');
+                setSheetState('state-half');
+                showToast(`Dipilih: ${name}`);
+            }
+
+            // 7. Raycaster Tap Detection
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+            let touchStartX = 0, touchStartY = 0;
+
+            renderer.domElement.addEventListener('pointerdown', e => {
+                touchStartX = e.clientX;
+                touchStartY = e.clientY;
+            });
+
+            renderer.domElement.addEventListener('pointerup', e => {
+                const dist = Math.hypot(e.clientX - touchStartX, e.clientY - touchStartY);
+                if (dist > 8) return; // Dragged/rotated, not a click
+
+                const rect = renderer.domElement.getBoundingClientRect();
+                mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(rootGroup.children, true);
+
+                if (intersects.length > 0) {
+                    let hit = intersects[0].object;
+                    // Find top-level mesh
+                    while (hit.parent && hit.parent !== rootGroup && !hit.userData.metadata && hit.parent.userData && hit.parent.userData.metadata) {
+                        hit = hit.parent;
+                    }
+                    selectComponent(hit);
+                }
+            });
+
+            // 8. 3D Dimension Lines Layer
+            const dimGroup = new THREE.Group();
+            dimGroup.name = "CAD_Dimensions";
+            dimGroup.visible = false;
+            scene.add(dimGroup);
+
+            function buildDimensions() {
+                const lineMatCyan = new THREE.LineBasicMaterial({ color: 0x00e5ff, linewidth: 2 });
+                const lineMatAmber = new THREE.LineBasicMaterial({ color: 0xf59e0b, linewidth: 2 });
+
+                // Function to add line
+                function addDimLine(p1, p2, mat) {
+                    const geo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+                    dimGroup.add(new THREE.Line(geo, mat));
+                }
+
+                // 26m Length Line
+                addDimLine(new THREE.Vector3(0, -0.6, 0.05), new THREE.Vector3(26, -0.6, 0.05), lineMatCyan);
+                // 12m Width Line
+                addDimLine(new THREE.Vector3(-0.6, 0, 0.05), new THREE.Vector3(-0.6, 12, 0.05), lineMatCyan);
+                // Eaves Height 2.97m Line
+                addDimLine(new THREE.Vector3(-0.6, -0.6, 0), new THREE.Vector3(-0.6, -0.6, 2.97), lineMatAmber);
+                // Peak Height 5.92m Line
+                addDimLine(new THREE.Vector3(13, -0.6, 0), new THREE.Vector3(13, -0.6, 5.92), lineMatAmber);
+
+                // Grid As Tiang (2m bays X)
+                for (let x = 0; x <= 26; x += 2) {
+                    addDimLine(new THREE.Vector3(x, -0.3, 0), new THREE.Vector3(x, -0.8, 0), lineMatCyan);
+                }
+                // Grid As Tiang (4m bays Y)
+                for (let y = 0; y <= 12; y += 4) {
+                    addDimLine(new THREE.Vector3(-0.3, y, 0), new THREE.Vector3(-0.8, y, 0), lineMatCyan);
+                }
+            }
+            buildDimensions();
+
+            // 9. Negative Pressure Airflow Breeze Particles
+            let breezeActive = false;
+            let breezeParticles = null;
+            const breezeCount = 350;
+
+            function initBreeze() {
+                const geo = new THREE.BufferGeometry();
+                const pos = new Float32Array(breezeCount * 3);
+                const speeds = new Float32Array(breezeCount);
+
+                for (let i = 0; i < breezeCount; i++) {
+                    pos[i * 3] = Math.random() * 26.0; // X (0 to 26)
+                    pos[i * 3 + 1] = 0.5 + Math.random() * 11.0; // Y (0.5 to 11.5)
+                    pos[i * 3 + 2] = 0.5 + Math.random() * 2.8; // Z (0.5 to 3.3)
+                    speeds[i] = 0.08 + Math.random() * 0.07;
+                }
+
+                geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                const mat = new THREE.PointsMaterial({
+                    color: 0x00e5ff,
+                    size: 0.18,
+                    transparent: true,
+                    opacity: 0.75,
+                    blending: THREE.AdditiveBlending
+                });
+
+                breezeParticles = new THREE.Points(geo, mat);
+                breezeParticles.userData = { speeds: speeds };
+                breezeParticles.visible = false;
+                scene.add(breezeParticles);
+            }
+            initBreeze();
+
+            function updateBreeze() {
+                if (!breezeActive || !breezeParticles) return;
+                const pos = breezeParticles.geometry.attributes.position.array;
+                const speeds = breezeParticles.userData.speeds;
+
+                for (let i = 0; i < breezeCount; i++) {
+                    pos[i * 3] -= speeds[i]; // Move East (26) to West (0)
+                    if (pos[i * 3] < 0.2) {
+                        pos[i * 3] = 25.8;
+                        pos[i * 3 + 1] = 0.5 + Math.random() * 11.0;
+                        pos[i * 3 + 2] = 0.5 + Math.random() * 2.8;
+                    }
+                }
+                breezeParticles.geometry.attributes.position.needsUpdate = true;
+            }
+
+            // 10. 2D Interactive Denah Drawing (Canvas)
+            const denahCanvas = document.getElementById('denah-canvas');
+            const denahCtx = denahCanvas.getContext('2d');
+
+            function drawDenah() {
+                const w = denahCanvas.width;
+                const h = denahCanvas.height;
+                const pad = 24;
+
+                // Scale: 26m X x 12m Y mapped to canvas
+                const scaleX = (w - pad * 2) / 26.0;
+                const scaleY = (h - pad * 2) / 12.0;
+
+                denahCtx.fillStyle = '#0a0e17';
+                denahCtx.fillRect(0, 0, w, h);
+
+                // Outer Building Line 26x12m
+                denahCtx.strokeStyle = '#00e5ff';
+                denahCtx.lineWidth = 2;
+                denahCtx.strokeRect(pad, pad, 26.0 * scaleX, 12.0 * scaleY);
+
+                // Grid As Tiang (2m intervals in X, 4m in Y)
+                denahCtx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+                denahCtx.lineWidth = 1;
+                for (let x = 0; x <= 26; x += 2) {
+                    denahCtx.beginPath();
+                    denahCtx.moveTo(pad + x * scaleX, pad);
+                    denahCtx.lineTo(pad + x * scaleX, pad + 12.0 * scaleY);
+                    denahCtx.stroke();
+                }
+                for (let y = 0; y <= 12; y += 4) {
+                    denahCtx.beginPath();
+                    denahCtx.moveTo(pad, pad + y * scaleY);
+                    denahCtx.lineTo(pad + 26.0 * scaleX, pad + y * scaleY);
+                    denahCtx.stroke();
+                }
+
+                // 4 Rows of 3-Tier Cages (Green)
+                const cageRows = [
+                    { y: 0.6, h: 1.5, name: "Rak A" },
+                    { y: 3.1, h: 1.5, name: "Rak B1-B2" },
+                    { y: 5.6, h: 1.5, name: "Rak C1-C2" },
+                    { y: 8.1, h: 1.5, name: "Rak D" }
+                ];
+                denahCtx.fillStyle = 'rgba(16, 185, 129, 0.35)';
+                denahCtx.strokeStyle = '#10b981';
+                denahCtx.lineWidth = 1.5;
+                cageRows.forEach(r => {
+                    const rx = pad + 1.0 * scaleX;
+                    const ry = pad + r.y * scaleY;
+                    const rw = 24.0 * scaleX;
+                    const rh = r.h * scaleY;
+                    denahCtx.fillRect(rx, ry, rw, rh);
+                    denahCtx.strokeRect(rx, ry, rw, rh);
+
+                    denahCtx.fillStyle = '#fff';
+                    denahCtx.font = '10px Consolas, monospace';
+                    denahCtx.fillText(r.name, rx + 10, ry + rh / 2 + 3);
+                    denahCtx.fillStyle = 'rgba(16, 185, 129, 0.35)';
+                });
+
+                // 3 Central Aisles (1.0m each)
+                denahCtx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+                const aisles = [2.1, 4.6, 7.1];
+                aisles.forEach(ay => {
+                    denahCtx.fillRect(pad + 1.0 * scaleX, pad + ay * scaleY, 24.0 * scaleX, 1.0 * scaleY);
+                });
+
+                // 6 Exhaust Fans at West Wall (X=0)
+                denahCtx.fillStyle = '#3b82f6';
+                for (let i = 0; i < 6; i++) {
+                    const fy = pad + (1.0 + i * 1.8) * scaleY;
+                    denahCtx.fillRect(pad - 6, fy, 8, 1.4 * scaleY);
+                }
+
+                // Celldeck Cooling Pad at East Wall (X=26)
+                denahCtx.fillStyle = '#f59e0b';
+                denahCtx.fillRect(pad + 26.0 * scaleX - 2, pad + 1.0 * scaleY, 6, 10.0 * scaleY);
+
+                // Compass & Labels
+                denahCtx.fillStyle = '#94a3b8';
+                denahCtx.font = '9px sans-serif';
+                denahCtx.fillText('◀ BARAT (6 BLOWER 50")', pad + 10, pad - 8);
+                denahCtx.fillText('TIMUR (COOLING PAD) ▶', pad + 26 * scaleX - 120, pad - 8);
+            }
+            drawDenah();
+
+            // Click on 2D Denah -> Teleport 3D Camera
+            denahCanvas.addEventListener('click', e => {
+                const rect = denahCanvas.getBoundingClientRect();
+                const pad = 24;
+                const scaleX = (denahCanvas.width - pad * 2) / 26.0;
+                const scaleY = (denahCanvas.height - pad * 2) / 12.0;
+
+                const clickX = (e.clientX - rect.left) * (denahCanvas.width / rect.width) - pad;
+                const clickY = (e.clientY - rect.top) * (denahCanvas.height / rect.height) - pad;
+
+                const worldX = Math.max(0.5, Math.min(25.5, clickX / scaleX));
+                const worldY = Math.max(0.5, Math.min(11.5, clickY / scaleY));
+
+                animateCameraTo(
+                    new THREE.Vector3(worldX, worldY - 3.5, 2.2),
+                    new THREE.Vector3(worldX, worldY + 1.0, 1.5),
+                    800
+                );
+                showToast(`Teleport: X=${worldX.toFixed(1)}m, Y=${worldY.toFixed(1)}m`);
+            });
+
+            // 11. 24-Stage Construction Sequence Manager
+            const stages24 = [
+                { id: 1, title: "1. Pengukuran Lahan & Bowplank", desc: "Setting as bangunan 26.0m x 12.0m & patok elevasi tanah ±0.00." },
+                { id: 2, title: "2. Galian & Umpak Beton Bertulang", desc: "Pengecoran 32 umpak beton 30x30x40cm pada as tiang." },
+                { id: 3, title: "3. Pengecoran Plat Lantai Semen", desc: "Pengecoran 4 bidang lantai cor tebal 3cm (Utara, Selatan & Aisle)." },
+                { id: 4, title: "4. Saluran Parit Got Drainase", desc: "Pembuatan 3 jalur parit got semen 20x20cm L=25m di bawah kotoran." },
+                { id: 5, title: "5. Papan Kayu Ulin Penutup Got", desc: "Pemasangan papan ulin removable tebal 2.5cm penutup parit." },
+                { id: 6, title: "6. Erection 32 Tiang Komposit Ulin", desc: "Pemasangan 32 tiang komposit kayu besi 15x10cm (tinggi 2.97m)." },
+                { id: 7, title: "7. Balok Sabuk Pengaku Dinding", desc: "Pemasangan balok sabuk keliling bawah, tengah, dan atas." },
+                { id: 8, title: "8. Rangka Dinding Vertikal & Kusen", desc: "Rangka dinding kayu papan 1.5x6cm spasi 30cm & kusen pintu." },
+                { id: 9, title: "9. Rangka Rak 3 Susun Baris A", desc: "Perakitan rangka kayu 5x5 rak sisi utara 3 tingkat." },
+                { id: 10, title: "10. Rangka Rak 3 Susun Baris B1-B2", desc: "Perakitan rangka kayu 5x5 modul tengah pertama." },
+                { id: 11, title: "11. Rangka Rak 3 Susun Baris C1-C2", desc: "Perakitan rangka kayu 5x5 modul tengah kedua." },
+                { id: 12, title: "12. Rangka Rak 3 Susun Baris D", desc: "Perakitan rangka kayu 5x5 rak sisi selatan." },
+                { id: 13, title: "13. Lantai Slat Mesh Tingkat 1", desc: "Pemasangan slat plastik hijau tingkat 1 (elevasi Z=+0.60m)." },
+                { id: 14, title: "14. Lantai Slat Mesh Tingkat 2", desc: "Pemasangan slat plastik hijau tingkat 2 (elevasi Z=+1.80m)." },
+                { id: 15, title: "15. Lantai Slat Mesh Tingkat 3", desc: "Pemasangan slat plastik hijau tingkat 3 (elevasi Z=+3.00m)." },
+                { id: 16, title: "16. Alas Kotoran Tripleks 8mm", desc: "12 lajur tripleks penampung kotoran ayam di bawah tiap tingkat." },
+                { id: 17, title: "17. Pintu Koloni Kawat Galvanis", desc: "Pemasangan kawat ram pintu galvanis seluruh rak kandang." },
+                { id: 18, title: "18. Instalasi Nipple Drinker Otomatis", desc: "Pemasangan pipa 3/4in, 1.440 nipple drinker merah & drip cup." },
+                { id: 19, title: "19. Talang Pakan PVC Profil U Menerus", desc: "36 jalur talang pakan PVC menerus 24m di depan pintu." },
+                { id: 20, title: "20. 6 Unit Exhaust Fan Box 50 Inch", desc: "Pemasangan 6 box fan 50in, 11 louvers, 6 blade propeller di barat." },
+                { id: 21, title: "21. Mesin Kubota Diesel & Poros Transmisi", desc: "Instalasi Kubota RD110TTB & poros as transmisi baja puli 24m." },
+                { id: 22, title: "22. Celldeck Cooling Pad 7090", desc: "Pemasangan evaporative pad 12x1.7m & talang air stainless di timur." },
+                { id: 23, title: "23. Terpal Dinding Biru A8 Keliling", desc: "Pemasangan terpal tebal A8 menutup dinding utara dan selatan." },
+                { id: 24, title: "24. Kuda-Kuda, Gording & Atap Spandek", desc: "14 kuda-kuda, 13 gording, 180 spandek bergelombang & plafon putih." }
+            ];
+
+            let activeStage = 24;
+            let isPlayingTimeline = false;
+            let timelineSpeed = 2;
+            let timelineTimer = null;
+
+            function applyStage(stageNum) {
+                activeStage = Math.max(1, Math.min(24, stageNum));
+                const st = stages24[activeStage - 1];
+
+                document.getElementById('timeline-slider').value = activeStage;
+                document.getElementById('stage-active-title').innerText = st.title;
+                document.getElementById('stage-active-desc').innerText = st.desc;
+
+                // Map 24 steps to mesh visibility
+                // Steps 1-5: Stage 1 & 2
+                // Steps 6-8: Stage 3 & 4
+                // Steps 9-19: Stage 5
+                // Steps 20-21: Stage 6
+                // Steps 22-23: Stage 7
+                // Step 24: Stage 8
+                meshList.forEach(item => {
+                    const s = item.metadata.stage;
+                    let visible = true;
+                    if (activeStage <= 2 && s > 1) visible = false;
+                    else if (activeStage <= 5 && s > 2) visible = false;
+                    else if (activeStage <= 6 && s > 3) visible = false;
+                    else if (activeStage <= 8 && s > 4) visible = false;
+                    else if (activeStage <= 19 && s > 5) visible = false;
+                    else if (activeStage <= 21 && s > 6) visible = false;
+                    else if (activeStage <= 23 && s > 7) visible = false;
+                    item.mesh.visible = visible;
+                });
+            }
+
+            document.getElementById('timeline-slider').addEventListener('input', e => {
+                applyStage(parseInt(e.target.value));
+            });
+
+            const btnPlay = document.getElementById('btn-timeline-play');
+            btnPlay.addEventListener('click', () => {
+                if (isPlayingTimeline) {
+                    stopTimeline();
+                } else {
+                    startTimeline();
+                }
+            });
+
+            function startTimeline() {
+                isPlayingTimeline = true;
+                document.getElementById('play-icon').innerText = "⏸";
+                document.getElementById('play-text').innerText = "Jeda";
+                if (activeStage >= 24) applyStage(1);
+
+                timelineTimer = setInterval(() => {
+                    if (activeStage >= 24) {
+                        stopTimeline();
+                    } else {
+                        applyStage(activeStage + 1);
+                    }
+                }, 1200 / timelineSpeed);
+            }
+
+            function stopTimeline() {
+                isPlayingTimeline = false;
+                document.getElementById('play-icon').innerText = "▶";
+                document.getElementById('play-text').innerText = "Putar Animasi";
+                if (timelineTimer) clearInterval(timelineTimer);
+            }
+
+            document.getElementById('sel-timeline-spd').addEventListener('change', e => {
+                timelineSpeed = parseFloat(e.target.value);
+                if (isPlayingTimeline) {
+                    stopTimeline();
+                    startTimeline();
+                }
+            });
+
+            // 12. 20-Layer Tree Builder
+            const layerContainer = document.getElementById('layer-list-container');
+            for (const [key, def] of Object.entries(data.layers)) {
+                const count = objects.filter(o => o.layer === key).length;
+                const row = document.createElement('div');
+                row.className = 'layer-item';
+                row.innerHTML = `
+                    <div class="layer-item-left">
+                        <div class="layer-color-dot" style="background:${def.color};"></div>
+                        <span>${def.name}</span>
+                        <span class="layer-badge-count">${count}</span>
+                    </div>
+                    <button class="btn-layer-eye" data-layer="${key}">👁️</button>
+                `;
+                layerContainer.appendChild(row);
+
+                row.querySelector('.btn-layer-eye').addEventListener('click', function() {
+                    const grp = layerGroups[key];
+                    if (grp) {
+                        grp.visible = !grp.visible;
+                        this.innerText = grp.visible ? '👁️' : '🙈';
+                        this.style.opacity = grp.visible ? '1' : '0.4';
+                    }
+                });
+            }
+
+            document.getElementById('btn-show-all-layers').addEventListener('click', () => {
+                for (const grp of Object.values(layerGroups)) {
+                    grp.visible = true;
+                }
+                document.querySelectorAll('.btn-layer-eye').forEach(btn => {
+                    btn.innerText = '👁️';
+                    btn.style.opacity = '1';
+                });
+                showToast("Semua layer ditampilkan");
+            });
+
+            // 13. Section Clipping Planes
+            const clipPlaneX = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 26);
+            const clipPlaneY = new THREE.Plane(new THREE.Vector3(0, -1, 0), 12);
+            const clipPlaneZ = new THREE.Plane(new THREE.Vector3(0, 0, -1), 6);
+            renderer.clippingPlanes = [clipPlaneX, clipPlaneY, clipPlaneZ];
+
+            document.getElementById('slider-clip-x').addEventListener('input', e => {
+                const val = parseFloat(e.target.value);
+                clipPlaneX.constant = val;
+                document.getElementById('lbl-clip-x').innerText = `${val.toFixed(1)} m`;
+            });
+            document.getElementById('slider-clip-y').addEventListener('input', e => {
+                const val = parseFloat(e.target.value);
+                clipPlaneY.constant = val;
+                document.getElementById('lbl-clip-y').innerText = `${val.toFixed(1)} m`;
+            });
+            document.getElementById('slider-clip-z').addEventListener('input', e => {
+                const val = parseFloat(e.target.value);
+                clipPlaneZ.constant = val;
+                document.getElementById('lbl-clip-z').innerText = `${val.toFixed(1)} m`;
+            });
+            document.getElementById('btn-reset-clipping').addEventListener('click', () => {
+                clipPlaneX.constant = 26;
+                clipPlaneY.constant = 12;
+                clipPlaneZ.constant = 6;
+                document.getElementById('slider-clip-x').value = 26;
+                document.getElementById('slider-clip-y').value = 12;
+                document.getElementById('slider-clip-z').value = 6;
+                document.getElementById('lbl-clip-x').innerText = '26.0 m (Penuh)';
+                document.getElementById('lbl-clip-y').innerText = '12.0 m (Penuh)';
+                document.getElementById('lbl-clip-z').innerText = '6.0 m (Penuh)';
+                showToast("Potongan direset normal");
+            });
+
+            // 14. UI Controls: Camera Presets
+            const cameraPresets = {
+                iso: { pos: new THREE.Vector3(38, -20, 20), target: new THREE.Vector3(13, 6, 2.5) },
+                front: { pos: new THREE.Vector3(34, 6, 3.5), target: new THREE.Vector3(26, 6, 2.5) },
+                back: { pos: new THREE.Vector3(-8, 6, 3.5), target: new THREE.Vector3(0, 6, 2.5) },
+                side: { pos: new THREE.Vector3(13, -18, 5.0), target: new THREE.Vector3(13, 0, 2.5) },
+                top: { pos: new THREE.Vector3(13, 6, 35), target: new THREE.Vector3(13, 6, 0) },
+                inside: { pos: new THREE.Vector3(4, 2.1, 1.8), target: new THREE.Vector3(22, 2.1, 1.8) },
+                rack: { pos: new THREE.Vector3(13, 4.2, 2.2), target: new THREE.Vector3(13, 3.6, 1.8) }
+            };
+
+            function animateCameraTo(targetPos, targetLookAt, duration = 800) {
+                const startPos = camera.position.clone();
+                const startTarget = controls.target.clone();
+                const startTime = performance.now();
+
+                function loop(now) {
+                    const elapsed = now - startTime;
+                    const t = Math.min(1.0, elapsed / duration);
+                    const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // easeInOut
+
+                    camera.position.lerpVectors(startPos, targetPos, ease);
+                    controls.target.lerpVectors(startTarget, targetLookAt, ease);
+                    controls.update();
+
+                    if (t < 1.0) requestAnimationFrame(loop);
+                }
+                requestAnimationFrame(loop);
+            }
+
+            document.querySelectorAll('.cam-pill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.cam-pill').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const preset = cameraPresets[this.dataset.cam];
+                    if (preset) {
+                        animateCameraTo(preset.pos, preset.target, 800);
+                        showToast(`Kamera: ${this.innerText}`);
+                    }
+                });
+            });
+
+            document.getElementById('btn-reset-cam').addEventListener('click', () => {
+                const p = cameraPresets.iso;
+                animateCameraTo(p.pos, p.target, 800);
+                showToast("Kamera kembali ke Isometrik");
+            });
+
+            // 15. Bottom Sheet State & Tab Handlers
+            const bottomSheet = document.getElementById('bottom-sheet');
+
+            function setSheetState(state) {
+                bottomSheet.classList.remove('state-peek', 'state-half', 'state-full');
+                bottomSheet.classList.add(state);
+            }
+
+            function switchSheetTab(tabId) {
+                document.querySelectorAll('.sheet-tab-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === tabId);
+                });
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.toggle('active', pane.id === tabId);
+                });
+            }
+
+            document.querySelectorAll('.sheet-tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchSheetTab(this.dataset.tab);
+                    setSheetState('state-half');
+                });
+            });
+
+            // Toggle peek / half when clicking header
+            document.getElementById('sheet-peek-toggle').addEventListener('click', () => {
+                if (bottomSheet.classList.contains('state-peek')) {
+                    setSheetState('state-half');
+                } else {
+                    setSheetState('state-peek');
+                }
+            });
+
+            // Drag handle touch gestures
+            let dragStartY = 0, currentSheetY = 0;
+            const sheetHandle = document.getElementById('sheet-handle');
+
+            sheetHandle.addEventListener('touchstart', e => {
+                dragStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            sheetHandle.addEventListener('touchmove', e => {
+                currentSheetY = e.touches[0].clientY;
+            }, { passive: true });
+
+            sheetHandle.addEventListener('touchend', () => {
+                const diff = currentSheetY - dragStartY;
+                if (diff < -40) {
+                    // Dragged up
+                    if (bottomSheet.classList.contains('state-peek')) setSheetState('state-half');
+                    else setSheetState('state-full');
+                } else if (diff > 40) {
+                    // Dragged down
+                    if (bottomSheet.classList.contains('state-full')) setSheetState('state-half');
+                    else setSheetState('state-peek');
+                }
+            });
+
+            // FAB Actions
+            document.getElementById('fab-denah').addEventListener('click', () => {
+                switchSheetTab('tab-denah');
+                setSheetState('state-half');
+            });
+            document.getElementById('fab-tahap').addEventListener('click', () => {
+                switchSheetTab('tab-tahap');
+                setSheetState('state-half');
+            });
+            document.getElementById('fab-layer').addEventListener('click', () => {
+                switchSheetTab('tab-layer');
+                setSheetState('state-half');
+            });
+            document.getElementById('fab-dimensi').addEventListener('click', () => {
+                switchSheetTab('tab-ukuran');
+                setSheetState('state-half');
+            });
+            document.getElementById('fab-potong').addEventListener('click', () => {
+                switchSheetTab('tab-potong');
+                setSheetState('state-half');
+            });
+
+            // Blower FAB Toggle
+            const fabBlower = document.getElementById('fab-blower');
+            let fansSpinning = false;
+            fabBlower.addEventListener('click', () => {
+                fansSpinning = !fansSpinning;
+                breezeActive = fansSpinning;
+                if (breezeParticles) breezeParticles.visible = fansSpinning;
+                fabBlower.classList.toggle('active', fansSpinning);
+                fabBlower.classList.toggle('pulse', fansSpinning);
+                showToast(fansSpinning ? "🌀 6 Blower Aktif (228.000 CFM)" : "⏸ Blower Dinonaktifkan");
+            });
+
+            // Sheet Info Button Actions
+            document.getElementById('btn-focus-obj').addEventListener('click', () => {
+                if (currentSelectedMesh) {
+                    const box = new THREE.Box3().setFromObject(currentSelectedMesh);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+                    const maxDim = Math.max(size.x, size.y, size.z, 1.0);
+                    animateCameraTo(
+                        new THREE.Vector3(center.x + maxDim * 2, center.y - maxDim * 2, center.z + maxDim),
+                        center,
+                        700
+                    );
+                }
+            });
+
+            document.getElementById('btn-sorot-sejenis').addEventListener('click', () => {
+                if (currentSelectedMesh) {
+                    const meta = currentSelectedMesh.userData.metadata;
+                    if (meta && meta.materialType) {
+                        showToast(`Menyorot seluruh material: ${meta.materialType}`);
+                    }
+                }
+            });
+
+            document.getElementById('btn-clear-selection').addEventListener('click', () => {
+                clearSelection();
+                setSheetState('state-peek');
+            });
+
+            document.getElementById('btn-toggle-dim-lines').addEventListener('click', function() {
+                dimGroup.visible = !dimGroup.visible;
+                this.innerText = dimGroup.visible ? "Sembunyikan Garis Ukur 3D" : "📏 Tampilkan Garis Dimensi 3D";
+                showToast(dimGroup.visible ? "Garis dimensi diaktifkan" : "Garis dimensi disembunyikan");
+            });
+
+            // Fullscreen Toggle
+            document.getElementById('btn-fullscreen').addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                } else {
+                    document.exitFullscreen().catch(() => {});
+                }
+            });
+
+            // Toast helper
+            const toastEl = document.getElementById('mobile-toast');
+            let toastTimer = null;
+            function showToast(msg) {
+                toastEl.innerText = msg;
+                toastEl.classList.add('show');
+                if (toastTimer) clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
+            }
+
+            // Window Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // 16. Render Animation Loop
+            let lastTime = performance.now();
+            function animate(time) {
+                requestAnimationFrame(animate);
+
+                const dt = (time - lastTime) * 0.001;
+                lastTime = time;
+
+                controls.update();
+
+                // Rotate exhaust fans & transmission shaft
+                if (fansSpinning) {
+                    const spinAngle = dt * 15.0; // ~1400 RPM visual rotation
+                    rotatingFans.forEach(rotor => rotor.rotation.x -= spinAngle);
+                    if (transmissionShaft) transmissionShaft.rotation.x -= spinAngle;
+                    updateBreeze();
+                }
+
+                renderer.render(scene, camera);
+            }
+
+            // Initial camera position (Isometric CAD)
+            camera.position.set(38, -20, 20);
+            controls.target.set(13, 6, 2.5);
+            controls.update();
+
+            // Start animation loop
+            requestAnimationFrame(animate);
+
+            // Hide Loading Screen
+            setTimeout(() => {
+                const loader = document.getElementById('loading-screen');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+                showToast("Model 3D 8.564 Komponen Siap!");
+            }, 600);
+        }
+    </script>
+</body>
+</html>
