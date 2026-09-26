@@ -727,7 +727,8 @@ export class UIManager {
         this.layerList.innerHTML = '';
 
         for (const [key, def] of Object.entries(this.data.layers)) {
-            const isDefaultHidden = (key.includes('Atap') || key.includes('Terpal') || key.includes('Celldeck') || key.includes('Dinding'));
+            // HANYA penutup atap spandek yang default unchecked, rangka atap (kuda-kuda, gording, skur) & rangka dinding tetap utuh dan aktif
+            const isDefaultHidden = (key === '18_Penutup_Atap_Spandek_Bergelombang');
             if (isDefaultHidden) {
                 this.sceneModel.setLayerVisibility(key, false);
             }

@@ -1929,7 +1929,8 @@
                 const count = objects.filter(o => o.layer === key).length;
                 const row = document.createElement('div');
                 row.className = 'layer-item';
-                const isDefaultHidden = (key.includes('Atap') || key.includes('Terpal') || key.includes('Celldeck') || key.includes('Dinding'));
+                // HANYA penutup atap spandek yang default unchecked, rangka atap (kuda-kuda, gording, skur) & rangka dinding tetap utuh dan aktif
+                const isDefaultHidden = (key === '18_Penutup_Atap_Spandek_Bergelombang');
                 if (layerGroups[key] && isDefaultHidden) {
                     layerGroups[key].visible = false;
                 }

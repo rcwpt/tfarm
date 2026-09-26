@@ -282,7 +282,7 @@
       { id: 'got', name: '02. Parit Got Drainase', color: '#64748b', defaultVisible: true, count: '3 Jalur x 25m' },
       { id: 'papan_got', name: '03. Papan Penutup Got Ulin', color: '#966432', defaultVisible: true, count: '3 Jalur Papan 20cm' },
       { id: 'tiang', name: '04. Tiang Komposit 15x10', color: '#502d14', defaultVisible: true, count: '32 Unit Kolom' },
-      { id: 'dinding_k', name: '05. Rangka & Dinding Terpal', color: '#af7d4b', defaultVisible: false, count: 'Spasi 30cm & Terpal A8' },
+      { id: 'dinding_k', name: '05. Rangka Dinding Vertikal', color: '#af7d4b', defaultVisible: true, count: 'Spasi 30cm & Kusen' },
       { id: 'rak', name: '06. Rangka Rak 3 Susun', color: '#a06e3c', defaultVisible: true, count: '6 Lajur x 24m' },
       { id: 'slat', name: '07. Lantai Slat Mesh Hijau', color: '#2ea050', defaultVisible: true, count: '3 Tingkat 24m' },
       { id: 'pintu_galv', name: '07A. Pintu Galvanis Koloni', color: '#cbd5e1', defaultVisible: true, count: 'Pintu & Selot Kunci' },
@@ -291,7 +291,7 @@
       { id: 'kudakuda', name: '08. Kuda-Kuda Atap Monitor', color: '#a06e3c', defaultVisible: true, count: '14 Portal Kuda-Kuda' },
       { id: 'skur', name: '08B. Skur Penahan 5x10', color: '#8c5a2d', defaultVisible: true, count: 'Bracing Web Struts' },
       { id: 'gording', name: '09. Gording 5x10 Miring', color: '#be8c50', defaultVisible: true, count: '13 Lajur Canted 16.7°' },
-      { id: 'celldeck', name: '10. Celldeck Cooling Pad 12m', color: '#0ea5e9', defaultVisible: false, count: '12.0x1.7m Pad + Talang SS' },
+      { id: 'celldeck', name: '10. Celldeck Cooling Pad 12m', color: '#0ea5e9', defaultVisible: true, count: '12.0x1.7m Pad + Talang SS' },
       { id: 'blower', name: '12. Exhaust Fan Box 50"', color: '#94a3b8', defaultVisible: true, count: '6 Unit Box + 6 Baling' },
       { id: 'kubota', name: '13. Mesin Kubota & Puli', color: '#dc2626', defaultVisible: true, count: 'Kubota 11 HP + As' },
       { id: 'atap', name: '14. Atap Spandek Galvalum', color: '#9bb4cd', defaultVisible: false, count: '88 Lembar 6m + 2m' }
@@ -1035,59 +1035,6 @@
       buildAtapSpandek();
     }
 
-    function createRoofQuad(x1, x2, z1, y1, z2, y2, mat, info, uRep = 44, vRep = 1) {
-      const geom = new THREE.BufferGeometry();
-      const midX = (x1 + x2) / 2;
-      const midY = (y1 + y2) / 2;
-      const midZ = (z1 + z2) / 2;
-
-      const hx = (x2 - x1) / 2;
-      const dy1 = y1 - midY;
-      const dz1 = z1 - midZ;
-      const dy2 = y2 - midY;
-      const dz2 = z2 - midZ;
-
-      const vertices = new Float32Array([
-        -hx, dy1, dz1,
-        +hx, dy1, dz1,
-        +hx, dy2, dz2,
-
-        -hx, dy1, dz1,
-        +hx, dy2, dz2,
-        -hx, dy2, dz2
-      ]);
-
-      const uvs = new Float32Array([
-        0, 0,
-        uRep, 0,
-        uRep, vRep,
-
-        0, 0,
-        uRep, vRep,
-        0, vRep
-      ]);
-
-      geom.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-      geom.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
-      geom.computeVertexNormals();
-
-      const mesh = new THREE.Mesh(geom, mat);
-      mesh.position.set(midX, midY, midZ);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-
-      mesh.userData = {
-        layerId: 'atap',
-        basePos: new THREE.Vector3(midX, midY, midZ),
-        title: info.title || "Atap Spandek Galvalum",
-        dim: info.dim || "26.40 × 6.00 M",
-        desc: info.desc || "Penutup atap spandek galvalum profil bergelombang.",
-        matName: info.matName || "Spandek Galvalum AZ-100"
-      };
-
-      return mesh;
-    }
-
     function buildCelldeck() {
       // 1. Talang Bawah Stainless (X = 25.80 -> cx = +12.90m)
       addBox('celldeck', 25.80, 0.0, 0.55, 0.20, 12.0, 0.10, MATS.galvanis, {
@@ -1137,64 +1084,68 @@
 
     function buildAtapSpandek() {
       // 1. Sayap Kiri 6.0m (44 Lembar)
-      const roofKiri = createRoofQuad(
-        -13.2, 13.2,
-        -6.80, 3.06,  // Lisplang eave (Z=-6.80, Y=3.06)
-        -1.05, 4.85,  // Tumpuan monitor (Z=-1.05, Y=4.85)
-        MATS.spandek,
-        {
-          title: "Atap Spandek Galvalum Sayap Kiri (44 Lembar × 6m)",
-          dim: "26.40 × 6.02 M (Kemiringan 17.3°)",
-          desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm, tebal 0.30mm (AZ-100). Membentang dari Lisplang Kiri (Z=3.06m) hingga tumpuan monitor (Z=4.85m).",
-          matName: "Spandek Galvalum AZ-100 (6.0m)"
-        },
-        44, 6
-      );
+      const roofKiriGeo = new THREE.PlaneGeometry(26.4, 6.022);
+      const roofKiri = new THREE.Mesh(roofKiriGeo, MATS.spandek);
+      roofKiri.position.set(0, 3.955, -3.925);
+      roofKiri.rotation.x = -Math.PI / 2 + Math.atan2(1.79, 5.75);
+      roofKiri.castShadow = true;
+      roofKiri.receiveShadow = true;
+      roofKiri.userData = {
+        layerId: 'atap',
+        basePos: roofKiri.position.clone(),
+        title: "Atap Spandek Galvalum Sayap Kiri (44 Lembar × 6m)",
+        dim: "26.40 × 6.02 M (Kemiringan 17.3°)",
+        desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm, tebal 0.30mm (AZ-100). Membentang dari Lisplang Kiri (Z=3.06m) hingga tumpuan monitor (Z=4.85m).",
+        matName: "Spandek Galvalum AZ-100 (6.0m)"
+      };
 
       // 2. Sayap Kanan 6.0m (44 Lembar)
-      const roofKanan = createRoofQuad(
-        -13.2, 13.2,
-        1.05, 4.85,   // Tumpuan monitor (Z=+1.05, Y=4.85)
-        6.80, 3.06,   // Lisplang eave (Z=+6.80, Y=3.06)
-        MATS.spandek,
-        {
-          title: "Atap Spandek Galvalum Sayap Kanan (44 Lembar × 6m)",
-          dim: "26.40 × 6.02 M (Kemiringan 17.3°)",
-          desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm sisi sayap kanan dari tumpuan monitor (Z=4.85m) hingga lisplang kanan (Z=3.06m).",
-          matName: "Spandek Galvalum AZ-100 (6.0m)"
-        },
-        44, 6
-      );
+      const roofKananGeo = new THREE.PlaneGeometry(26.4, 6.022);
+      const roofKanan = new THREE.Mesh(roofKananGeo, MATS.spandek);
+      roofKanan.position.set(0, 3.955, 3.925);
+      roofKanan.rotation.x = -Math.PI / 2 - Math.atan2(1.79, 5.75);
+      roofKanan.castShadow = true;
+      roofKanan.receiveShadow = true;
+      roofKanan.userData = {
+        layerId: 'atap',
+        basePos: roofKanan.position.clone(),
+        title: "Atap Spandek Galvalum Sayap Kanan (44 Lembar × 6m)",
+        dim: "26.40 × 6.02 M (Kemiringan 17.3°)",
+        desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm sisi sayap kanan dari tumpuan monitor (Z=4.85m) hingga lisplang kanan (Z=3.06m).",
+        matName: "Spandek Galvalum AZ-100 (6.0m)"
+      };
 
       // 3. Topi Monitor Kiri 2.0m (22 Lembar)
-      const roofMonitorKiri = createRoofQuad(
-        -13.2, 13.2,
-        -1.80, 5.37,  // Overstek monitor kiri (Z=-1.80, Y=5.37)
-        0.00, 5.92,   // Puncak nok (Z=0.00, Y=5.92)
-        MATS.spandek,
-        {
-          title: "Atap Topi Monitor Kiri (22 Lembar × 2m)",
-          dim: "26.40 × 1.88 M (Kemiringan 17.0°)",
-          desc: "Penutup ventilasi atap monitor sisi kiri dengan overstek 40cm, kemiringan 17° menuju puncak nok (Z=5.92m).",
-          matName: "Spandek Galvalum AZ-100 (2.0m)"
-        },
-        44, 2
-      );
+      const roofMonitorKiriGeo = new THREE.PlaneGeometry(26.4, 1.88);
+      const roofMonitorKiri = new THREE.Mesh(roofMonitorKiriGeo, MATS.spandek);
+      roofMonitorKiri.position.set(0, 5.645, -0.90);
+      roofMonitorKiri.rotation.x = -Math.PI / 2 + Math.atan2(0.55, 1.80);
+      roofMonitorKiri.castShadow = true;
+      roofMonitorKiri.receiveShadow = true;
+      roofMonitorKiri.userData = {
+        layerId: 'atap',
+        basePos: roofMonitorKiri.position.clone(),
+        title: "Atap Topi Monitor Kiri (22 Lembar × 2m)",
+        dim: "26.40 × 1.88 M (Kemiringan 17.0°)",
+        desc: "Penutup ventilasi atap monitor sisi kiri dengan overstek 40cm, kemiringan 17° menuju puncak nok (Z=5.92m).",
+        matName: "Spandek Galvalum AZ-100 (2.0m)"
+      };
 
       // 4. Topi Monitor Kanan 2.0m (22 Lembar)
-      const roofMonitorKanan = createRoofQuad(
-        -13.2, 13.2,
-        0.00, 5.92,   // Puncak nok (Z=0.00, Y=5.92)
-        1.80, 5.37,   // Overstek monitor kanan (Z=+1.80, Y=5.37)
-        MATS.spandek,
-        {
-          title: "Atap Topi Monitor Kanan (22 Lembar × 2m)",
-          dim: "26.40 × 1.88 M (Kemiringan 17.0°)",
-          desc: "Penutup ventilasi atap monitor sisi kanan dari puncak nok (Z=5.92m) ke overstek kanan (Z=5.37m).",
-          matName: "Spandek Galvalum AZ-100 (2.0m)"
-        },
-        44, 2
-      );
+      const roofMonitorKananGeo = new THREE.PlaneGeometry(26.4, 1.88);
+      const roofMonitorKanan = new THREE.Mesh(roofMonitorKananGeo, MATS.spandek);
+      roofMonitorKanan.position.set(0, 5.645, 0.90);
+      roofMonitorKanan.rotation.x = -Math.PI / 2 - Math.atan2(0.55, 1.80);
+      roofMonitorKanan.castShadow = true;
+      roofMonitorKanan.receiveShadow = true;
+      roofMonitorKanan.userData = {
+        layerId: 'atap',
+        basePos: roofMonitorKanan.position.clone(),
+        title: "Atap Topi Monitor Kanan (22 Lembar × 2m)",
+        dim: "26.40 × 1.88 M (Kemiringan 17.0°)",
+        desc: "Penutup ventilasi atap monitor sisi kanan dari puncak nok (Z=5.92m) ke overstek kanan (Z=5.37m).",
+        matName: "Spandek Galvalum AZ-100 (2.0m)"
+      };
 
       // 5. Nok Seng Puncak Bubungan Flashing (Ridge Cap)
       const nokGeo = new THREE.BoxGeometry(26.4, 0.04, 0.35);
@@ -1234,7 +1185,7 @@
         matName: "Plat Galvalum Lisplang"
       };
 
-      // Kuda-kuda (kap) kini 100% terbuka tanpa ampig penghalang
+      // Kuda-kuda (kap) 100% terbuka tanpa ampig penghalang
       layerGroups['atap'] = new THREE.Group();
       layerGroups['atap'].add(roofKiri, roofKanan, roofMonitorKiri, roofMonitorKanan, nokMesh, lisKiri, lisKanan);
       layerGroups['atap'].visible = true;
@@ -2161,10 +2112,8 @@
       initAirflowSystem();
       initDimensionOverlay();
       initLayersUI();
-      // Set default layer visibility: Atap, Dinding & Celldeck are hidden by default to reveal structural timber frame
+      // Set default layer visibility: HANYA atap spandek yang default unchecked (kuda-kuda, gording, rangka dinding, celldeck tetap utuh terlihat)
       if (layerGroups['atap']) layerGroups['atap'].visible = false;
-      if (layerGroups['dinding_k']) layerGroups['dinding_k'].visible = false;
-      if (layerGroups['celldeck']) layerGroups['celldeck'].visible = false;
       setupEventListeners();
       setCameraPreset('iso');
       setTechnicalMode('engineering');
