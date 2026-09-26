@@ -37,17 +37,17 @@ export class SceneModel {
     }
 
     initEnvironment() {
-        // CAD Engineering Grid (Ground)
-        const gridHelper = new THREE.GridHelper(60, 60, 0x00e5ff, 0x223344);
+        // CAD Engineering Grid (Infinite Horizon Scale 800m)
+        const gridHelper = new THREE.GridHelper(240, 120, 0x00e5ff, 0x223344);
         gridHelper.name = "GroundGrid";
         gridHelper.rotation.x = Math.PI / 2; // Three.js Y-up to Z-up orientation
         gridHelper.position.set(13.0, 6.0, -0.405);
         this.scene.add(gridHelper);
 
-        // Ground Plane (Paving/Site)
-        const groundGeo = new THREE.PlaneGeometry(80, 80);
+        // Ground Plane (Paving/Site 800m)
+        const groundGeo = new THREE.PlaneGeometry(800, 800);
         const groundMat = new THREE.MeshStandardMaterial({
-            color: 0x161a22,
+            color: 0x0e1117,
             roughness: 0.95,
             metalness: 0.05
         });

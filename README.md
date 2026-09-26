@@ -11,10 +11,33 @@ Seluruh ukuran, koordinat, material, elevasi, jumlah komponen, dan hubungan spas
 
 ---
 
-## 🌟 Aplikasi Web Utama dalam Proyek
+## 🌟 Arsitektur Sistem & Aplikasi Web
 
-### 1. 🎮 Interactive 3D Digital Twin Viewer (`kandang-3d/index.html`)
-Aplikasi web 3D berbasis **Three.js (Offline-First)** yang berfungsi sebagai mini CAD/BIM viewer:
+Repositori ini berpusat pada **Halaman Utama Peternakan** (`index.html`) yang didukung oleh **4 Sub-Halaman Rekayasa Teknik & Visualisasi 3D**:
+
+```
+[index.html] Portal Utama TFARM Timika (Fokus Peternakan & Operasional Kandang 26×12m 7.000 Ekor)
+   │
+   ├── 💻 Sub-Halaman 1: kandang-3d/index.html       (Fullscreen BIM/CAD Digital Twin 3D)
+   ├── 📱 Sub-Halaman 2: kandang_broiler_3d.html      (3D CAD Mobile Touch Specialist)
+   ├── ⚡ Sub-Halaman 3: kandang_broiler_3d_viewer.html (3D Lightweight Single-File Viewer)
+   └── 📑 Sub-Halaman 4: sketsa-rab-26x12.html       (2D CAD Work Drawings & Bill of Materials)
+```
+
+---
+
+### 🏠 Portal Utama Peternakan (`index.html`)
+Pusat informasi komprehensif operasional dan rekayasa peternakan modern closed house di Timika, Papua:
+- **Farm Overview**: Kapasitas 7.000 ekor broiler, 3 tier baterai, sistem ventilasi tunnel negative pressure.
+- **Kalkulator Indeks Performa (IP) Live**: Hitung IP, FCR, deplesi/mortalitas, dan rata-rata bobot panen secara interaktif.
+- **Jurnal Konstruksi Lapangan**: Dokumentasi 23 foto riil pembangunan bertahap di Timika dengan fitur lightbox zoom.
+- **Showcase & Navigasi Sub-Halaman**: Embed interaktif mini viewer dan tautan langsung ke seluruh sub-halaman 3D & 2D.
+- **Tabel Rekayasa Mekanikal-Elektrikal**: Spesifikasi daya genset, debit udara blower 264.000 CFM, dan kebutuhan air minum otomatis.
+
+---
+
+### 🎮 Sub-Halaman 1: Fullscreen 3D CAD/BIM Digital Twin (`kandang-3d/index.html`)
+Aplikasi web 3D berbasis **Three.js (Offline-First)** yang berfungsi sebagai workstation CAD/BIM profesional:
 - **Navigasi Kamera Penuh**: Orbit 360°, Pan, Zoom, Presets (*Isometric, Top, Front, Back, Left, Right, Interior Walkway, Roof, Structure*).
 - **5 Mode Render Material**: *Realistic (PBR)*, *Technical (Color-coded Kategori)*, *Wireframe*, *X-Ray*, *Transparent*.
 - **Sistem Dimensi CAD**: Menampilkan elevasi aktual Ruby (0.00, 0.03, 0.25, 0.95, 1.20, 1.90, 2.15, 2.85, 2.97, 3.00, 4.30, 4.90, 5.76, 5.86, 5.92m) dan dimensi keseluruhan (26.00m × 12.00m).
@@ -22,7 +45,7 @@ Aplikasi web 3D berbasis **Three.js (Offline-First)** yang berfungsi sebagai min
 - **Inspektor Objek Interaktif**: Klik objek apa saja di canvas 3D untuk melihat Nama, ID, Kategori, Material, Dimensi (L, W, H), Posisi (X, Y, Z), Volume, Luas, dan **Traceability Baris Kode Ruby (`sourceLine`)**.
 - **Mesin Pencari Objek**: Cari nama/nomor komponen (misal: `Tiang 17`, `Blower A`, `Rak B1`, `Nipple`, `Talang`) -> kamera otomatis fokus ke objek.
 - **Rangka Rak 3 Susun & Slat**: 6 lajur rak 24m (Rak A, B1, B2, C1, C2, D) lengkap dengan lantai slat mesh plastik, pintu galvanis + slot kunci, alas kotoran tripleks, talang pakan profil U terbuka, dan 1.440 unit nipple drinker 360° + drip cup kuning.
-- **6 Unit Exhaust Fan Box 50" & Sistem Penggerak Transmisi**: 11 louver/sirip miring, motor hub, brackets, 6 propeller blade stainless yang berputar dinamis saat ventilasi aktif, grille pelindung, serta mesin diesel penggerak + as transmisi 10.4m.
+- **6 Unit Exhaust Fan Box 50" & Sistem Transmisi Presisi**: 11 louver/sirip miring, motor hub, brackets, 6 propeller blade stainless yang berputar dinamis saat ventilasi aktif. As transmisi 10.4m dan puli penggerak berposisi statis sesuai mekanika riil.
 - **Visualisasi Aliran Udara & Air**: Simulasi partikel udara dari Celldeck menuju exhaust fan dengan kontrol kecepatan aliran, serta tetesan air pada Celldeck cooling pad.
 - **Animasi Pembangunan 8 Tahap**:
   - `[1/8]` Pondasi & Lantai Cor
@@ -34,14 +57,49 @@ Aplikasi web 3D berbasis **Three.js (Offline-First)** yang berfungsi sebagai min
   - `[7/8]` Terpal Dinding & Celldeck Cooling Pad
   - `[8/8]` Kuda-Kuda, Gording Miring & Spandek Bergelombang
 - **Perekam Video Konstruksi (MediaRecorder API)**: Merekam animasi pembangunan dan kamera sinematik menjadi file video `.webm` (durasi 30s, 60s, 90s).
-- **Exploded View Slider**: Mengurai komponen atap, rangka, dinding, rak, dan lantai secara vertikal (0% - 100%).
 - **Cutaway / Section Plane**: Potongan bidang X, Y, Z interaktif dengan slider.
 - **Alat Ukur Titik ke Titik**: Klik 2 titik pada model untuk mengukur jarak 3D, ΔX, ΔY, dan ΔZ.
 - **Mode Presentasi (P)**: Tampilan bersih tanpa UI untuk presentasi ke owner, investor, konsultan, atau tukang.
 
 ---
 
-### 2. 📑 Sketsa Teknis 2D Interaktif + RAB Material Lengkap (`sketsa-rab-26x12.html`)
+### 💥 Fitur Unggulan: Interactive Exploded View Engine (0% - 100%)
+Fitur penguraian visual rekayasa (*Exploded Assembly*) yang memisahkan seluruh komponen bangunan menjadi 8 subsistem terisolasi secara radial dan vertikal:
+1. **Atap & Spandek Bergelombang**: Terangkat vertikal +7.0 m s.d +8.5 m di atas bangunan.
+2. **Kuda-Kuda Kayu Besi & Gording**: Terangkat vertikal +4.5 m memperlihatkan sistem sambungan pasak tiang.
+3. **Rangka Dinding Vertikal & Sabuk**: Berekspansi keluar secara lateral pada sumbu Y (±2.5 m).
+4. **Dinding Terpal Biru A8 & Penutup Samping**: Membuka ke arah luar memperlihatkan rangka interior.
+5. **6 Lajur Rak 3 Susun & Slat Mesh**: Terangkat +2.0 m dan sedikit merenggang untuk inspeksi alas kotoran tripleks.
+6. **Sistem Perpipaan Nipple & Talang Pakan**: Terangkat independen di atas rak ayam.
+7. **Bantalan Evaporatif Celldeck (Inlet Udara)**: Bergeser ke arah depan sepanjang sumbu X (+4.0 m).
+8. **6 Unit Exhaust Fan Box 50" (Outlet Udara)**: Bergeser ke arah belakang sepanjang sumbu X (-4.0 m).
+
+> Kontrol fleksibel disediakan via slider continuous 0% – 100%, preset cepat (0%, 25%, 50%, 75%, 100%), serta tombol animasi transisi otomatis.
+
+---
+
+### 📱 Sub-Halaman 2: 3D CAD Mobile Specialist (`kandang_broiler_3d.html` / `kandang-3d/mobile.html`)
+Dioptimalkan secara khusus untuk pengalaman peninjauan di lapangan melalui smartphone dan tablet:
+- **Touch-First Navigation**: Orbit satu jari, pan dua jari, dan pinch-to-zoom dengan akselerasi inertial halus.
+- **Bottom Sheet Drawer**: Panel layer dan tools didesain ramah jempol (*thumb-friendly*).
+- **Tampilan Default Rangka**: Atap, dinding terpal, dan celldeck dinonaktifkan pada kondisi awal buka (*default unchecked*) sehingga struktur rangka kayu besi (`rangka bangunan`) langsung terekspos jelas.
+- **Rotasi Blower Presisi**: Hanya propeller blades berputar saat ventilasi aktif, puli dan belt tetap statis.
+- **Horizon Tanah Luas**: Bidang tanah 800×800m dengan grid tak terpotong saat digeser.
+
+---
+
+### ⚡ Sub-Halaman 3: 3D Lightweight Single-File Viewer (`kandang_broiler_3d_viewer.html`)
+Solusi visualisasi 3D instan dalam format **satu file HTML mandiri**:
+- **Zero Configuration**: Tanpa dependensi server atau folder eksternal, langsung jalan di browser apapun.
+- **Kamera Awal Isometrik**: Tampilan sudut isometrik teknis yang proporsional saat pertama kali dibuka.
+- **Default Rangka Terbuka**: Checkbox Atap, Dinding, dan Celldeck default tidak tercentang agar rangka terlihat utuh.
+- **Interactive Exploded Slider**: Slider ledakan komponen visual 0–100% untuk membedah interior kandang secara instan.
+- **As Transmisi Statis**: Batang as 10.4m dan puli penggerak diam kokoh di tempatnya.
+- **Tanah Tanpa Batas**: Bidang tanah 800×800m dengan jarak pandang kamera (far plane) 1.500m.
+
+---
+
+### 📑 Sub-Halaman 4: Sketsa Teknis 2D Interaktif + RAB Material Lengkap (`sketsa-rab-26x12.html`)
 Aplikasi mandiri untuk rekayasa teknis, estimasi, dan pengadaan bahan:
 - **Sketsa Vektor 2D CAD Interaktif (SVG)**:
   - *Denah Tata Letak (Tampak Atas)*: Grid 8×4 tiang, 6 rak, 3 got drainase, 3 lorong inspeksi (1.0m), celldeck, dan blower.
@@ -64,11 +122,6 @@ Aplikasi mandiri untuk rekayasa teknis, estimasi, dan pengadaan bahan:
 - **RAB Bahan Tanpa Harga**: Tabel 300 baris kelompok komponen berdasarkan 15 Bagian Bangunan dan 30 Jenis Material lengkap dengan filter multi-kolom, pencarian instan, dan export CSV, JSON, serta cetak PDF.
 - **Audit & Validasi Ruby**: Pengecekan otomatis yang memverifikasi 8.564 objek terurai tanpa ada komponen yang terlewat.
 - **Source Code Ruby Viewer**: Menampilkan keseluruhan 790 baris `build_kandang_LENGKAP.rb` dengan nomor baris dan penyorotan sintaks.
-
----
-
-### 3. 🏠 Portal Beranda Utama (`index.html`)
-- Menghubungkan seluruh ekosistem teknik TFARM Timika (Dashboard performa IP, kalkulator panen broiler live, jurnal konstruksi 23 foto riil, showcase 3D interaktif, tabel spesifikasi rekayasa, dan kedua aplikasi 26x12m di atas).
 
 ---
 

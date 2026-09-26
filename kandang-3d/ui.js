@@ -727,11 +727,16 @@ export class UIManager {
         this.layerList.innerHTML = '';
 
         for (const [key, def] of Object.entries(this.data.layers)) {
+            const isDefaultHidden = (key.includes('Atap') || key.includes('Terpal') || key.includes('Celldeck') || key.includes('Dinding'));
+            if (isDefaultHidden) {
+                this.sceneModel.setLayerVisibility(key, false);
+            }
+            const isChecked = !isDefaultHidden ? 'checked' : '';
             const row = document.createElement('div');
             row.className = 'layer-row';
             row.innerHTML = `
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <input type="checkbox" id="layer-${key}" checked>
+                    <input type="checkbox" id="layer-${key}" ${isChecked}>
                     <span class="layer-dot" style="background:${def.color};"></span>
                     <span class="layer-name">${def.name}</span>
                 </div>

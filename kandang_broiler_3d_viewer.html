@@ -98,9 +98,9 @@
         <i class="fa-solid fa-fan animate-spin text-xs" style="animation-duration: 3s;"></i>
         <span class="hidden sm:inline">Fan: On</span>
       </button>
-      <button id="btn-toggle-roof" class="px-2.5 py-1.5 rounded-lg text-xs font-medium glass-panel border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 transition flex items-center gap-1.5 shadow" title="Tampilkan/Sembunyikan Atap">
+      <button id="btn-toggle-roof" class="px-2.5 py-1.5 rounded-lg text-xs font-medium glass-panel border border-slate-700 text-slate-400 hover:bg-slate-800 transition flex items-center gap-1.5 shadow" title="Tampilkan/Sembunyikan Atap">
         <i class="fa-solid fa-house-chimney text-xs"></i>
-        <span id="roof-label" class="hidden sm:inline">Atap: Terpasang</span>
+        <span id="roof-label" class="hidden sm:inline">Atap: Terbuka</span>
       </button>
       <button id="btn-reset-cam" class="p-2 rounded-lg text-xs font-medium glass-panel border border-slate-700 text-slate-300 hover:bg-slate-800 transition" title="Reset Kamera Isometrik">
         <i class="fa-solid fa-arrows-rotate"></i>
@@ -282,7 +282,7 @@
       { id: 'got', name: '02. Parit Got Drainase', color: '#64748b', defaultVisible: true, count: '3 Jalur x 25m' },
       { id: 'papan_got', name: '03. Papan Penutup Got Ulin', color: '#966432', defaultVisible: true, count: '3 Jalur Papan 20cm' },
       { id: 'tiang', name: '04. Tiang Komposit 15x10', color: '#502d14', defaultVisible: true, count: '32 Unit Kolom' },
-      { id: 'dinding_k', name: '05. Rangka Dinding Vertikal', color: '#af7d4b', defaultVisible: true, count: 'Spasi 30cm & Kusen' },
+      { id: 'dinding_k', name: '05. Rangka & Dinding Terpal', color: '#af7d4b', defaultVisible: false, count: 'Spasi 30cm & Terpal A8' },
       { id: 'rak', name: '06. Rangka Rak 3 Susun', color: '#a06e3c', defaultVisible: true, count: '6 Lajur x 24m' },
       { id: 'slat', name: '07. Lantai Slat Mesh Hijau', color: '#2ea050', defaultVisible: true, count: '3 Tingkat 24m' },
       { id: 'pintu_galv', name: '07A. Pintu Galvanis Koloni', color: '#cbd5e1', defaultVisible: true, count: 'Pintu & Selot Kunci' },
@@ -291,10 +291,10 @@
       { id: 'kudakuda', name: '08. Kuda-Kuda Atap Monitor', color: '#a06e3c', defaultVisible: true, count: '14 Portal Kuda-Kuda' },
       { id: 'skur', name: '08B. Skur Penahan 5x10', color: '#8c5a2d', defaultVisible: true, count: 'Bracing Web Struts' },
       { id: 'gording', name: '09. Gording 5x10 Miring', color: '#be8c50', defaultVisible: true, count: '13 Lajur Canted 16.7°' },
-      { id: 'celldeck', name: '10. Celldeck Cooling Pad 12m', color: '#0ea5e9', defaultVisible: true, count: '12.0x1.7m Pad + Talang SS' },
+      { id: 'celldeck', name: '10. Celldeck Cooling Pad 12m', color: '#0ea5e9', defaultVisible: false, count: '12.0x1.7m Pad + Talang SS' },
       { id: 'blower', name: '12. Exhaust Fan Box 50"', color: '#94a3b8', defaultVisible: true, count: '6 Unit Box + 6 Baling' },
       { id: 'kubota', name: '13. Mesin Kubota & Puli', color: '#dc2626', defaultVisible: true, count: 'Kubota 11 HP + As' },
-      { id: 'atap', name: '14. Atap Spandek Galvalum', color: '#9bb4cd', defaultVisible: true, count: '88 Lembar 6m + 2m' }
+      { id: 'atap', name: '14. Atap Spandek Galvalum', color: '#9bb4cd', defaultVisible: false, count: '88 Lembar 6m + 2m' }
     ];
 
     // Three.js State Variables
@@ -337,13 +337,13 @@
     function initScene() {
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x090d16);
-      scene.fog = new THREE.FogExp2(0x090d16, 0.012);
+      scene.fog = new THREE.FogExp2(0x090d16, 0.0035);
 
       const width = container.clientWidth || window.innerWidth;
       const height = container.clientHeight || window.innerHeight;
 
       // Perspective camera calibrated for architectural CAD viewing (42° FOV)
-      camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 1000);
+      camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 1500);
       camera.position.set(28, 17, 24);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
@@ -386,16 +386,16 @@
       fillLight.position.set(-25, 20, -20);
       scene.add(fillLight);
 
-      // Architectural Ground Grid
-      const groundGeo = new THREE.PlaneGeometry(120, 120);
-      const groundMat = new THREE.MeshStandardMaterial({ color: 0x0c1322, roughness: 0.92, metalness: 0.08 });
+      // Architectural Ground Grid (Large Infinite Horizon Scale)
+      const groundGeo = new THREE.PlaneGeometry(800, 800);
+      const groundMat = new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.95, metalness: 0.05 });
       const ground = new THREE.Mesh(groundGeo, groundMat);
       ground.rotation.x = -Math.PI / 2;
       ground.position.y = -0.45;
       ground.receiveShadow = true;
       scene.add(ground);
 
-      const grid = new THREE.GridHelper(100, 50, 0x38bdf8, 0x1e293b);
+      const grid = new THREE.GridHelper(240, 120, 0x38bdf8, 0x1e293b);
       grid.position.y = -0.44;
       scene.add(grid);
     }
@@ -482,7 +482,8 @@
       puli: new THREE.MeshStandardMaterial({ color: 0x282828, roughness: 0.5, metalness: 0.8 }),
       v_belt: new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.92, metalness: 0.05 }),
       spandek: new THREE.MeshStandardMaterial({ color: 0xa8c2d8, map: createSpandekTexture(), roughness: 0.38, metalness: 0.65, side: THREE.DoubleSide }),
-      celldeck: new THREE.MeshStandardMaterial({ color: 0xb45519, map: createCelldeckTexture(), roughness: 0.85, metalness: 0.05 })
+      celldeck: new THREE.MeshStandardMaterial({ color: 0xb45519, map: createCelldeckTexture(), roughness: 0.85, metalness: 0.05 }),
+      terpal_d: new THREE.MeshStandardMaterial({ color: 0x1d4ed8, roughness: 0.6, metalness: 0.05, transparent: true, opacity: 0.78, side: THREE.DoubleSide })
     };
 
     // Helper: Add solid box matching SketchUp Ruby logic:
@@ -650,6 +651,18 @@
           addBox('dinding_k', px, y + 0.90, 0.03, 0.05, 0.05, 2.0, MATS.kayu_dinding);
           addBox('dinding_k', px, y, 2.03, 0.05, 0.95, 0.05, MATS.kayu_dinding);
         });
+      });
+
+      // Dinding Tirai Terpal Biru A8 (Ruby line 617-618)
+      addBox('dinding_k', 0.0, 0.0, 0.03, 26.0, 0.005, 2.97, MATS.terpal_d, {
+        title: "Dinding Terpal Biru A8 Sisi Utara (26.0 × 2.97m)",
+        desc: "Tirai terpal kedap udara tipe A8 tebal penahan angin luar dan pengarah aliran ventilasi terowongan.",
+        matName: "Terpal Plastik Polietilen A8 Biru"
+      });
+      addBox('dinding_k', 1.0, 11.995, 0.03, 24.0, 0.005, 2.97, MATS.terpal_d, {
+        title: "Dinding Terpal Biru A8 Sisi Selatan (24.0 × 2.97m)",
+        desc: "Tirai terpal kedap udara tipe A8 tebal penahan angin sisi selatan kandang.",
+        matName: "Terpal Plastik Polietilen A8 Biru"
       });
     }
 
@@ -833,7 +846,7 @@
           shaftPulleyGeo.rotateZ(Math.PI / 2);
           const shaftPulley = new THREE.Mesh(shaftPulleyGeo, MATS.puli);
           shaftPulley.position.set(-13.65, 0.50, cz);
-          shaftRotors.push(shaftPulley);
+          // Shaft pulley is strictly static (no rotation)
 
           // STATIC V-BELT: Loop connecting shaft pulley and blower pulley
           const beltPts = [
@@ -891,7 +904,7 @@
         scene.add(layerGroups['kubota']);
       }
       layerGroups['kubota'].add(shaftMesh);
-      shaftRotors.push(shaftMesh);
+      // Transmission shaft is strictly static (no rotation)
     }
 
     function buildKudaKudaDanGording() {
@@ -2108,9 +2121,7 @@
         fanRotors.forEach(rotor => {
           rotor.rotation.x += spinAngle;
         });
-        shaftRotors.forEach(shaft => {
-          shaft.rotation.x += spinAngle;
-        });
+        // Transmission shaft and V-belts remain 100% static!
       }
 
       // 2. NATURAL AERODYNAMIC AIRFLOW
@@ -2150,6 +2161,10 @@
       initAirflowSystem();
       initDimensionOverlay();
       initLayersUI();
+      // Set default layer visibility: Atap, Dinding & Celldeck are hidden by default to reveal structural timber frame
+      if (layerGroups['atap']) layerGroups['atap'].visible = false;
+      if (layerGroups['dinding_k']) layerGroups['dinding_k'].visible = false;
+      if (layerGroups['celldeck']) layerGroups['celldeck'].visible = false;
       setupEventListeners();
       setCameraPreset('iso');
       setTechnicalMode('engineering');

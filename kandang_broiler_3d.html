@@ -1135,9 +1135,9 @@
             // 1. Scene, Camera, Renderer Setup
             const scene = new THREE.Scene();
             scene.background = new THREE.Color(0x0a0e17);
-            scene.fog = new THREE.FogExp2(0x0a0e17, 0.015);
+            scene.fog = new THREE.FogExp2(0x0a0e17, 0.0035);
 
-            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 500);
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1500);
             camera.up.set(0, 0, 1); // Z-up CAD Coordinate System
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
@@ -1188,15 +1188,15 @@
             interiorLight.position.set(13, 6, 2.8);
             scene.add(interiorLight);
 
-            // Ground Engineering Grid
-            const groundGrid = new THREE.GridHelper(50, 50, 0x00e5ff, 0x1b2434);
+            // Ground Engineering Grid (Large 800m scale, no clipping)
+            const groundGrid = new THREE.GridHelper(240, 120, 0x00e5ff, 0x1b2434);
             groundGrid.rotation.x = Math.PI / 2;
             groundGrid.position.set(13, 6, -0.401);
             scene.add(groundGrid);
 
             const groundPlane = new THREE.Mesh(
-                new THREE.PlaneGeometry(70, 70),
-                new THREE.MeshStandardMaterial({ color: 0x111622, roughness: 0.95 })
+                new THREE.PlaneGeometry(800, 800),
+                new THREE.MeshStandardMaterial({ color: 0x0a0e17, roughness: 0.95, metalness: 0.05 })
             );
             groundPlane.position.set(13, 6, -0.405);
             scene.add(groundPlane);
@@ -1929,9 +1929,14 @@
                 const count = objects.filter(o => o.layer === key).length;
                 const row = document.createElement('div');
                 row.className = 'layer-item';
+                const isDefaultHidden = (key.includes('Atap') || key.includes('Terpal') || key.includes('Celldeck') || key.includes('Dinding'));
+                if (layerGroups[key] && isDefaultHidden) {
+                    layerGroups[key].visible = false;
+                }
+                const chkAttr = isDefaultHidden ? '' : 'checked';
                 row.innerHTML = `
                     <div class="layer-info">
-                        <input type="checkbox" id="mchk-${key}" checked>
+                        <input type="checkbox" id="mchk-${key}" ${chkAttr}>
                         <span class="layer-badge" style="background:${def.color};"></span>
                         <label for="mchk-${key}">${def.name} <small>(${count})</small></label>
                     </div>

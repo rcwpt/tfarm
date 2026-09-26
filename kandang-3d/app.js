@@ -45,14 +45,14 @@ class KandangApp {
         // 2. Scene Setup
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x0e1117);
-        this.scene.fog = new THREE.FogExp2(0x0e1117, 0.008);
+        this.scene.fog = new THREE.FogExp2(0x0e1117, 0.0035);
 
         // 3. Camera Setup
         this.camera = new THREE.PerspectiveCamera(
             45,
             window.innerWidth / window.innerHeight,
             0.1,
-            250.0
+            1500.0
         );
         // CAD Engineering standard: Z is UP!
         this.camera.up.set(0, 0, 1);

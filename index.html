@@ -1,4 +1,4 @@
-html_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -116,6 +116,7 @@ html_content = """<!DOCTYPE html>
                     <a href="#overview" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Farm</a>
                     <a href="#digital-twin" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Digital Twin</a>
                     <a href="#exploded" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Exploded View</a>
+                    <a href="#sub-pages" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-cyan-300 hover:text-white">Sub-Halaman 3D</a>
                     <a href="#airflow" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Airflow</a>
                     <a href="#engineering" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Spesifikasi</a>
                     <a href="#timeline" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Konstruksi</a>
@@ -151,6 +152,7 @@ html_content = """<!DOCTYPE html>
             <a href="#overview" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Farm Overview</a>
             <a href="#digital-twin" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-500/30">💻 Digital Twin 3D Viewer</a>
             <a href="#exploded" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">💥 Exploded View</a>
+            <a href="#sub-pages" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-cyan-300 hover:bg-slate-800/60">📑 4 Sub-Halaman 3D & CAD</a>
             <a href="#airflow" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">🌬 Airflow Visualization</a>
             <a href="#engineering" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Engineering Spesifikasi</a>
             <a href="#timeline" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Tahap Konstruksi (8 Fase)</a>
@@ -367,6 +369,132 @@ html_content = """<!DOCTYPE html>
                 <a href="kandang-3d/index.html" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-xl transition flex-shrink-0">
                     Coba Exploded View ➔
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUB-HALAMAN REKAYASA & VISUALISASI 3D -->
+    <section id="sub-pages" class="py-20 bg-slate-900/60 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="inline-flex items-center gap-2 bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-layer-group text-cyan-400"></i> Ekosistem Rekayasa & Visualisasi
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">4 Sub-Halaman Rekayasa Teknis 3D & 2D</h2>
+                <p class="mt-2 text-slate-300 text-sm sm:text-base">
+                    Halaman utama ini adalah pusat operasional peternakan TFARM Timika. Seluruh modul rekayasa, gambar kerja, dan visualisasi 3D mendalam dapat diakses melalui sub-halaman khusus berikut:
+                </p>
+            </div>
+
+            <!-- Sub-pages Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card 1: Fullscreen 3D BIM/CAD Twin -->
+                <div class="bg-slate-950/90 rounded-3xl p-6 sm:p-8 border border-cyan-500/30 hover:border-cyan-400 transition-all flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono font-bold px-3 py-1 rounded-full uppercase">
+                                Sub-Halaman 1 • Fullscreen CAD
+                            </span>
+                            <span class="text-slate-400 text-xs font-mono">kandang-3d/index.html</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-cube text-cyan-400"></i> 3D CAD/BIM Digital Twin Workstation
+                        </h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                            Workstation CAD teknik lengkap berbasis Three.js offline-first. Dilengkapi <strong>Interactive Exploded View (0% - 100%)</strong> untuk membedah 8 subsistem, inspeksi 8.564 objek 1:1 dari Ruby Script, penggaris 3D (jarak, ΔX, ΔY, ΔZ), kontrol 19 layer SketchUp, simulasi 8 tahap perakitan bangunan, dan perekam video WebM.
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-6 text-[11px] font-mono text-cyan-300">
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Exploded 0-100%</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">8.564 Komponen</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Penggaris 3D</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">8 Tahap Perakitan</span>
+                        </div>
+                    </div>
+                    <a href="kandang-3d/index.html" class="w-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-center text-sm shadow-lg transition flex items-center justify-center gap-2">
+                        Buka Workstation CAD 3D <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Card 2: Mobile 3D Specialist -->
+                <div class="bg-slate-950/90 rounded-3xl p-6 sm:p-8 border border-emerald-500/30 hover:border-emerald-400 transition-all flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-[11px] font-mono font-bold px-3 py-1 rounded-full uppercase">
+                                Sub-Halaman 2 • Mobile Specialist
+                            </span>
+                            <span class="text-slate-400 text-xs font-mono">kandang_broiler_3d.html</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-mobile-screen text-emerald-400"></i> 3D CAD Mobile Touch Specialist
+                        </h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                            Didesain khusus untuk inspeksi langsung di lapangan lewat smartphone atau tablet. Dilengkapi kontrol multi-touch responsif (orbit satu jari, pinch-to-zoom), drawer panel ramah jempol, tampilan default rangka terbuka (atap/dinding/celldeck uncheck saat buka), serta putaran blower mekanis presisi.
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-6 text-[11px] font-mono text-emerald-300">
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Touch & Pinch Zoom</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Rangka Kayu Terbuka</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Mobile Bottom-Sheet</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Blower Dinamis</span>
+                        </div>
+                    </div>
+                    <a href="kandang_broiler_3d.html" class="w-full bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-center text-sm shadow-lg transition flex items-center justify-center gap-2">
+                        Buka Mode Mobile 3D <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3: Lightweight Single-File Viewer -->
+                <div class="bg-slate-950/90 rounded-3xl p-6 sm:p-8 border border-amber-500/30 hover:border-amber-400 transition-all flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="bg-amber-500/10 text-amber-300 border border-amber-500/30 text-[11px] font-mono font-bold px-3 py-1 rounded-full uppercase">
+                                Sub-Halaman 3 • Lightweight Viewer
+                            </span>
+                            <span class="text-slate-400 text-xs font-mono">kandang_broiler_3d_viewer.html</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-amber-400"></i> 3D Lightweight Single-File Viewer
+                        </h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                            Versi ringkas mandiri dalam satu berkas HTML tanpa file pendukung eksternal. Langsung dimuat cepat pada koneksi lambat, sudut awal isometrik teknis, bidang tanah luas 800m bebas terpotong saat digeser, transmisi statis, dan kontrol slider ledakan visual interaktif.
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-6 text-[11px] font-mono text-amber-300">
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Single File Standalone</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Sudut Isometrik</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Tanah 800m Horizon</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">As Transmisi Statis</span>
+                        </div>
+                    </div>
+                    <a href="kandang_broiler_3d_viewer.html" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-center text-sm shadow-lg transition flex items-center justify-center gap-2">
+                        Buka Viewer Ringan <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Card 4: 2D CAD Drawings & RAB Material -->
+                <div class="bg-slate-950/90 rounded-3xl p-6 sm:p-8 border border-purple-500/30 hover:border-purple-400 transition-all flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="bg-purple-500/10 text-purple-300 border border-purple-500/30 text-[11px] font-mono font-bold px-3 py-1 rounded-full uppercase">
+                                Sub-Halaman 4 • 2D CAD & BOM
+                            </span>
+                            <span class="text-slate-400 text-xs font-mono">sketsa-rab-26x12.html</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-file-lines text-purple-400"></i> Sketsa Teknis 2D CAD & RAB Material Lengkap
+                        </h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                            Dokumentasi gambar kerja ortografis (Denah Tata Letak, Potongan Melintang Bentang 12m, Tampak Depan, Samping, dan Belakang) serta Rekapitulasi Kebutuhan Raw Material (Baku) vs Installed Pieces (kayu ulin 10x10, kayu 5x10/5x5/1.5x6, spandek, slat, nipple, talang pakan) tanpa asumsi fiktif.
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-6 text-[11px] font-mono text-purple-300">
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">5 Sketsa SVG 2D</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Rekap Bahan Baku</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Tabel 300 Komponen</span>
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">Export CSV / PDF</span>
+                        </div>
+                    </div>
+                    <a href="sketsa-rab-26x12.html" class="w-full bg-purple-400 hover:bg-purple-300 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-center text-sm shadow-lg transition flex items-center justify-center gap-2">
+                        Buka Sketsa 2D & RAB <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
