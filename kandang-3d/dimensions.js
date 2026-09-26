@@ -243,7 +243,7 @@ export class DimensionManager {
         // 1. Primary Dimension Callout Badge directly above component
         const badgeText = `${compName} | P: ${dx.toFixed(2)}m × L: ${dy.toFixed(2)}m × T: ${dz.toFixed(2)}m (Z=+${min.z.toFixed(2)}m)`;
         this.createOverlayLabel(
-            new THREE.Vector3(center.x, center.y, max.z + 0.15),
+            new THREE.Vector3(center.x, center.y, max.z + 0.18),
             badgeText,
             'selected',
             10,
@@ -268,6 +268,26 @@ export class DimensionManager {
             );
         }
 
+        // 3. Update Floating HUD overlay (Desktop CAD)
+        const hud = document.getElementById('selected-dim-hud');
+        if (hud) {
+            const hudName = document.getElementById('hud-comp-name');
+            const hudSize = document.getElementById('hud-comp-size');
+            const hudElev = document.getElementById('hud-comp-elev');
+            const hudQty = document.getElementById('hud-comp-qty');
+            if (hudName) hudName.innerText = compName;
+            if (hudSize) hudSize.innerText = `${dx.toFixed(2)}m × ${dy.toFixed(2)}m × ${dz.toFixed(2)}m`;
+            if (hudElev) hudElev.innerText = `+${min.z.toFixed(2)} m (±0.00)`;
+            if (hudQty) {
+                let countTxt = "1 Unit";
+                if (meta.materialType && window.KANDANG_DATA && window.KANDANG_DATA.materialSummary && window.KANDANG_DATA.materialSummary[meta.materialType]) {
+                    countTxt = `${window.KANDANG_DATA.materialSummary[meta.materialType].count} Unit`;
+                }
+                hudQty.innerText = countTxt;
+            }
+            hud.style.display = 'block';
+        }
+
         this.visibility.selected = true;
         this.groups.selected.visible = true;
         this.updateLabels();
@@ -290,6 +310,8 @@ export class DimensionManager {
             }
             return true;
         });
+        const hud = document.getElementById('selected-dim-hud');
+        if (hud) hud.style.display = 'none';
     }
 
     /* Helper to add CAD dimension line with leader ticks & text */
@@ -326,6 +348,48 @@ export class DimensionManager {
         el.innerText = text;
         el.dataset.category = category;
         el.dataset.priority = priority;
+
+        // Hard inline positioning - NEVER expand horizontally into a table stripe!
+        el.style.position = 'absolute';
+        el.style.top = '0px';
+        el.style.left = '0px';
+        el.style.transform = 'translate(-50%, -50%)';
+        el.style.display = 'none';
+        el.style.width = 'max-content';
+        el.style.maxWidth = '360px';
+        el.style.whiteSpace = 'nowrap';
+        el.style.pointerEvents = 'none';
+        el.style.boxSizing = 'border-box';
+        el.style.zIndex = (category === 'selected') ? '50' : '20';
+        el.style.fontFamily = 'Consolas, SF Mono, monospace';
+        el.style.fontSize = '11px';
+        el.style.fontWeight = '600';
+        el.style.padding = '3px 8px';
+        el.style.borderRadius = '4px';
+        el.style.boxShadow = '0 3px 12px rgba(0,0,0,0.85)';
+        el.style.backgroundColor = 'rgba(10, 14, 23, 0.94)';
+
+        if (category === 'main') {
+            el.style.border = '1.5px solid #00e5ff';
+            el.style.color = '#ffffff';
+        } else if (category === 'selected') {
+            el.style.border = '2px solid #00e5ff';
+            el.style.color = '#00e5ff';
+            el.style.fontWeight = '700';
+            el.style.fontSize = '12px';
+            el.style.backgroundColor = 'rgba(5, 14, 24, 0.98)';
+            el.style.boxShadow = '0 0 16px rgba(0, 229, 255, 0.5)';
+        } else if (category === 'elevations') {
+            el.style.border = '1px solid #f59e0b';
+            el.style.color = '#fef08a';
+        } else if (category === 'grid') {
+            el.style.border = '1px solid #0288d1';
+            el.style.color = '#bae6fd';
+        } else if (category === 'racks') {
+            el.style.border = '1px solid #10b981';
+            el.style.color = '#a7f3d0';
+        }
+
         container.appendChild(el);
 
         this.labels.push({

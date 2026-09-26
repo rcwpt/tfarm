@@ -4,7 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Digital Twin: Kandang Broiler 26x12m (3 Susun, 7.000 Ekor)</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3.5">
+    <style>
+        #canvas-overlay {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            pointer-events: none !important;
+            z-index: 5 !important;
+            overflow: hidden !important;
+        }
+        .cad-dimension-tag {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            display: none;
+            width: max-content !important;
+            max-width: 360px !important;
+            white-space: nowrap !important;
+            transform: translate(-50%, -50%) !important;
+            pointer-events: none !important;
+            z-index: 20 !important;
+            box-sizing: border-box !important;
+        }
+    </style>
     <!-- Offline-first Three.js and OrbitControls with CDN fallback -->
     <script src="assets/js/three.min.js"></script>
     <script>
@@ -38,6 +63,16 @@
     <div id="canvas-container">
         <canvas id="three-canvas"></canvas>
         <div id="canvas-overlay"></div>
+        <!-- Floating HUD Dimension Callout (Desktop CAD) -->
+        <div id="selected-dim-hud" style="display:none; position:absolute; bottom:84px; left:360px; z-index:30; background:rgba(10,14,23,0.95); border:1.5px solid #00e5ff; border-radius:8px; padding:10px 16px; box-shadow:0 8px 32px rgba(0,0,0,0.85); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); pointer-events:none; font-family:Consolas, monospace;">
+            <div style="font-size:10px; color:#00e5ff; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">🎯 UKURAN BAHAN TERPILIH (CAD REAL-TIME)</div>
+            <div id="hud-comp-name" style="font-size:13px; font-weight:700; color:#ffffff; margin-bottom:6px;">-</div>
+            <div style="display:flex; gap:16px; font-size:12px;">
+                <div><span style="color:#94a3b8;">Ukuran (P×L×T):</span> <strong id="hud-comp-size" style="color:#00e5ff;">-</strong></div>
+                <div><span style="color:#94a3b8;">Elevasi (Z):</span> <strong id="hud-comp-elev" style="color:#f59e0b;">-</strong></div>
+                <div><span style="color:#94a3b8;">Jumlah:</span> <strong id="hud-comp-qty" style="color:#10b981;">-</strong></div>
+            </div>
+        </div>
     </div>
 
     <!-- Top Navigation Header -->
