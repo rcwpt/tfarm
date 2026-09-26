@@ -203,7 +203,7 @@
       const height = container.clientHeight;
 
       camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-      setCameraPreset('iso');
+      camera.position.set(24, 18, 22);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
       renderer.setSize(width, height);
@@ -219,7 +219,8 @@
       controls.maxPolarAngle = Math.PI / 2 + 0.02; // Don't go deep under ground
       controls.minDistance = 2;
       controls.maxDistance = 80;
-      controls.target.set(0, 2.5, 0);
+      controls.target.set(0, 2.2, 0);
+      controls.update();
 
       // Lights
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
@@ -1175,6 +1176,7 @@
       buildKudaKudaDanGording();
       initLayersUI();
       setupEventListeners();
+      setCameraPreset('iso');
       animate();
     };
   </script>
