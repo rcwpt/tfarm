@@ -291,6 +291,7 @@
       { id: 'kudakuda', name: '08. Kuda-Kuda Atap Monitor', color: '#a06e3c', defaultVisible: true, count: '14 Portal Kuda-Kuda' },
       { id: 'skur', name: '08B. Skur Penahan 5x10', color: '#8c5a2d', defaultVisible: true, count: 'Bracing Web Struts' },
       { id: 'gording', name: '09. Gording 5x10 Miring', color: '#be8c50', defaultVisible: true, count: '13 Lajur Canted 16.7°' },
+      { id: 'celldeck', name: '10. Celldeck Cooling Pad 12m', color: '#0ea5e9', defaultVisible: true, count: '12.0x1.7m Pad + Talang SS' },
       { id: 'blower', name: '12. Exhaust Fan Box 50"', color: '#94a3b8', defaultVisible: true, count: '6 Unit Box + 6 Baling' },
       { id: 'kubota', name: '13. Mesin Kubota & Puli', color: '#dc2626', defaultVisible: true, count: 'Kubota 11 HP + As' },
       { id: 'atap', name: '14. Atap Spandek Galvalum', color: '#9bb4cd', defaultVisible: true, count: '88 Lembar 6m + 2m' }
@@ -428,6 +429,36 @@
       return tex;
     }
 
+    function createCelldeckTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 128;
+      cvs.height = 128;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#b45519'; // Warm cellulose brown
+      ctx.fillRect(0, 0, 128, 128);
+
+      // Cross fluted 45°/45° pattern
+      ctx.strokeStyle = '#7c330a';
+      ctx.lineWidth = 2.5;
+      for (let i = -128; i < 256; i += 16) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i + 128, 128);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(i, 128);
+        ctx.lineTo(i + 128, 0);
+        ctx.stroke();
+      }
+
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(24, 4);
+      return tex;
+    }
+
     const MATS = {
       beton: new THREE.MeshStandardMaterial({ color: 0xd7dce1, roughness: 0.85, metalness: 0.05 }),
       got: new THREE.MeshStandardMaterial({ color: 0x64696e, roughness: 0.9, metalness: 0.1 }),
@@ -451,7 +482,7 @@
       puli: new THREE.MeshStandardMaterial({ color: 0x282828, roughness: 0.5, metalness: 0.8 }),
       v_belt: new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.92, metalness: 0.05 }),
       spandek: new THREE.MeshStandardMaterial({ color: 0xa8c2d8, map: createSpandekTexture(), roughness: 0.38, metalness: 0.65, side: THREE.DoubleSide }),
-      gable_orange: new THREE.MeshStandardMaterial({ color: 0xdf6418, roughness: 0.65, metalness: 0.1, side: THREE.DoubleSide })
+      celldeck: new THREE.MeshStandardMaterial({ color: 0xb45519, map: createCelldeckTexture(), roughness: 0.85, metalness: 0.05 })
     };
 
     // Helper: Add solid box matching SketchUp Ruby logic:
@@ -991,68 +1022,166 @@
       buildAtapSpandek();
     }
 
+    function createRoofQuad(x1, x2, z1, y1, z2, y2, mat, info, uRep = 44, vRep = 1) {
+      const geom = new THREE.BufferGeometry();
+      const midX = (x1 + x2) / 2;
+      const midY = (y1 + y2) / 2;
+      const midZ = (z1 + z2) / 2;
+
+      const hx = (x2 - x1) / 2;
+      const dy1 = y1 - midY;
+      const dz1 = z1 - midZ;
+      const dy2 = y2 - midY;
+      const dz2 = z2 - midZ;
+
+      const vertices = new Float32Array([
+        -hx, dy1, dz1,
+        +hx, dy1, dz1,
+        +hx, dy2, dz2,
+
+        -hx, dy1, dz1,
+        +hx, dy2, dz2,
+        -hx, dy2, dz2
+      ]);
+
+      const uvs = new Float32Array([
+        0, 0,
+        uRep, 0,
+        uRep, vRep,
+
+        0, 0,
+        uRep, vRep,
+        0, vRep
+      ]);
+
+      geom.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+      geom.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+      geom.computeVertexNormals();
+
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.position.set(midX, midY, midZ);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+
+      mesh.userData = {
+        layerId: 'atap',
+        basePos: new THREE.Vector3(midX, midY, midZ),
+        title: info.title || "Atap Spandek Galvalum",
+        dim: info.dim || "26.40 × 6.00 M",
+        desc: info.desc || "Penutup atap spandek galvalum profil bergelombang.",
+        matName: info.matName || "Spandek Galvalum AZ-100"
+      };
+
+      return mesh;
+    }
+
+    function buildCelldeck() {
+      // 1. Talang Bawah Stainless (X = 25.80 -> cx = +12.90m)
+      addBox('celldeck', 25.80, 0.0, 0.55, 0.20, 12.0, 0.10, MATS.galvanis, {
+        title: "Talang Air Bawah Celldeck Stainless 12m",
+        desc: "Talang penampung air sirkulasi cooling pad dari plat stainless steel tebal 1.2mm sepanjang 12 meter.",
+        matName: "Stainless Steel 304"
+      });
+
+      // 2. Talang Atas / Pipa Header Distribusi
+      addBox('celldeck', 25.80, 0.0, 2.35, 0.20, 12.0, 0.10, MATS.galvanis, {
+        title: "Talang Distribusi Atas Celldeck 12m",
+        desc: "Talang distribusi atas penutup celldeck dan rumah pipa header pembagi air siram.",
+        matName: "Stainless Steel 304"
+      });
+
+      // 3. Frame Tiang Samping Kiri & Kanan
+      addBox('celldeck', 25.80, -0.05, 0.55, 0.20, 0.05, 1.90, MATS.galvanis, {
+        title: "Frame Tiang Samping Kiri Celldeck",
+        desc: "Tiang frame penjepit panel celldeck sisi utara.",
+        matName: "Profil Stainless Steel"
+      });
+      addBox('celldeck', 25.80, 12.00, 0.55, 0.20, 0.05, 1.90, MATS.galvanis, {
+        title: "Frame Tiang Samping Kanan Celldeck",
+        desc: "Tiang frame penjepit panel celldeck sisi selatan.",
+        matName: "Profil Stainless Steel"
+      });
+
+      // 4. Cooling Pad 7090 Cellulose Fluted (12.0 x 1.7 x 0.15m)
+      addBox('celldeck', 25.82, 0.0, 0.65, 0.15, 12.0, 1.70, MATS.celldeck, {
+        title: "Cooling Pad Evaporatif Celldeck 7090",
+        dim: "12.00 × 0.15 × 1.70 M",
+        desc: "Blok kertas selulosa bergelombang tipe 7090 fluted tebal 15cm, tinggi 1.7m, bentang 12m. Menurunkan suhu udara masuk sebesar 4-6°C.",
+        matName: "Cellulose Pad 7090 Fluted"
+      });
+
+      // 5. 41 Strip Pembagi Panel Stainless (Spasi 30cm)
+      for (let fi = 0; fi <= 40; fi++) {
+        let fy = fi * 0.30;
+        if (fy > 12.0) continue;
+        addBox('celldeck', 25.81, fy, 0.65, 0.005, 0.02, 1.70, MATS.galvanis, {
+          title: `Pembagi Panel Celldeck #${fi + 1}`,
+          desc: "Strip penyekat dan pengaku panel celldeck stainless steel spasi 30cm.",
+          matName: "Stainless Strip"
+        });
+      }
+    }
+
     function buildAtapSpandek() {
       // 1. Sayap Kiri 6.0m (44 Lembar)
-      const roofKiriGeo = new THREE.PlaneGeometry(26.4, 6.022);
-      const roofKiri = new THREE.Mesh(roofKiriGeo, MATS.spandek);
-      roofKiri.position.set(0, 3.955, -3.925);
-      roofKiri.rotation.x = -Math.PI / 2 + Math.atan2(1.79, 5.75);
-      roofKiri.castShadow = true;
-      roofKiri.receiveShadow = true;
-      roofKiri.userData = {
-        layerId: 'atap',
-        basePos: roofKiri.position.clone(),
-        title: "Atap Spandek Galvalum Sayap Kiri (44 Lembar × 6m)",
-        dim: "26.40 × 6.02 M (Kemiringan 17.3°)",
-        desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm, tebal 0.30mm (AZ-100). Membentang dari Lisplang Kiri (Z=3.06m) hingga tumpuan monitor (Z=4.85m).",
-        matName: "Spandek Galvalum AZ-100 (6.0m)"
-      };
+      const roofKiri = createRoofQuad(
+        -13.2, 13.2,
+        -6.80, 3.06,  // Lisplang eave (Z=-6.80, Y=3.06)
+        -1.05, 4.85,  // Tumpuan monitor (Z=-1.05, Y=4.85)
+        MATS.spandek,
+        {
+          title: "Atap Spandek Galvalum Sayap Kiri (44 Lembar × 6m)",
+          dim: "26.40 × 6.02 M (Kemiringan 17.3°)",
+          desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm, tebal 0.30mm (AZ-100). Membentang dari Lisplang Kiri (Z=3.06m) hingga tumpuan monitor (Z=4.85m).",
+          matName: "Spandek Galvalum AZ-100 (6.0m)"
+        },
+        44, 6
+      );
 
       // 2. Sayap Kanan 6.0m (44 Lembar)
-      const roofKananGeo = new THREE.PlaneGeometry(26.4, 6.022);
-      const roofKanan = new THREE.Mesh(roofKananGeo, MATS.spandek);
-      roofKanan.position.set(0, 3.955, 3.925);
-      roofKanan.rotation.x = -Math.PI / 2 - Math.atan2(1.79, 5.75);
-      roofKanan.castShadow = true;
-      roofKanan.receiveShadow = true;
-      roofKanan.userData = {
-        layerId: 'atap',
-        basePos: roofKanan.position.clone(),
-        title: "Atap Spandek Galvalum Sayap Kanan (44 Lembar × 6m)",
-        dim: "26.40 × 6.02 M (Kemiringan 17.3°)",
-        desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm sisi sayap kanan dari tumpuan monitor (Z=4.85m) hingga lisplang kanan (Z=3.06m).",
-        matName: "Spandek Galvalum AZ-100 (6.0m)"
-      };
+      const roofKanan = createRoofQuad(
+        -13.2, 13.2,
+        1.05, 4.85,   // Tumpuan monitor (Z=+1.05, Y=4.85)
+        6.80, 3.06,   // Lisplang eave (Z=+6.80, Y=3.06)
+        MATS.spandek,
+        {
+          title: "Atap Spandek Galvalum Sayap Kanan (44 Lembar × 6m)",
+          dim: "26.40 × 6.02 M (Kemiringan 17.3°)",
+          desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm sisi sayap kanan dari tumpuan monitor (Z=4.85m) hingga lisplang kanan (Z=3.06m).",
+          matName: "Spandek Galvalum AZ-100 (6.0m)"
+        },
+        44, 6
+      );
 
       // 3. Topi Monitor Kiri 2.0m (22 Lembar)
-      const roofMonitorKiri = new THREE.Mesh(new THREE.PlaneGeometry(26.4, 1.882), MATS.spandek);
-      roofMonitorKiri.position.set(0, 5.645, -0.90);
-      roofMonitorKiri.rotation.x = -Math.PI / 2 + Math.atan2(0.55, 1.80);
-      roofMonitorKiri.castShadow = true;
-      roofMonitorKiri.receiveShadow = true;
-      roofMonitorKiri.userData = {
-        layerId: 'atap',
-        basePos: roofMonitorKiri.position.clone(),
-        title: "Atap Topi Monitor Kiri (22 Lembar × 2m)",
-        dim: "26.40 × 1.88 M (Kemiringan 17.0°)",
-        desc: "Penutup ventilasi atap monitor sisi kiri dengan overstek 40cm, kemiringan 17° menuju puncak nok (Z=5.92m).",
-        matName: "Spandek Galvalum AZ-100 (2.0m)"
-      };
+      const roofMonitorKiri = createRoofQuad(
+        -13.2, 13.2,
+        -1.80, 5.37,  // Overstek monitor kiri (Z=-1.80, Y=5.37)
+        0.00, 5.92,   // Puncak nok (Z=0.00, Y=5.92)
+        MATS.spandek,
+        {
+          title: "Atap Topi Monitor Kiri (22 Lembar × 2m)",
+          dim: "26.40 × 1.88 M (Kemiringan 17.0°)",
+          desc: "Penutup ventilasi atap monitor sisi kiri dengan overstek 40cm, kemiringan 17° menuju puncak nok (Z=5.92m).",
+          matName: "Spandek Galvalum AZ-100 (2.0m)"
+        },
+        44, 2
+      );
 
       // 4. Topi Monitor Kanan 2.0m (22 Lembar)
-      const roofMonitorKanan = new THREE.Mesh(new THREE.PlaneGeometry(26.4, 1.882), MATS.spandek);
-      roofMonitorKanan.position.set(0, 5.645, 0.90);
-      roofMonitorKanan.rotation.x = -Math.PI / 2 - Math.atan2(0.55, 1.80);
-      roofMonitorKanan.castShadow = true;
-      roofMonitorKanan.receiveShadow = true;
-      roofMonitorKanan.userData = {
-        layerId: 'atap',
-        basePos: roofMonitorKanan.position.clone(),
-        title: "Atap Topi Monitor Kanan (22 Lembar × 2m)",
-        dim: "26.40 × 1.88 M (Kemiringan 17.0°)",
-        desc: "Penutup ventilasi atap monitor sisi kanan dari puncak nok (Z=5.92m) ke overstek kanan (Z=5.37m).",
-        matName: "Spandek Galvalum AZ-100 (2.0m)"
-      };
+      const roofMonitorKanan = createRoofQuad(
+        -13.2, 13.2,
+        0.00, 5.92,   // Puncak nok (Z=0.00, Y=5.92)
+        1.80, 5.37,   // Overstek monitor kanan (Z=+1.80, Y=5.37)
+        MATS.spandek,
+        {
+          title: "Atap Topi Monitor Kanan (22 Lembar × 2m)",
+          dim: "26.40 × 1.88 M (Kemiringan 17.0°)",
+          desc: "Penutup ventilasi atap monitor sisi kanan dari puncak nok (Z=5.92m) ke overstek kanan (Z=5.37m).",
+          matName: "Spandek Galvalum AZ-100 (2.0m)"
+        },
+        44, 2
+      );
 
       // 5. Nok Seng Puncak Bubungan Flashing (Ridge Cap)
       const nokGeo = new THREE.BoxGeometry(26.4, 0.04, 0.35);
@@ -1092,55 +1221,9 @@
         matName: "Plat Galvalum Lisplang"
       };
 
-      // 7. Ampig Segitiga Dinding Ujung Depan & Belakang (Gable Wall Panels)
-      // Memberikan siluet atap arsitektural kandang closed house persis sesuai gambar referensi!
-      function createGableShape() {
-        const shape = new THREE.Shape();
-        shape.moveTo(-6.0, 2.97);  // Bottom-left eave
-        shape.lineTo(-1.05, 4.85); // Left under-monitor
-        shape.lineTo(-1.05, 5.37); // Left monitor post
-        shape.lineTo(0.0, 5.92);   // Apex ridge
-        shape.lineTo(1.05, 5.37);  // Right monitor post
-        shape.lineTo(1.05, 4.85);  // Right under-monitor
-        shape.lineTo(6.0, 2.97);   // Bottom-right eave
-        shape.closePath();
-        return shape;
-      }
-
-      const gableGeo = new THREE.ShapeGeometry(createGableShape());
-
-      // Front Gable (X = +13.0m)
-      const gableFront = new THREE.Mesh(gableGeo, MATS.gable_orange);
-      gableFront.position.set(13.0, 0, 0);
-      gableFront.rotation.y = Math.PI / 2;
-      gableFront.castShadow = true;
-      gableFront.receiveShadow = true;
-      gableFront.userData = {
-        layerId: 'atap',
-        basePos: gableFront.position.clone(),
-        title: "Dinding Ampig Segitiga Depan (Gable End)",
-        dim: "Bentang 12.0m × Tinggi 2.95m",
-        desc: "Dinding ampig penutup kuda-kuda depan warna oranye arsitektural penahan tempias angin dan hujan.",
-        matName: "Papan Kayu Ampig Cat Weatherproof Oranye"
-      };
-
-      // Rear Gable (X = -13.0m)
-      const gableRear = new THREE.Mesh(gableGeo, MATS.gable_orange);
-      gableRear.position.set(-13.0, 0, 0);
-      gableRear.rotation.y = -Math.PI / 2;
-      gableRear.castShadow = true;
-      gableRear.receiveShadow = true;
-      gableRear.userData = {
-        layerId: 'atap',
-        basePos: gableRear.position.clone(),
-        title: "Dinding Ampig Segitiga Belakang (Gable End)",
-        dim: "Bentang 12.0m × Tinggi 2.95m",
-        desc: "Dinding ampig penutup kuda-kuda belakang di atas instalasi 6 unit blower fan.",
-        matName: "Papan Kayu Ampig Cat Weatherproof Oranye"
-      };
-
+      // Kuda-kuda (kap) kini 100% terbuka tanpa ampig penghalang
       layerGroups['atap'] = new THREE.Group();
-      layerGroups['atap'].add(roofKiri, roofKanan, roofMonitorKiri, roofMonitorKanan, nokMesh, lisKiri, lisKanan, gableFront, gableRear);
+      layerGroups['atap'].add(roofKiri, roofKanan, roofMonitorKiri, roofMonitorKanan, nokMesh, lisKiri, lisKanan);
       layerGroups['atap'].visible = true;
       scene.add(layerGroups['atap']);
     }
@@ -1581,63 +1664,71 @@
 
           switch (layerId) {
             case 'atap':
-              targetY = base.y + 8.6 * factor;
+              targetY = base.y + 7.5 * factor;
+              if (isRadial) {
+                if (base.z < -2.0) targetZ = base.z - 2.0 * factor;
+                else if (base.z > 2.0) targetZ = base.z + 2.0 * factor;
+                else if (base.z < -0.05) targetZ = base.z - 0.8 * factor;
+                else if (base.z > 0.05) targetZ = base.z + 0.8 * factor;
+                else targetY = base.y + 9.5 * factor;
+              }
+              break;
+
+            case 'gording':
+              targetY = base.y + 5.5 * factor;
               if (isRadial) {
                 if (base.z < -0.1) targetZ = base.z - 1.2 * factor;
                 else if (base.z > 0.1) targetZ = base.z + 1.2 * factor;
               }
               break;
 
-            case 'gording':
-              targetY = base.y + 6.8 * factor;
-              if (isRadial) {
-                if (base.z < -0.1) targetZ = base.z - 0.8 * factor;
-                else if (base.z > 0.1) targetZ = base.z + 0.8 * factor;
-              }
-              break;
-
             case 'kudakuda':
             case 'skur':
-              targetY = base.y + 5.0 * factor;
+              targetY = base.y + 3.8 * factor;
               break;
 
             case 'pipa_nipple':
-              targetY = base.y + 3.6 * factor;
-              if (isRadial) targetZ = base.z + (base.z > 0 ? 0.35 : -0.35) * factor;
+              targetY = base.y + 2.6 * factor;
+              if (isRadial) targetZ = base.z + (base.z > 0 ? 0.4 : -0.4) * factor;
               break;
 
             case 'talang_pakan':
-              targetY = base.y + 3.1 * factor;
-              if (isRadial) targetZ = base.z + (base.z > 0 ? 0.45 : -0.45) * factor;
+              targetY = base.y + 2.1 * factor;
+              if (isRadial) targetZ = base.z + (base.z > 0 ? 0.5 : -0.5) * factor;
               break;
 
             case 'pintu_galv':
-              targetY = base.y + 2.7 * factor;
-              if (isRadial) targetZ = base.z + (base.z > 0 ? 0.55 : -0.55) * factor;
+              targetY = base.y + 1.7 * factor;
+              if (isRadial) targetZ = base.z + (base.z > 0 ? 0.6 : -0.6) * factor;
               break;
 
             case 'slat':
-              targetY = base.y + 2.2 * factor;
+              targetY = base.y + 1.2 * factor;
               break;
 
             case 'rak':
-              targetY = base.y + 1.6 * factor;
+              targetY = base.y + 0.7 * factor;
               break;
 
             case 'dinding_k':
               if (isRadial) {
                 if (base.z < -4.0) {
-                  targetZ = base.z - 2.8 * factor;
+                  targetZ = base.z - 3.2 * factor;
                   targetY = base.y + 0.4 * factor;
                 } else if (base.z > 4.0) {
-                  targetZ = base.z + 2.8 * factor;
+                  targetZ = base.z + 3.2 * factor;
                   targetY = base.y + 0.4 * factor;
                 }
-                if (base.x > 11.0) targetX = base.x + 2.4 * factor;
-                if (base.x < -11.0) targetX = base.x - 2.4 * factor;
+                if (base.x > 11.0) targetX = base.x + 3.0 * factor;
+                if (base.x < -11.0) targetX = base.x - 3.0 * factor;
               } else {
                 targetY = base.y + 1.2 * factor;
               }
+              break;
+
+            case 'celldeck':
+              targetX = base.x + 4.2 * factor;
+              targetY = base.y + 0.4 * factor;
               break;
 
             case 'blower':
@@ -1646,7 +1737,7 @@
               break;
 
             case 'kubota':
-              targetX = base.x - 2.0 * factor;
+              targetX = base.x - 5.0 * factor;
               targetY = base.y + 0.3 * factor;
               break;
 
@@ -2054,6 +2145,7 @@
       buildRangkaDinding();
       buildRakSlatDanPeralatan();
       buildBlowerDanKubota();
+      buildCelldeck();
       buildKudaKudaDanGording();
       initAirflowSystem();
       initDimensionOverlay();
