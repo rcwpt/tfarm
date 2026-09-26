@@ -2359,7 +2359,8 @@
                 if (fansSpinning && BLOWER_CONFIG.blowerEnabled) {
                     const spinAngle = (BLOWER_CONFIG.blowerRPM * 2 * Math.PI / 60) * dt;
                     rotatingFans.forEach(rotor => rotor.rotation.x += BLOWER_CONFIG.blowerDirection * spinAngle);
-                    if (transmissionShaft) transmissionShaft.rotation.x += BLOWER_CONFIG.blowerDirection * spinAngle;
+                    // Transmission shaft & V-belt strictly static
+
                 }
                 if (breezeActive) {
                     updateAirflowSystem(dt);

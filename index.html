@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+html_content = """<!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TFARM Timika - Peternakan Ayam Broiler Modern Closed House</title>
-    <meta name="description" content="TFARM Timika - Peternakan ayam broiler modern di Papua dengan teknologi Closed House rak baterai 2 tingkat berkapasitas 7.000 ekor.">
+    <title>TFARM TIMIKA — Modern Closed House Broiler Farm & Engineering Digital Twin</title>
+    <meta name="description" content="TFARM Timika - Peternakan ayam broiler modern di Papua berbasis teknologi Closed House 26x12m, kapasitas 7.000 ekor, 3 tier, dan 3D CAD Engineering Digital Twin.">
     <link rel="icon" href="logo.png" type="image/png">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -46,84 +46,94 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
         
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
         .glass-nav {
-            background: rgba(15, 23, 42, 0.94);
+            background: rgba(9, 13, 22, 0.94);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
+
+        .cad-grid-bg {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        }
+
+        .glow-cyan {
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.25);
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-emerald-500/40 transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
-        <i class="fa-solid fa-circle-check text-emerald-400"></i>
-        <span id="toast-msg" class="text-emerald-300 font-semibold text-sm">Alamat disalin</span>
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-cyan-500/40 transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-cyan-400"></i>
+        <span id="toast-msg" class="text-cyan-300 font-semibold text-sm">Alamat disalin</span>
     </div>
 
-    <!-- TOP PROMO BANNER: LINK TO 9000.HTML -->
-    <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-emerald-100 text-xs sm:text-sm py-2.5 px-4 border-b border-emerald-700/50">
+    <!-- TOP ANNOUNCEMENT BAR (Clean 26x12m 7.000 Ekor specification) -->
+    <div class="bg-gradient-to-r from-slate-900 via-cyan-950 to-slate-900 text-cyan-200 text-xs sm:text-sm py-2 px-4 border-b border-cyan-500/20">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
             <div class="flex items-center gap-2 font-medium text-center sm:text-left">
-                <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider">Cetak Biru Baru</span>
-                <span>Tersedia Desain Kandang Skala Besar <strong>12m x 50m (9.000 Ekor)</strong> dengan Sistem Rangka Kayu</span>
+                <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 px-2 py-0.5 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider">Engineering Digital Twin</span>
+                <span>Model Kandang Closed House <strong>26 × 12 M (3 Susun, 7.000 Ekor)</strong> Terverifikasi 1:1 Ruby CAD</span>
             </div>
-            <a href="9000.html" class="inline-flex items-center gap-1.5 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-extrabold px-3.5 py-1 rounded-full text-xs transition transform hover:scale-105 shadow-sm">
-                Buka Blueprint 9.000 <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            <a href="kandang-3d/index.html" class="inline-flex items-center gap-1.5 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-extrabold px-3 py-0.5 rounded-full text-xs transition transform hover:scale-105 shadow-sm">
+                Buka Digital Twin 3D <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </a>
         </div>
     </div>
 
     <!-- STICKY NAVBAR -->
-    <nav class="glass-nav text-white shadow-xl sticky top-0 z-40 border-b border-slate-800">
+    <nav class="glass-nav text-white shadow-xl sticky top-0 z-40 border-b border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 
                 <!-- Logo & Brand -->
                 <a href="index.html" class="flex items-center space-x-3 group">
-                    <div class="bg-white p-1.5 rounded-2xl shadow-md group-hover:scale-105 transition-transform duration-300">
-                        <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/rcwpt/tfarm/main/logo.png'" alt="Logo TFARM" class="h-9 w-9 object-contain">
+                    <div class="bg-gradient-to-tr from-cyan-500 to-emerald-400 p-1 rounded-2xl shadow-md group-hover:scale-105 transition-transform duration-300">
+                        <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/rcwpt/tfarm/main/logo.png'" alt="Logo TFARM" class="h-9 w-9 object-contain bg-white rounded-xl p-1">
                     </div>
                     <div>
                         <span class="font-extrabold text-xl sm:text-2xl tracking-tight text-white flex items-center gap-1.5">
-                            TFARM <span class="text-emerald-400 font-bold text-xs bg-emerald-950 px-2 py-0.5 rounded border border-emerald-600/40">TIMIKA</span>
+                            TFARM <span class="text-cyan-400 font-bold text-xs bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/40">TIMIKA</span>
                         </span>
-                        <p class="text-[11px] text-slate-400 font-medium hidden sm:block tracking-wide">Modern Broiler Closed House Farm</p>
+                        <p class="text-[11px] text-slate-400 font-medium hidden sm:block tracking-wide">Modern Broiler Closed House Farm & Engineering</p>
                     </div>
                 </a>
                 
                 <!-- Desktop Menu Navigation -->
-                <div class="hidden lg:flex items-center space-x-1">
-                    <a href="#dashboard" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Dashboard</a>
-                    <a href="#calculator" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Kalkulator IP</a>
-                    <a href="#about" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Fasilitas</a>
-                    <a href="kandang_broiler_3d.html" class="bg-emerald-500/10 border border-emerald-400/30 hover:bg-emerald-500/20 px-3 py-2 rounded-xl text-sm font-bold transition text-emerald-300 hover:text-white"><i class="fa-solid fa-mobile-screen-button text-emerald-400 mr-1"></i> 3D Mobile</a>
-                    <a href="kandang-3d/index.html" class="bg-sky-500/10 border border-sky-400/30 hover:bg-sky-500/20 px-3 py-2 rounded-xl text-sm font-bold transition text-sky-300 hover:text-white"><i class="fa-solid fa-desktop text-sky-400 mr-1"></i> 3D Desktop</a>
-                    <a href="kandang_broiler_3d_viewer.html" class="bg-amber-500/10 border border-amber-400/30 hover:bg-amber-500/20 px-3 py-2 rounded-xl text-sm font-bold transition text-amber-300 hover:text-white"><i class="fa-solid fa-feather text-amber-400 mr-1"></i> 3D Ringan</a>
-                    <a href="sketsa-rab-26x12.html" class="bg-emerald-500/10 border border-emerald-400/30 hover:bg-emerald-500/20 px-3 py-2 rounded-xl text-sm font-bold transition text-emerald-300 hover:text-white"><i class="fa-solid fa-file-invoice text-emerald-400 mr-1"></i> Sketsa & RAB</a>
-                    <a href="#construction" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Pembangunan</a>
-                    <a href="#gallery" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Galeri</a>
-                    <a href="#location" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl text-sm font-semibold transition text-slate-200 hover:text-white">Lokasi</a>
+                <div class="hidden xl:flex items-center space-x-1 text-sm font-semibold">
+                    <a href="#overview" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Farm</a>
+                    <a href="#digital-twin" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Digital Twin</a>
+                    <a href="#exploded" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Exploded View</a>
+                    <a href="#airflow" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Airflow</a>
+                    <a href="#engineering" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Spesifikasi</a>
+                    <a href="#timeline" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Konstruksi</a>
+                    <a href="#bom" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">BOM</a>
+                    <a href="#performance" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Performa</a>
+                    <a href="#gallery" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Galeri</a>
+                    <a href="#location" class="hover:bg-slate-800/80 px-3 py-2 rounded-xl transition text-slate-300 hover:text-white">Lokasi</a>
                 </div>
 
                 <!-- Header Right Action -->
-                <div class="hidden md:flex items-center space-x-3">
-                    <a href="9000.html" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold px-3.5 py-2.5 rounded-xl text-sm shadow-md transition transform hover:-translate-y-0.5">
-                        <i class="fa-solid fa-drafting-compass"></i> Blueprint 9.000
+                <div class="hidden sm:flex items-center space-x-3">
+                    <a href="kandang-3d/index.html" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-teal-400 hover:from-cyan-300 hover:to-teal-300 text-slate-950 font-extrabold px-4 py-2.5 rounded-xl text-sm shadow-lg shadow-cyan-500/20 transition transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-cube"></i> OPEN 3D TWIN
                     </a>
                 </div>
 
                 <!-- Mobile Hamburger Button -->
-                <div class="lg:hidden">
+                <div class="xl:hidden">
                     <button 
                         id="btn-mobile-toggle"
                         onclick="toggleMobileMenu()" 
@@ -137,1019 +147,791 @@
         </div>
 
         <!-- Mobile Drawer Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-slate-950 border-t border-slate-800 px-4 pt-3 pb-6 space-y-2 shadow-2xl">
-            <a href="#dashboard" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-slate-800/60 hover:bg-slate-800">Dashboard Performa</a>
-            <a href="#calculator" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:bg-slate-800/60">Kalkulator IP Broiler</a>
-            <a href="kandang_broiler_3d.html" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-emerald-300 bg-emerald-950/60 border border-emerald-500/30"><i class="fa-solid fa-mobile-screen-button text-emerald-400 mr-2"></i> 📱 3D Mobile Viewer (26x12m, 3 Susun)</a>
-            <a href="kandang-3d/index.html" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-sky-300 bg-sky-950/60 border border-sky-500/30"><i class="fa-solid fa-desktop text-sky-400 mr-2"></i> 💻 3D Desktop CAD Twin</a>
-            <a href="kandang_broiler_3d_viewer.html" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-amber-300 bg-amber-950/60 border border-amber-500/30"><i class="fa-solid fa-feather text-amber-400 mr-2"></i> 🪶 3D Viewer Ringan (Single File)</a>
-            <a href="sketsa-rab-26x12.html" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-emerald-300 bg-emerald-950/60 border border-emerald-500/30"><i class="fa-solid fa-file-invoice text-emerald-400 mr-2"></i> Sketsa Teknis 2D & RAB Lengkap</a>
-            <a href="#about" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:bg-slate-800/60">Fasilitas Kandang</a>
-            <a href="#construction" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:bg-slate-800/60">Jurnal Pembangunan (23 Foto)</a>
-            <a href="#gallery" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:bg-slate-800/60">Galeri Operasional</a>
-            <a href="#location" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:bg-slate-800/60">Lokasi & Navigasi Maps</a>
+        <div id="mobile-menu" class="hidden xl:hidden bg-slate-950 border-t border-slate-800 px-4 pt-3 pb-6 space-y-2 shadow-2xl">
+            <a href="#overview" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Farm Overview</a>
+            <a href="#digital-twin" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-500/30">💻 Digital Twin 3D Viewer</a>
+            <a href="#exploded" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">💥 Exploded View</a>
+            <a href="#airflow" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">🌬 Airflow Visualization</a>
+            <a href="#engineering" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Engineering Spesifikasi</a>
+            <a href="#timeline" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Tahap Konstruksi (8 Fase)</a>
+            <a href="#bom" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Bill of Materials (BOM)</a>
+            <a href="#performance" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Dashboard Performa & IP</a>
+            <a href="#gallery" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Galeri Foto</a>
+            <a href="#location" onclick="toggleMobileMenu()" class="block px-4 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/60">Lokasi Timika</a>
             
-            <div class="pt-2 border-t border-slate-800 space-y-2">
-                <a href="9000.html" class="flex items-center justify-center gap-2 w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-4 py-3 rounded-xl text-sm shadow-lg">
-                    <i class="fa-solid fa-drafting-compass"></i> Buka Blueprint Kandang 9.000 Ekor (12x50m)
+            <div class="pt-3 border-t border-slate-800 space-y-2">
+                <a href="kandang-3d/index.html" class="flex items-center justify-center gap-2 w-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold px-4 py-3 rounded-xl text-sm shadow-lg">
+                    <i class="fa-solid fa-cube"></i> Buka Fullscreen 3D Digital Twin
+                </a>
+                <a href="kandang_broiler_3d.html" class="flex items-center justify-center gap-2 w-full bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm border border-slate-700">
+                    <i class="fa-solid fa-mobile-screen-button text-cyan-400"></i> Mode 3D Mobile
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <div class="relative bg-slate-950 text-white overflow-hidden py-20 sm:py-28">
-        <!-- Background Hero Image with Dark Gradient Layer -->
-        <div class="absolute inset-0 z-0">
-            <img 
-                src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/kandang%20rak%20baterai.jpeg" 
-                class="w-full h-full object-cover opacity-20 filter brightness-90 scale-105" 
-                alt="Kandang TFARM Timika" 
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent"></div>
-        </div>
+    <!-- 1. HERO SECTION -->
+    <section class="relative cad-grid-bg overflow-hidden py-24 sm:py-32 border-b border-slate-800">
+        <!-- Ambient radial glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none"></div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             
-            <!-- Top Badges -->
-            <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full mb-6 backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>KAPASITAS AKTIF: 7.000 EKOR • CLOSED HOUSE 2 TINGKAT</span>
+            <!-- Badges -->
+            <div class="inline-flex flex-wrap items-center justify-center gap-2 mb-8">
+                <span class="inline-flex items-center gap-1.5 bg-cyan-500/15 text-cyan-300 border border-cyan-400/40 text-xs sm:text-sm font-mono font-bold px-3.5 py-1.5 rounded-full backdrop-blur-md">
+                    <i class="fa-solid fa-ruler-combined text-cyan-400"></i> 26 × 12 M
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-emerald-500/15 text-emerald-300 border border-emerald-400/40 text-xs sm:text-sm font-mono font-bold px-3.5 py-1.5 rounded-full backdrop-blur-md">
+                    <i class="fa-solid fa-feather text-emerald-400"></i> 7.000 EKOR
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-amber-500/15 text-amber-300 border border-amber-400/40 text-xs sm:text-sm font-mono font-bold px-3.5 py-1.5 rounded-full backdrop-blur-md">
+                    <i class="fa-solid fa-layer-group text-amber-400"></i> 3 TIER (SUSUN)
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-purple-500/15 text-purple-300 border border-purple-400/40 text-xs sm:text-sm font-mono font-bold px-3.5 py-1.5 rounded-full backdrop-blur-md">
+                    <i class="fa-solid fa-warehouse text-purple-400"></i> CLOSED HOUSE
+                </span>
             </div>
 
-            <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight max-w-5xl mx-auto">
-                Peternakan Modern di <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-green-400">Tanah Papua</span>
+            <!-- Title & Subtitle -->
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight mb-6 leading-tight max-w-5xl mx-auto text-white">
+                TFARM <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">TIMIKA</span>
             </h1>
-            
-            <p class="mt-4 max-w-3xl mx-auto text-lg sm:text-xl text-slate-300 font-normal leading-relaxed">
-                TFARM Timika menghadirkan standar mutu ayam broiler terbaik melalui rekayasa kandang rak baterai 2 tingkat, biosecurity ketat, dan efisiensi konversi pakan berkelas nasional.
+            <p class="text-lg sm:text-2xl font-bold text-slate-300 tracking-wide max-w-3xl mx-auto mb-4">
+                Modern Closed House Broiler Farm & Engineering
+            </p>
+            <p class="max-w-3xl mx-auto text-sm sm:text-base text-slate-400 font-normal leading-relaxed mb-10">
+                Penerapan peternakan ayam pedaging modern di Tanah Papua berbasis sistem kandang tertutup tunnel negative pressure, biosecurity berlapis, dan model 3D Engineering Digital Twin 1:1 dari Ruby CAD SketchUp.
             </p>
 
             <!-- Dual Primary Call-to-Actions -->
-            <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <a href="#dashboard" class="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-xl shadow-emerald-500/20 transition transform hover:-translate-y-1 flex items-center justify-center gap-2.5">
-                    <i class="fa-solid fa-chart-line text-slate-950"></i> Cek Performa & Dashboard IP
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#digital-twin" class="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-extrabold text-slate-950 bg-gradient-to-r from-cyan-400 to-teal-400 hover:from-cyan-300 hover:to-teal-300 shadow-xl shadow-cyan-500/25 transition transform hover:-translate-y-1 flex items-center justify-center gap-2.5">
+                    <i class="fa-solid fa-cube text-slate-950"></i> Explore Digital Twin
                 </a>
-                <a href="9000.html" class="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700 shadow-xl transition transform hover:-translate-y-1 flex items-center justify-center gap-2.5">
-                    <i class="fa-solid fa-drafting-compass text-amber-400"></i> Blueprint 9.000 Ekor (12x50m) <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400 ml-1"></i>
+                <a href="#engineering" class="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold text-white bg-slate-900 hover:bg-slate-800 border border-slate-700 shadow-xl transition transform hover:-translate-y-1 flex items-center justify-center gap-2.5">
+                    <i class="fa-solid fa-microchip text-cyan-400"></i> Technical Specification
                 </a>
             </div>
 
-            <!-- Live Hero KPI Metrics -->
+            <!-- Hero KPI Metrics -->
             <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
                 <div class="bg-slate-900/80 border border-slate-800 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-center">
                     <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">IP Tertinggi</p>
-                    <p class="text-3xl sm:text-4xl font-extrabold text-emerald-400 mt-1">385</p>
-                    <span class="text-[11px] text-emerald-300 font-medium">Kategori Istimewa</span>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-cyan-400 mt-1">385</p>
+                    <span class="text-[11px] text-cyan-300 font-medium">Kategori Istimewa</span>
                 </div>
                 <div class="bg-slate-900/80 border border-slate-800 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-center">
                     <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">FCR Efisien</p>
-                    <p class="text-3xl sm:text-4xl font-extrabold text-sky-400 mt-1">1.46</p>
-                    <span class="text-[11px] text-sky-300 font-medium">Konversi Maksimal</span>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-emerald-400 mt-1">1.46</p>
+                    <span class="text-[11px] text-emerald-300 font-medium">Konversi Maksimal</span>
                 </div>
                 <div class="bg-slate-900/80 border border-slate-800 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-center">
-                    <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Deplesi Rendah</p>
-                    <p class="text-3xl sm:text-4xl font-extrabold text-teal-400 mt-1">4.2%</p>
-                    <span class="text-[11px] text-teal-300 font-medium">Daya Hidup 95.8%</span>
+                    <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Daya Hidup</p>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-teal-400 mt-1">95.8%</p>
+                    <span class="text-[11px] text-teal-300 font-medium">Deplesi Rendah 4.2%</span>
                 </div>
                 <div class="bg-slate-900/80 border border-slate-800 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-center">
                     <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Bobot Rata-rata</p>
-                    <p class="text-3xl sm:text-4xl font-extrabold text-purple-400 mt-1">2.8 <span class="text-base font-normal">kg</span></p>
-                    <span class="text-[11px] text-purple-300 font-medium">Panen 42 Hari</span>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-amber-400 mt-1">2.8 <span class="text-base font-normal">kg</span></p>
+                    <span class="text-[11px] text-amber-300 font-medium">Panen 42 Hari</span>
                 </div>
             </div>
 
         </div>
-    </div>
+    </section>
 
-    <!-- DASHBOARD SECTION -->
-    <section id="dashboard" class="py-20 bg-slate-100 border-b border-slate-200">
+    <!-- 2. FARM OVERVIEW SECTION -->
+    <section id="overview" class="py-20 bg-slate-900/60 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider">
+                        <i class="fa-solid fa-shield-halved text-emerald-400"></i> Closed House System
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                        Rekayasa Peternakan Modern Berkelanjutan di Mimika
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        TFARM Timika didesain khusus menghadapi iklim tropis lembap Papua Tengah. Menggabungkan struktur komposit kayu ulin lokal berdaya tahan puluhan tahun dengan teknologi closed house tunnel ventilation dan rak baterai 3 tingkat, peternakan menghasilkan bobot panen prima serta rasio konversi pakan berstandar nasional.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+                            <i class="fa-solid fa-wind text-cyan-400 text-xl mb-2"></i>
+                            <h4 class="font-bold text-white text-sm">Tunnel Ventilation</h4>
+                            <p class="text-xs text-slate-400 mt-1">Kecepatan udara 2.8 m/s menjamin suhu stabil 24-28°C di seluruh area kandang.</p>
+                        </div>
+                        <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+                            <i class="fa-solid fa-layer-group text-emerald-400 text-xl mb-2"></i>
+                            <h4 class="font-bold text-white text-sm">3 Tier Battery Cages</h4>
+                            <p class="text-xs text-slate-400 mt-1">Pemisahan kotoran otomatis, lantai slat higienis, dan nipple drinker otomatis.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-6">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-700 group">
+                        <img src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/kandang%20rak%20baterai.jpeg" alt="Fasilitas Kandang TFARM" class="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent flex items-end p-6">
+                            <div>
+                                <span class="text-cyan-400 text-xs font-mono font-bold uppercase">Operasional Nyata</span>
+                                <h3 class="text-white font-extrabold text-xl">Sistem Rak 3 Susun TFARM Timika</h3>
+                                <p class="text-slate-300 text-xs mt-1">Kapasitas 7.000 ekor ayam pedaging dengan sirkulasi udara merata.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. DIGITAL TWIN (INTERACTIVE 3D EMBED) -->
+    <section id="digital-twin" class="py-20 bg-slate-950 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <div class="inline-flex items-center gap-2 bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-cube text-cyan-400"></i> BIM / CAD Interactive Viewer
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">3D Engineering Digital Twin</h2>
+                <p class="mt-2 text-slate-400 text-sm sm:text-base">
+                    Model 3D interaktif 1:1 langsung dari Ruby SketchUp. Eksplorasi 8.564 komponen, dimensi teknis, dan sistem struktur.
+                </p>
+            </div>
+
+            <!-- 3D Frame Container -->
+            <div class="relative w-full rounded-3xl overflow-hidden border border-cyan-500/30 shadow-2xl bg-slate-900 h-[560px] sm:h-[680px]">
+                <iframe src="kandang_broiler_3d_viewer.html" class="w-full h-full border-0" title="TFARM 3D Digital Twin Viewer" loading="lazy"></iframe>
+                <div class="absolute top-4 right-4 z-20 flex gap-2">
+                    <a href="kandang-3d/index.html" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-extrabold px-3.5 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-up-right-and-down-left-from-center"></i> Fullscreen CAD
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-4 flex flex-wrap justify-between items-center text-xs text-slate-400 gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-mouse-pointer text-cyan-400"></i> Klik komponen untuk inspeksi</span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-arrows-rotate text-cyan-400"></i> Drag untuk orbit kamera</span>
+                </div>
+                <div class="flex gap-2">
+                    <a href="kandang-3d/index.html" class="text-cyan-400 hover:underline font-semibold">Buka Fullscreen CAD Twin →</a>
+                    <span class="text-slate-600">•</span>
+                    <a href="kandang_broiler_3d.html" class="text-emerald-400 hover:underline font-semibold">Mode Mobile Ringan →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. EXPLODED VIEW SECTION -->
+    <section id="exploded" class="py-20 bg-slate-900/80 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-12">
-                <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
-                    <i class="fa-solid fa-award text-emerald-600"></i> Data Operasional Terverifikasi
+                <div class="inline-flex items-center gap-2 bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-burst text-amber-400"></i> Fitur Utama CAD
                 </div>
-                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Dashboard Performa Produksi 2025</h2>
-                <p class="mt-3 text-base sm:text-lg text-slate-600">
-                    Laporan berkala hasil panen aktual closed house TFARM per periode pemeliharaan.
+                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Interactive Exploded View (0% - 100%)</h2>
+                <p class="mt-2 text-slate-400 text-sm sm:text-base">
+                    Uraikan 8 subsistem struktur kandang secara terpisah untuk memeriksa relasi konstruksi internal dan instalasi peralatan.
                 </p>
             </div>
 
-            <!-- Period Selector Tabs -->
-            <div class="flex justify-center mb-10">
-                <div class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-2 justify-center">
-                    <button id="btn-period-1" onclick="setDashboardPeriod(1)" class="px-5 py-3 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50">
-                        Periode 1 (Jan-Feb 2025)
-                    </button>
-                    <button id="btn-period-2" onclick="setDashboardPeriod(2)" class="px-5 py-3 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50">
-                        Periode 2 (Mar-Apr 2025)
-                    </button>
-                    <button id="btn-period-3" onclick="setDashboardPeriod(3)" class="px-5 py-3 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 bg-emerald-600 text-white shadow-md shadow-emerald-600/30">
-                        Periode 3 (Mei-Jun 2025) <span class="text-[10px] ml-1 px-2 py-0.5 rounded-full font-extrabold bg-amber-400 text-slate-950">IP 385 ⭐</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Main Metrics 4 Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                
-                <!-- IP Card -->
-                <div class="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden group hover:shadow-2xl transition duration-300">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs uppercase tracking-wider font-bold bg-white/20 px-2.5 py-1 rounded-full">Indeks Performa</span>
-                        <span class="text-xs font-semibold text-emerald-200">Standar > 300</span>
-                    </div>
-                    <div id="metric-ip" class="text-5xl font-black mt-4 tracking-tight">385</div>
-                    <div class="mt-4 flex items-center gap-2">
-                        <span id="metric-status" class="text-xs font-bold bg-amber-400 text-slate-950 px-3 py-1 rounded-full shadow-sm">
-                            Istimewa
-                        </span>
-                        <span class="text-xs text-emerald-100">Efisiensi optimal</span>
-                    </div>
-                </div>
-
-                <!-- FCR Card -->
-                <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden group hover:shadow-2xl transition duration-300">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs uppercase tracking-wider font-bold bg-white/20 px-2.5 py-1 rounded-full">FCR (Feed Conv.)</span>
-                        <span class="text-xs font-semibold text-blue-200">Target &lt; 1.55</span>
-                    </div>
-                    <div id="metric-fcr" class="text-5xl font-black mt-4 tracking-tight">1.46</div>
-                    <p class="mt-2 text-xs text-blue-100">Kg pakan untuk hasilkan 1 kg daging</p>
-                    <div class="mt-3 w-full bg-blue-950/40 rounded-full h-2">
-                        <div id="metric-fcr-bar" class="bg-amber-300 h-2 rounded-full transition-all duration-500" style="width: 54%;"></div>
-                    </div>
-                </div>
-
-                <!-- Deplesi / Mortalitas Card -->
-                <div class="bg-gradient-to-br from-rose-600 to-red-700 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden group hover:shadow-2xl transition duration-300">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs uppercase tracking-wider font-bold bg-white/20 px-2.5 py-1 rounded-full">Deplesi / Mort.</span>
-                        <span class="text-xs font-semibold text-rose-200">Batas &lt; 6.0%</span>
-                    </div>
-                    <div class="text-5xl font-black mt-4 tracking-tight"><span id="metric-deplesi">4.2</span><span class="text-2xl font-bold">%</span></div>
-                    <p class="mt-2 text-xs text-rose-100">Daya hidup populasi: <span id="metric-livability">95.8</span>%</p>
-                    <div class="mt-3 w-full bg-rose-950/40 rounded-full h-2">
-                        <div id="metric-deplesi-bar" class="bg-emerald-300 h-2 rounded-full transition-all duration-500" style="width: 58%;"></div>
-                    </div>
-                </div>
-
-                <!-- Berat Rata-rata Card -->
-                <div class="bg-gradient-to-br from-purple-600 to-violet-800 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden group hover:shadow-2xl transition duration-300">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs uppercase tracking-wider font-bold bg-white/20 px-2.5 py-1 rounded-full">Bobot Panen</span>
-                        <span class="text-xs font-semibold text-purple-200">Umur: <span id="metric-age">42</span> Hari</span>
-                    </div>
-                    <div class="text-5xl font-black mt-4 tracking-tight"><span id="metric-weight">2.8</span> <span class="text-2xl font-bold">kg</span></div>
-                    <p class="mt-2 text-xs text-purple-100">Daging padat & seragam</p>
-                    <div class="mt-3 text-xs bg-white/20 inline-block px-3 py-1 rounded-full">
-                        Performa Ayam Prima
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- SOP Compliance & Operational Discipline -->
-            <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-200/80 mb-12">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
-                    <div class="flex items-center gap-3">
-                        <div class="p-3 bg-emerald-100 rounded-2xl text-emerald-700">
-                            <i class="fa-solid fa-clipboard-check text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900">Kepatuhan Standar Operasional (SOP)</h3>
-                            <p class="text-xs sm:text-sm text-slate-500">Parameter biosafety, manajemen iklim mikro, dan medis ayam</p>
-                        </div>
-                    </div>
-                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-200">
-                        <i class="fa-solid fa-check text-emerald-600"></i> Audit Lolos 100%
-                    </span>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="font-bold text-slate-700 text-sm">Biosecurity & Sanitasi</span>
-                            <span id="sop-bio-val" class="font-extrabold text-emerald-700 text-base">98%</span>
-                        </div>
-                        <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
-                            <div id="sop-bio-bar" class="bg-emerald-600 h-3 rounded-full transition-all duration-700" style="width: 98%;"></div>
-                        </div>
-                        <p class="text-[11px] text-slate-500 mt-2">Dipping roda, spray gerbang, APD steril petugas.</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="font-bold text-slate-700 text-sm">Suhu & Sirkulasi Angin</span>
-                            <span id="sop-temp-val" class="font-extrabold text-emerald-700 text-base">97%</span>
-                        </div>
-                        <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
-                            <div id="sop-temp-bar" class="bg-teal-500 h-3 rounded-full transition-all duration-700" style="width: 97%;"></div>
-                        </div>
-                        <p class="text-[11px] text-slate-500 mt-2">Kontrol otomatis suhu, kelembaban, dan celldex inlet.</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="font-bold text-slate-700 text-sm">Program Vaksin & Medis</span>
-                            <span id="sop-vac-val" class="font-extrabold text-emerald-700 text-base">100%</span>
-                        </div>
-                        <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
-                            <div id="sop-vac-bar" class="bg-emerald-500 h-3 rounded-full transition-all duration-700" style="width: 100%;"></div>
-                        </div>
-                        <p class="text-[11px] text-slate-500 mt-2">Jadwal vaksinasi ketat ND-IB, Gumboro, dan multivitamin.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PRESTASI SECTION (Interactive Lightbox Trigger) -->
-            <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200/80 group">
-                <div class="p-6 text-center border-b border-slate-100 bg-gradient-to-r from-amber-50/70 via-white to-emerald-50/70 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-3 text-left">
-                        <div class="p-3 bg-amber-100 text-amber-600 rounded-2xl">
-                            <i class="fa-solid fa-award text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-900">Sertifikat Prestasi Kemitraan</h3>
-                            <p class="text-xs sm:text-sm text-slate-500">Bukti integritas & reputasi panen berprestasi di tingkat regional</p>
-                        </div>
-                    </div>
-                    <button 
-                        onclick="openSingleImageModal('prestasi index.jpg', 'Sertifikat Prestasi Kemitraan TFARM', 'Sertifikat Penghargaan Prestasi Kemitraan Peternakan Broiler TFARM Timika.')"
-                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm"
-                    >
-                        <i class="fa-solid fa-magnifying-glass-plus text-amber-400"></i> Perbesar Sertifikat
-                    </button>
-                </div>
-                <div class="p-6 bg-slate-50 flex justify-center">
-                    <div 
-                        onclick="openSingleImageModal('prestasi index.jpg', 'Sertifikat Prestasi Kemitraan TFARM', 'Sertifikat Penghargaan Prestasi Kemitraan Peternakan Broiler TFARM Timika.')"
-                        class="relative cursor-pointer max-w-lg rounded-2xl overflow-hidden shadow-md border border-slate-200 hover:shadow-2xl transition-all duration-300"
-                    >
-                        <img 
-                            src="prestasi index.jpg" 
-                            onerror="this.src='https://raw.githubusercontent.com/rcwpt/tfarm/main/prestasi%20index.jpg'" 
-                            alt="Prestasi Kemitraan TFARM" 
-                            class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" 
-                            loading="lazy" 
-                        />
-                        <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span class="bg-white/90 backdrop-blur-md text-slate-900 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow-lg">
-                                <i class="fa-solid fa-magnifying-glass-plus text-emerald-600"></i> Klik untuk Melihat Full HD
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- LIVE IP CALCULATOR INTERACTIVE SECTION -->
-    <section id="calculator" class="py-20 bg-slate-900 text-white relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            
-            <div class="text-center max-w-3xl mx-auto mb-14">
-                <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
-                    <i class="fa-solid fa-calculator text-emerald-400"></i> Simulasi Produktivitas
-                </div>
-                <h2 class="text-3xl sm:text-4xl font-black tracking-tight">Kalkulator Indeks Performa (IP) Broiler</h2>
-                <p class="mt-3 text-slate-300 text-base sm:text-lg">
-                    Hitung langsung skor IP dan estimasi biomassa panen dengan memasukkan parameter kandang Anda.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto">
-                
-                <!-- Input Controls -->
-                <div class="lg:col-span-7 bg-slate-800/90 border border-slate-700 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-2xl">
-                    <h3 class="text-lg font-bold text-emerald-400 mb-6 flex items-center gap-2">
-                        <i class="fa-solid fa-sliders"></i> Parameter Panen
-                    </h3>
-
-                    <div class="space-y-5">
-                        <!-- DOC Input -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-1.5">
-                                <span class="text-slate-300 font-medium">Populasi DOC Masuk</span>
-                                <span id="calc-doc-val" class="font-mono font-bold text-emerald-300">7,000 Ekor</span>
-                            </div>
-                            <input 
-                                type="range" 
-                                id="calc-doc"
-                                min="1000" 
-                                max="20000" 
-                                step="500" 
-                                value="7000" 
-                                oninput="calculateIpLive()"
-                                class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
-                            />
-                        </div>
-
-                        <!-- Weight Input -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-1.5">
-                                <span class="text-slate-300 font-medium">Bobot Rata-rata Panen (kg)</span>
-                                <span id="calc-weight-val" class="font-mono font-bold text-emerald-300">2.80 kg</span>
-                            </div>
-                            <input 
-                                type="range" 
-                                id="calc-weight"
-                                min="1.2" 
-                                max="3.5" 
-                                step="0.05" 
-                                value="2.80" 
-                                oninput="calculateIpLive()"
-                                class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
-                            />
-                        </div>
-
-                        <!-- Age Input -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-1.5">
-                                <span class="text-slate-300 font-medium">Umur Panen (Hari)</span>
-                                <span id="calc-age-val" class="font-mono font-bold text-emerald-300">42 Hari</span>
-                            </div>
-                            <input 
-                                type="range" 
-                                id="calc-age"
-                                min="28" 
-                                max="50" 
-                                step="1" 
-                                value="42" 
-                                oninput="calculateIpLive()"
-                                class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
-                            />
-                        </div>
-
-                        <!-- FCR Input -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-1.5">
-                                <span class="text-slate-300 font-medium">FCR (Feed Conversion Ratio)</span>
-                                <span id="calc-fcr-val" class="font-mono font-bold text-emerald-300">1.46</span>
-                            </div>
-                            <input 
-                                type="range" 
-                                id="calc-fcr"
-                                min="1.20" 
-                                max="2.00" 
-                                step="0.01" 
-                                value="1.46" 
-                                oninput="calculateIpLive()"
-                                class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
-                            />
-                        </div>
-
-                        <!-- Mortality Input -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-1.5">
-                                <span class="text-slate-300 font-medium">Deplesi / Kematian (%)</span>
-                                <span id="calc-mort-val" class="font-mono font-bold text-emerald-300">4.2%</span>
-                            </div>
-                            <input 
-                                type="range" 
-                                id="calc-mort"
-                                min="1.0" 
-                                max="15.0" 
-                                step="0.1" 
-                                value="4.2" 
-                                oninput="calculateIpLive()"
-                                class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
-                            />
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Calculated Output Display -->
-                <div class="lg:col-span-5 bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 border border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-xs text-slate-400 uppercase tracking-widest font-bold">Hasil Perhitungan IP</span>
-                            <span id="calc-badge" class="text-xs px-3 py-1 rounded-full font-extrabold bg-amber-400 text-slate-950">
-                                ⭐ ISTIMEWA
-                            </span>
-                        </div>
-
-                        <div id="calc-ip-result" class="text-6xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-200 tracking-tight my-2">
-                            385
-                        </div>
-
-                        <p class="text-xs text-slate-400 mb-6 font-mono">
-                            Rumus: (Daya Hidup % × Bobot kg) / (FCR × Umur Hari) × 100
-                        </p>
-                    </div>
-
-                    <div class="space-y-3 pt-6 border-t border-slate-700/80 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-slate-400">Daya Hidup (Livability):</span>
-                            <span id="calc-live-res" class="font-bold text-white">95.8%</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-slate-400">Total Panen Hidup:</span>
-                            <span id="calc-harvest-heads" class="font-bold text-emerald-400">6,706 Ekor</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-slate-400">Total Estimasi Biomassa:</span>
-                            <span id="calc-biomass-res" class="font-bold text-emerald-300">18,777 kg</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-8">
-                        <a href="9000.html" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-4 py-3 rounded-2xl text-xs sm:text-sm transition shadow-lg">
-                            <i class="fa-solid fa-drafting-compass"></i> Buka Kalkulator Ventilasi di Blueprint 9.000 <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ABOUT / FACILITIES SECTION -->
-    <section id="about" class="py-20 bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
-                    <i class="fa-solid fa-layer-group text-emerald-600"></i> Infrastruktur Berkelanjutan
-                </div>
-                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Spesifikasi & Fasilitas Kandang</h2>
-                <p class="mt-3 text-base sm:text-lg text-slate-600">
-                    Infrastruktur modern dan fasilitas terpadu untuk kenyamanan kerja tim dan performa ayam terbaik.
-                </p>
-            </div>
-
+            <!-- Exploded Showcase Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <div class="bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 text-emerald-700 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-layer-group text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Rak Baterai 2 Tingkat</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        Sistem rak 2 level dengan nipple drink dan pakan internal untuk efisiensi pakan maksimal serta sanitasi unggul.
-                    </p>
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-amber-500/40 transition">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold mb-4">01</div>
+                    <h3 class="font-bold text-white text-base">Atap & Monitor Roof</h3>
+                    <p class="text-xs text-slate-400 mt-2">Terangkat vertikal (+7.0m s.d +8.5m) memperlihatkan 180 lembar spandek dan ventilasi nok.</p>
                 </div>
-
-                <div class="bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 text-emerald-700 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-ruler-combined text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Closed House 24x8m</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        Bangunan 2 lantai dengan kontrol iklim terpadu, tirai otomatis, dan celldex cooling pad menjaga suhu sejuk stabil.
-                    </p>
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-amber-500/40 transition">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold mb-4">02</div>
+                    <h3 class="font-bold text-white text-base">Kuda-kuda & Gording</h3>
+                    <p class="text-xs text-slate-400 mt-2">14 bentang kuda-kuda kayu terangkat (+4.5m) menunjukkan sambungan pasak tiang komposit.</p>
                 </div>
-
-                <div class="bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 text-emerald-700 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-users text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Mess & Kantor 2 Lantai</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        Bangunan (5x12m) terintegrasi di sisi kiri kandang, dilengkapi kamar istirahat, pantry, dan sanitasi karyawan.
-                    </p>
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-amber-500/40 transition">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold mb-4">03</div>
+                    <h3 class="font-bold text-white text-base">Rak 3 Susun & Slat</h3>
+                    <p class="text-xs text-slate-400 mt-2">6 lajur rak baterai terangkat dan sedikit melebar secara lateral untuk inspeksi 360 unit slat.</p>
                 </div>
-
-                <div class="bg-slate-50 rounded-3xl p-7 border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 text-emerald-700 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-house text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Ruang Rapat & Monitoring</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        Ruang representatif untuk koordinasi teknis tim, pencatatan harian, dan penerimaan tamu mitra peternakan.
-                    </p>
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-amber-500/40 transition">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold mb-4">04</div>
+                    <h3 class="font-bold text-white text-base">Ventilasi & Cooling Pad</h3>
+                    <p class="text-xs text-slate-400 mt-2">6 unit box fan 50" tertarik ke belakang (-X) dan celldeck tertarik ke depan (+X).</p>
                 </div>
-
             </div>
 
-        </div>
-    </section>
-
-    <!-- BLUEPRINT & TECHNICAL SKETCH SECTION -->
-    <section id="blueprint" class="py-20 bg-slate-900 text-white relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            
-            <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-6">
+            <!-- Exploded Live CTA -->
+            <div class="mt-10 bg-gradient-to-r from-amber-500/10 via-amber-500/20 to-amber-500/10 p-6 rounded-3xl border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                    <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
-                        <i class="fa-solid fa-pen-ruler text-emerald-400"></i> Sketsa Rekayasa Kandang
-                    </div>
-                    <h2 class="text-3xl sm:text-4xl font-black tracking-tight">Desain Teknis Kandang TFARM</h2>
-                    <p class="mt-2 text-slate-300 text-sm sm:text-base">Tata letak kawasan presisi, potongan melintang sistem rak, serta digital twin 3D.</p>
+                    <h4 class="font-extrabold text-white text-base">Ingin mencoba Exploded View secara langsung?</h4>
+                    <p class="text-xs text-slate-300 mt-1">Buka aplikasi CAD Twin untuk mengontrol slider 0% - 100%, preset 25/50/75%, dan tombol Auto Explode.</p>
                 </div>
-
-                <a href="9000.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-5 py-3 rounded-2xl text-sm transition shadow-lg self-start lg:self-auto">
-                    <i class="fa-solid fa-drafting-compass"></i> Buka Cetak Biru Model 12x50m (9.000 Ekor) <i class="fa-solid fa-arrow-right ml-1"></i>
+                <a href="kandang-3d/index.html" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-xl transition flex-shrink-0">
+                    Coba Exploded View ➔
                 </a>
             </div>
-
-            <!-- HIGHLIGHT CARD: 3D DIGITAL TWIN & SKETSA TEKNIS 26x12m -->
-            <div class="mb-12 bg-gradient-to-r from-sky-950/90 via-slate-900/90 to-emerald-950/90 border-2 border-sky-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md relative overflow-hidden">
-                <div class="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
-                    <div class="space-y-3 max-w-2xl">
-                        <div class="inline-flex items-center gap-2 bg-sky-500/20 text-sky-300 border border-sky-400/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                            <i class="fa-solid fa-cube text-sky-400"></i> New CAD/BIM Digital Twin • Source of Truth: build_kandang_LENGKAP.rb
-                        </div>
-                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white">Interactive 3D Digital Twin & RAB Teknis (26×12m)</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed">
-                            Model rekayasa kandang broiler closed house 3 susun kapasitas 7.000 ekor diekstrak 100% presisi dari file <code>build_kandang_LENGKAP.rb</code>. Dilengkapi mini CAD/BIM viewer 360°, simulasi ventilasi blower 50", exploded view, animasi pentahapan konstruksi 8 langkah, serta Bill of Materials (RAB tanpa harga) lengkap 8.564 komponen.
-                        </p>
-                    </div>
-                    <div class="flex flex-col sm:flex-row flex-wrap gap-3 w-full lg:w-auto flex-shrink-0">
-                        <a href="kandang_broiler_3d.html" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-sm shadow-xl transition transform hover:-translate-y-0.5">
-                            <i class="fa-solid fa-mobile-screen-button text-base"></i> 📱 3D Mobile
-                        </a>
-                        <a href="kandang-3d/index.html" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-300 hover:to-sky-400 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-sm shadow-xl transition transform hover:-translate-y-0.5">
-                            <i class="fa-solid fa-desktop text-base"></i> 💻 3D Desktop
-                        </a>
-                        <a href="kandang_broiler_3d_viewer.html" class="inline-flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-bold px-5 py-3 rounded-2xl text-sm transition shadow-lg">
-                            <i class="fa-solid fa-feather text-base"></i> 🪶 3D Ringan
-                        </a>
-                        <a href="sketsa-rab-26x12.html" class="inline-flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/40 font-bold px-5 py-3 rounded-2xl text-sm transition shadow-lg">
-                            <i class="fa-solid fa-file-invoice text-base"></i> Sketsa 2D & RAB
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-                
-                <!-- Sketch 1: Layout Kawasan -->
-                <div class="bg-slate-800/80 p-6 sm:p-7 rounded-3xl border border-slate-700/80 backdrop-blur-md shadow-2xl">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-bold text-emerald-300">Layout Kawasan (Tampak Atas 24x8m)</h3>
-                        <span class="text-xs bg-slate-700 px-2.5 py-1 rounded-full text-slate-300">Model 7.000</span>
-                    </div>
-                    
-                    <div class="w-full aspect-video bg-slate-950 rounded-2xl border-2 border-dashed border-slate-700 p-4 flex items-center justify-center relative overflow-hidden shadow-inner">
-                        <svg viewBox="0 0 320 200" class="w-full h-full drop-shadow-md">
-                            <defs>
-                                <pattern id="gridIndex" width="10" height="10" patternUnits="userSpaceOnUse">
-                                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(56, 189, 248, 0.15)" stroke-width="0.5"/>
-                                </pattern>
-                            </defs>
-                            <rect width="100%" height="100%" fill="url(#gridIndex)" />
-                            
-                            <!-- Main House Outline -->
-                            <rect x="50" y="70" width="220" height="80" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="2" rx="4" />
-                            <text x="160" y="58" fill="#a7f3d0" font-size="8" font-weight="bold" text-anchor="middle">KANDANG CLOSED HOUSE (24m x 8m)</text>
-                            <text x="160" y="165" fill="#94a3b8" font-size="8" text-anchor="middle">Panjang: 24 Meter</text>
-                            <text x="38" y="110" fill="#94a3b8" font-size="8" text-anchor="middle" transform="rotate(-90, 38, 110)">Lebar: 8m</text>
-                            
-                            <text x="160" y="105" fill="#6ee7b7" font-size="11" text-anchor="middle" font-weight="bold">FULL KANDANG CLOSED HOUSE</text>
-                            <text x="160" y="122" fill="#34d399" font-size="9" text-anchor="middle">(LANTAI 1 & 2 - KAPASITAS 7.000 EKOR)</text>
-                            
-                            <!-- Mess & Office -->
-                            <rect x="50" y="18" width="55" height="48" fill="rgba(249, 115, 22, 0.2)" stroke="#fb923c" stroke-width="1.5" rx="3" />
-                            <text x="77" y="34" fill="#fed7aa" font-size="6.5" text-anchor="middle" font-weight="bold">MESS & KANTOR</text>
-                            <text x="77" y="45" fill="#fdba74" font-size="5" text-anchor="middle">2 Lantai (5m x 12m)</text>
-                            <circle cx="77" cy="68" r="2.5" fill="#ef4444" />
-                            <text x="90" y="70" fill="#fca5a5" font-size="6" text-anchor="start">Pintu Akses</text>
-                        </svg>
-                    </div>
-                    <p class="mt-3 text-xs text-slate-400 italic text-center">*Mess & kantor terhubung langsung di sudut hulu kandang untuk monitoring 24 jam.</p>
-                </div>
-
-                <!-- Sketch 2: Cross Section -->
-                <div class="bg-slate-800/80 p-6 sm:p-7 rounded-3xl border border-slate-700/80 backdrop-blur-md shadow-2xl">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-bold text-emerald-300">Potongan Melintang (Cross Section)</h3>
-                        <span class="text-xs bg-slate-700 px-2.5 py-1 rounded-full text-slate-300">2 Tingkat</span>
-                    </div>
-                    
-                    <div class="w-full aspect-video bg-slate-950 rounded-2xl border-2 border-dashed border-slate-700 p-4 flex items-center justify-center relative shadow-inner">
-                        <svg viewBox="0 0 240 160" class="w-full h-full drop-shadow-md">
-                            <line x1="10" y1="150" x2="230" y2="150" stroke="#64748b" stroke-width="2" />
-                            <line x1="10" y1="80" x2="230" y2="80" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3 2" />
-                            <path d="M 10 150 L 10 30 L 120 10 L 230 30 L 230 150" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1" />
-                            
-                            <text x="235" y="75" fill="#94a3b8" font-size="6" opacity="0.8">Lt 2</text>
-                            <text x="235" y="145" fill="#94a3b8" font-size="6" opacity="0.8">Lt 1</text>
-                            
-                            <!-- Floor 1 & Floor 2 Racks -->
-                            <g transform="translate(0, 40)">
-                                <rect x="20" y="0" width="40" height="35" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1" rx="2" />
-                                <line x1="20" y1="17.5" x2="60" y2="17.5" stroke="#10b981" stroke-width="0.5" />
-                                <circle cx="40" cy="8.75" r="4" fill="#f97316" />
-                                <circle cx="40" cy="26.25" r="4" fill="#f97316" />
-                                
-                                <rect x="80" y="0" width="80" height="35" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1" rx="2" />
-                                <line x1="80" y1="17.5" x2="160" y2="17.5" stroke="#10b981" stroke-width="0.5" />
-                                <line x1="120" y1="0" x2="120" y2="35" stroke="#10b981" stroke-width="0.5" stroke-dasharray="2" />
-                                <circle cx="100" cy="8.75" r="4" fill="#f97316" />
-                                <circle cx="100" cy="26.25" r="4" fill="#f97316" />
-                                <circle cx="140" cy="8.75" r="4" fill="#f97316" />
-                                <circle cx="140" cy="26.25" r="4" fill="#f97316" />
-                                
-                                <rect x="180" y="0" width="40" height="35" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1" rx="2" />
-                                <line x1="180" y1="17.5" x2="220" y2="17.5" stroke="#10b981" stroke-width="0.5" />
-                                <circle cx="200" cy="8.75" r="4" fill="#f97316" />
-                                <circle cx="200" cy="26.25" r="4" fill="#f97316" />
-                            </g>
-
-                            <g transform="translate(0, 110)">
-                                <rect x="20" y="0" width="40" height="35" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1" rx="2" />
-                                <line x1="20" y1="17.5" x2="60" y2="17.5" stroke="#10b981" stroke-width="0.5" />
-                                <circle cx="40" cy="8.75" r="4" fill="#f97316" />
-                                <circle cx="40" cy="26.25" r="4" fill="#f97316" />
-                                
-                                <rect x="80" y="0" width="80" height="35" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1" rx="2" />
-                                <line x1="80" y1="17.5" x2="160" y2="17.5" stroke="#10b981" stroke-width="0.5" />
-                                <line x1="120" y1="0" x2="120" y2="35" stroke="#10b981" stroke-width="0.5" stroke-dasharray="2" />
-                                <circle cx="100" cy="8.75" r="4" fill="#f97316" />
-                                <circle cx="100" cy="26.25" r="4" fill="#f97316" />
-                                <circle cx="140" cy="8.75" r="4" fill="#f97316" />
-                                <circle cx="140" cy="26.25" r="4" fill="#f97316" />
-                                
-                                <rect x="180" y="0" width="40" height="35" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1" rx="2" />
-                                <line x1="180" y1="17.5" x2="220" y2="17.5" stroke="#10b981" stroke-width="0.5" />
-                                <circle cx="200" cy="8.75" r="4" fill="#f97316" />
-                                <circle cx="200" cy="26.25" r="4" fill="#f97316" />
-                            </g>
-                            
-                            <text x="70" y="145" fill="#a7f3d0" font-size="4" text-anchor="middle">Lorong</text>
-                            <text x="170" y="145" fill="#a7f3d0" font-size="4" text-anchor="middle">Lorong</text>
-                            <text x="120" y="18" fill="#4ade80" font-size="5" font-weight="bold" text-anchor="middle">Struktur Rak Efisiensi Maksimal (2 Jalur Servis)</text>
-                        </svg>
-                    </div>
-                    <p class="mt-3 text-xs text-slate-400 italic text-center">*Konfigurasi rak ganda tengah menghemat ruang & memperlancar sirkulasi lorong.</p>
-                </div>
-
-            </div>
-
-            <!-- BLUEPRINT CTA BANNER -->
-            <div class="bg-gradient-to-r from-emerald-800 via-teal-800 to-slate-900 rounded-3xl p-8 border border-emerald-500/40 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="space-y-2 text-center md:text-left">
-                    <span class="bg-amber-400 text-slate-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">Ekspansi 9.000 Ekor</span>
-                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white">Ingin Melihat Desain Skala 12x50m?</h3>
-                    <p class="text-emerald-100 text-sm max-w-2xl">
-                        Pelajari cetak biru interaktif 12x50m dengan 8 Exhaust Fan (4 Diesel + 4 Listrik), simulasi sirkulasi udara, serta kalkulator densitas lengkap.
-                    </p>
-                </div>
-                <a href="9000.html" class="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-950 font-extrabold px-6 py-3.5 rounded-2xl text-sm shadow-xl transition transform hover:scale-105 flex-shrink-0">
-                    Buka Blueprint 9.000 Ekor <i class="fa-solid fa-arrow-right text-emerald-600"></i>
-                </a>
-            </div>
-
         </div>
     </section>
 
-    <!-- CONSTRUCTION JOURNAL & TIMELINE SECTION -->
-    <section id="construction" class="py-20 bg-slate-50 border-b border-slate-200">
+    <!-- 5. AIRFLOW VISUALIZATION SECTION -->
+    <section id="airflow" class="py-20 bg-slate-950 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 pb-6 border-b border-slate-200 gap-6">
-                <div>
-                    <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
-                        <i class="fa-solid fa-images text-emerald-600"></i> Jurnal Konstruksi Lapangan
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider">
+                        <i class="fa-solid fa-wind text-cyan-400"></i> Tunnel Ventilation Dynamics
                     </div>
-                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Dokumentasi Pembangunan (23 Tahap)</h2>
-                    <p class="mt-2 text-slate-600 text-sm sm:text-base">Proses rekayasa kandang dari nol pematangan lahan hingga siap chick-in.</p>
+                    <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                        Aliran Udara Negatif Pressure Alami (Cooling Pad ke Exhaust Fan)
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Sistem ventilasi dirancang dengan kalkulasi debit udara hingga 264.000 CFM. Partikel udara masuk melalui bantalan celldeck 12 meter di sisi timur, melewati lorong kandang dan sela-sela rak 3 susun dengan kecepatan rata-rata 2.8 m/s, lalu dibuang keluar oleh 6 unit exhaust fan box 50" di sisi barat.
+                    </p>
+                    
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800">
+                            <span class="text-slate-400">Kecepatan Aliran Udara (Airspeed):</span>
+                            <span class="text-cyan-400 font-bold">2.8 m/s [Estimated Visual]</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800">
+                            <span class="text-slate-400">Kapasitas Exhaust Fan:</span>
+                            <span class="text-emerald-400 font-bold">6 Unit Box Fan 50" (~264.000 CFM)</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800">
+                            <span class="text-slate-400">Luas Penampang Inlet Celldeck:</span>
+                            <span class="text-amber-400 font-bold">12.0m × 1.70m = 20.4 m²</span>
+                        </div>
+                    </div>
+
+                    <p class="text-[11px] text-slate-500 italic">
+                        *Catatan: Visualisasi aliran partikel dan pita garis streamline merupakan representasi aerodinamis konseptual — bukan pemodelan fluida komputasi (CFD) bersertifikat.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-6">
+                    <!-- Flow Schematic Graphic -->
+                    <div class="bg-slate-900/90 p-8 rounded-3xl border border-cyan-500/20 relative overflow-hidden">
+                        <div class="text-center font-mono text-xs text-cyan-400 font-bold mb-4">DIAGRAM ALIRAN VENTILASI TUNNEL (26 METER)</div>
+                        <div class="flex items-center justify-between my-8 relative">
+                            <div class="text-center z-10">
+                                <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center justify-center font-bold text-xs mx-auto">
+                                    INLET
+                                </div>
+                                <span class="text-[10px] text-slate-400 block mt-2">Celldeck 12m</span>
+                            </div>
+                            
+                            <!-- Arrow flow line -->
+                            <div class="flex-1 px-4 relative flex items-center justify-center">
+                                <div class="w-full h-1 bg-gradient-to-r from-amber-400 via-cyan-400 to-purple-400 rounded-full animate-pulse"></div>
+                                <span class="absolute bg-slate-950 px-2 py-0.5 rounded text-[10px] font-mono text-cyan-300 border border-cyan-500/30 font-bold">2.8 m/s</span>
+                            </div>
+
+                            <div class="text-center z-10">
+                                <div class="w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-500/40 text-purple-300 flex items-center justify-center font-bold text-xs mx-auto">
+                                    FAN
+                                </div>
+                                <span class="text-[10px] text-slate-400 block mt-2">6 Blower 50"</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-400 leading-relaxed">
+                            <strong class="text-white block mb-1">Mekanisme Pendinginan Evaporatif:</strong>
+                            Air didistribusikan ke media selulosa fluted 7090 setebal 15cm. Udara luar yang dihisap mengalami penurunan temperatur 4-7°C sebelum mengalir melewati ayam broiler.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. ENGINEERING SPECIFICATION SECTION -->
+    <section id="engineering" class="py-20 bg-slate-900/60 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-clipboard-list text-emerald-400"></i> Data Geometri Terverifikasi
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Spesifikasi Teknik Kandang 26 × 12 M</h2>
+                <p class="mt-2 text-slate-400 text-sm sm:text-base">
+                    Seluruh ukuran mengacu pada file sumber Ruby SketchUp `build_kandang_LENGKAP.rb` (Source of Truth).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-mono text-xs">
+                <!-- Card 1 -->
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                    <h3 class="font-sans font-extrabold text-white text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-alt text-cyan-400"></i> Dimensi Utama
+                    </h3>
+                    <div class="space-y-2.5">
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Panjang Total (X):</span><strong class="text-white font-bold">26.00 Meter</strong></div>
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Lebar Total (Y):</span><strong class="text-white font-bold">12.00 Meter</strong></div>
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Tinggi Eaves / Lisplang:</span><strong class="text-cyan-400 font-bold">+2.97 Meter</strong></div>
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Tinggi Puncak Monitor:</span><strong class="text-amber-400 font-bold">+5.92 Meter</strong></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Luas Lantai Efektif:</span><strong class="text-white font-bold">312.00 m²</strong></div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                    <h3 class="font-sans font-extrabold text-white text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-cubes text-emerald-400"></i> Struktur Tiang & Kuda-kuda
+                    </h3>
+                    <div class="space-y-2.5">
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Jumlah Tiang Utama:</span><strong class="text-white font-bold">32 Titik Tiang Komposit</strong></div>
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Material Tiang:</span><strong class="text-emerald-400 font-bold">Bilah Kayu Ulin 5×10</strong></div>
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Bentang Kuda-kuda:</span><strong class="text-white font-bold">14 Kuda-kuda (Jarak 2.0m)</strong></div>
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Kemiringan Atap:</span><strong class="text-white font-bold">17.3 Derajat (Kembar)</strong></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Fondasi:</span><strong class="text-white font-bold">32 Umpak Cor Beton</strong></div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                    <h3 class="font-sans font-extrabold text-white text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-fan text-purple-400"></i> Peralatan & Kapasitas
+                    </h3>
+                    <div class="space-y-2.5">
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Kapasitas Chick-In:</span><strong class="text-cyan-400 font-bold">7.000 Ekor Broiler</strong></div>
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Susunan Rak Baterai:</span><strong class="text-white font-bold">6 Baris × 3 Susun</strong></div>
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Total Slat Plastik:</span><strong class="text-white font-bold">360 Unit</strong></div>
+                        <div class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-400">Jumlah Nipple Drinker:</span><strong class="text-emerald-400 font-bold">1.440 Titik Nipple</strong></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Unit Exhaust Fan:</span><strong class="text-purple-400 font-bold">6 Unit Box 50 Inch</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. CONSTRUCTION TIMELINE (8 PHASES) -->
+    <section id="timeline" class="py-20 bg-slate-950 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="inline-flex items-center gap-2 bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-trowel-bricks text-cyan-400"></i> Tahapan Rekayasa
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Timeline Konstruksi Kandang</h2>
+                <p class="mt-2 text-slate-400 text-sm sm:text-base">
+                    8 urutan pembangunan dari nol tapak hingga kandang siap beroperasi secara optimal.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-xs">
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                    <div class="font-mono text-cyan-400 font-bold text-xs mb-1">[01]</div>
+                    <h3 class="font-bold text-white text-sm">Ground & Floor</h3>
+                    <p class="text-slate-400 mt-2">Pematangan lahan, pembuatan 32 umpak beton, dan 4 pelat lantai cor seluas 312 m².</p>
+                </div>
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                    <div class="font-mono text-cyan-400 font-bold text-xs mb-1">[02]</div>
+                    <h3 class="font-bold text-white text-sm">Main Structure</h3>
+                    <p class="text-slate-400 mt-2">Pemasangan 3 jalur got drainase ulin dan pendirian 32 tiang komposit kayu ulin 15x10.</p>
+                </div>
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                    <div class="font-mono text-cyan-400 font-bold text-xs mb-1">[03]</div>
+                    <h3 class="font-bold text-white text-sm">Roof Structure</h3>
+                    <p class="text-slate-400 mt-2">Pemasangan 14 bentang kuda-kuda bentang 12 meter, gording miring, dan rangka atap monitor.</p>
+                </div>
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                    <div class="font-mono text-cyan-400 font-bold text-xs mb-1">[04]</div>
+                    <h3 class="font-bold text-white text-sm">Rack System</h3>
+                    <p class="text-slate-400 mt-2">Instalasi rangka rak baterai 3 susun presisi laser, pemasangan 360 unit slat plastik pijakan.</p>
+                </div>
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                    <div class="font-mono text-cyan-400 font-bold text-xs mb-1">[05]</div>
+                    <h3 class="font-bold text-white text-sm">Ventilation</h3>
+                    <p class="text-slate-400 mt-2">Pemasangan 6 unit box fan 50", louvers otomatis, motor dinamo, dan sistem penggerak transmisi.</p>
+                </div>
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                    <div class="font-mono text-cyan-400 font-bold text-xs mb-1">[06]</div>
+                    <h3 class="font-bold text-white text-sm">Cooling Pad & Fan</h3>
+                    <p class="text-slate-400 mt-2">Pemasangan celldeck cooling pad 12 meter, talang pipa sirkulasi air, dan tirai terpal kedap.</p>
+                </div>
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                    <div class="font-mono text-cyan-400 font-bold text-xs mb-1">[07]</div>
+                    <h3 class="font-bold text-white text-sm">Equipment</h3>
+                    <p class="text-slate-400 mt-2">Instalasi 1.440 titik nipple otomatis, pipa header air utama, dan 108 lajur talang pakan.</p>
+                </div>
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                    <div class="font-mono text-cyan-400 font-bold text-xs mb-1">[08]</div>
+                    <h3 class="font-bold text-white text-sm">Complete Farm</h3>
+                    <p class="text-slate-400 mt-2">Penyelesaian penutup spandek, uji coba sirkulasi angin, sanitasi steril, dan siap chick-in.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. MATERIAL / BOM (MATERIAL TAKE-OFF) -->
+    <section id="bom" class="py-20 bg-slate-900/80 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="inline-flex items-center gap-2 bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-boxes-stacked text-amber-400"></i> Engineering QTO
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Engineering Material Take-Off (BOM)</h2>
+                <p class="mt-2 text-slate-400 text-sm sm:text-base">
+                    Rekapitulasi volume material fisik berdasarkan model CAD 1:1 tanpa komponen mark-up harga.
+                </p>
+            </div>
+
+            <div class="overflow-x-auto bg-slate-950 rounded-2xl border border-slate-800 p-4 font-mono text-xs">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-slate-400">
+                            <th class="py-3 px-4">Kategori Material</th>
+                            <th class="py-3 px-4">Spesifikasi Fisik</th>
+                            <th class="py-3 px-4 text-right">Kuantitas</th>
+                            <th class="py-3 px-4 text-right">Estimasi Dimensi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-900 text-slate-300">
+                        <tr>
+                            <td class="py-3 px-4 font-bold text-white">Kayu Ulin Komposit</td>
+                            <td class="py-3 px-4">Bilah tiang ulin 5x10, balok gording, spacer</td>
+                            <td class="py-3 px-4 text-right text-cyan-400 font-bold">128 Batang</td>
+                            <td class="py-3 px-4 text-right">~14.2 m³</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-bold text-white">Kayu Rangka & Kuda-kuda</td>
+                            <td class="py-3 px-4">Kayu kelas kuat II untuk 14 bentang kuda-kuda 12m</td>
+                            <td class="py-3 px-4 text-right text-cyan-400 font-bold">14 Set</td>
+                            <td class="py-3 px-4 text-right">~8.6 m³</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-bold text-white">Penutup Atap Spandek</td>
+                            <td class="py-3 px-4">Spandek gelombang zincalume t=0.35mm</td>
+                            <td class="py-3 px-4 text-right text-cyan-400 font-bold">180 Lembar</td>
+                            <td class="py-3 px-4 text-right">~380 m²</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-bold text-white">Slat Plastik Broiler</td>
+                            <td class="py-3 px-4">Slat polypropylene anti-slip ramah cakar ayam</td>
+                            <td class="py-3 px-4 text-right text-emerald-400 font-bold">360 Pcs</td>
+                            <td class="py-3 px-4 text-right">100 × 50 cm</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-bold text-white">Rangka Rak Baterai</td>
+                            <td class="py-3 px-4">Besi hollow galvanis 3 susun presisi laser</td>
+                            <td class="py-3 px-4 text-right text-emerald-400 font-bold">6 Baris</td>
+                            <td class="py-3 px-4 text-right">L=24.0 m</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-bold text-white">Nipple Drinker Otomatis</td>
+                            <td class="py-3 px-4">Nipple stainless 360° dengan mangkuk gantung</td>
+                            <td class="py-3 px-4 text-right text-emerald-400 font-bold">1.440 Pcs</td>
+                            <td class="py-3 px-4 text-right">18 Jalur</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-bold text-white">Exhaust Fan Box 50"</td>
+                            <td class="py-3 px-4">Cone fan stainless 6 daun, louver otomatis</td>
+                            <td class="py-3 px-4 text-right text-purple-400 font-bold">6 Unit</td>
+                            <td class="py-3 px-4 text-right">1.37 × 1.37 m</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-bold text-white">Evaporative Cooling Pad</td>
+                            <td class="py-3 px-4">Media selulosa fluted 7090 t=15cm</td>
+                            <td class="py-3 px-4 text-right text-amber-400 font-bold">20.4 m²</td>
+                            <td class="py-3 px-4 text-right">12.0 × 1.70 m</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-bold text-white">Tirai Terpal Dinding</td>
+                            <td class="py-3 px-4">Terpal PVC kedap udara UV resistant</td>
+                            <td class="py-3 px-4 text-right text-white font-bold">2 Sisi</td>
+                            <td class="py-3 px-4 text-right">52.0 × 2.4 m</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. FARM PERFORMANCE & LIVE CALCULATOR SECTION -->
+    <section id="performance" class="py-20 bg-slate-950 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-calculator text-emerald-400"></i> Alat Hitung Produksi
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Kalkulator Indeks Performa (IP) Broiler</h2>
+                <p class="mt-2 text-slate-400 text-sm sm:text-base">
+                    Simulasikan standar Indeks Performa kandang broiler Anda secara real-time.
+                </p>
+            </div>
+
+            <!-- Calculator Component Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-900/90 p-8 rounded-3xl border border-slate-800">
+                <div class="lg:col-span-7 space-y-4 font-mono text-xs">
+                    <div>
+                        <div class="flex justify-between text-slate-300 font-sans mb-1">
+                            <span>Populasi Awal DOC (Ekor):</span>
+                            <strong id="calc-doc-val" class="text-cyan-400">7.000 Ekor</strong>
+                        </div>
+                        <input type="range" id="calc-doc" min="1000" max="10000" step="500" value="7000" class="w-full accent-cyan-400" oninput="calculateIpLive()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-slate-300 font-sans mb-1">
+                            <span>Bobot Rata-rata Panen (kg):</span>
+                            <strong id="calc-weight-val" class="text-cyan-400">2.80 kg</strong>
+                        </div>
+                        <input type="range" id="calc-weight" min="1.5" max="3.5" step="0.05" value="2.8" class="w-full accent-cyan-400" oninput="calculateIpLive()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-slate-300 font-sans mb-1">
+                            <span>Umur Panen (Hari):</span>
+                            <strong id="calc-age-val" class="text-cyan-400">42 Hari</strong>
+                        </div>
+                        <input type="range" id="calc-age" min="30" max="50" step="1" value="42" class="w-full accent-cyan-400" oninput="calculateIpLive()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-slate-300 font-sans mb-1">
+                            <span>Feed Conversion Ratio (FCR):</span>
+                            <strong id="calc-fcr-val" class="text-cyan-400">1.46</strong>
+                        </div>
+                        <input type="range" id="calc-fcr" min="1.2" max="2.2" step="0.01" value="1.46" class="w-full accent-cyan-400" oninput="calculateIpLive()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-slate-300 font-sans mb-1">
+                            <span>Mortalitas / Deplesi (%):</span>
+                            <strong id="calc-mort-val" class="text-cyan-400">4.2%</strong>
+                        </div>
+                        <input type="range" id="calc-mort" min="1.0" max="15.0" step="0.1" value="4.2" class="w-full accent-cyan-400" oninput="calculateIpLive()">
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-slate-950 p-6 rounded-2xl border border-slate-800 text-center">
+                    <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Hasil Indeks Performa</span>
+                    <div id="calc-ip-result" class="text-6xl font-black text-cyan-400 my-3 font-mono">385</div>
+                    <span id="calc-badge" class="inline-block text-xs px-3 py-1 rounded-full font-extrabold bg-amber-400 text-slate-950 mb-4">
+                        ⭐ ISTIMEWA
+                    </span>
+                    <div class="grid grid-cols-2 gap-2 text-left font-mono text-[11px] pt-4 border-t border-slate-800">
+                        <div><span class="text-slate-500 block">Daya Hidup:</span><strong id="calc-live-res" class="text-white">95.8%</strong></div>
+                        <div><span class="text-slate-500 block">Ekor Panen:</span><strong id="calc-harvest-heads" class="text-white">6.706 Ekor</strong></div>
+                        <div><span class="text-slate-500 block">Total Biomassa:</span><strong id="calc-biomass-res" class="text-cyan-400 font-bold">18.777 kg</strong></div>
+                        <div><span class="text-slate-500 block">Standar Mutu:</span><strong class="text-emerald-400 font-bold">Grade A</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. CONSTRUCTION JOURNAL (23 FOTO DOKUMENTASI LAPANGAN) -->
+    <section id="construction" class="py-20 bg-slate-900/60 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 pb-6 border-b border-slate-800 gap-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-camera-retro text-emerald-400"></i> Jurnal Konstruksi Lapangan
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Dokumentasi Proyek Pembangunan (23 Foto)</h2>
+                    <p class="mt-2 text-slate-400 text-sm sm:text-base">Foto asli progres pembangunan kandang TFARM Timika dari pematangan tanah hingga chick-in.</p>
                 </div>
                 
                 <!-- Stage Filter Tabs -->
-                <div class="w-full md:w-auto flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
-                    <button id="filter-all" onclick="filterConstruction('all')" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 bg-emerald-600 text-white shadow-md shadow-emerald-600/30">Semua (23)</button>
-                    <button id="filter-tahap1" onclick="filterConstruction('tahap1')" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Tahap 1: Struktur</button>
-                    <button id="filter-tahap2" onclick="filterConstruction('tahap2')" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Tahap 2: Dinding/Atap</button>
-                    <button id="filter-tahap3" onclick="filterConstruction('tahap3')" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Tahap 3: Rak Baterai</button>
-                    <button id="filter-tahap4" onclick="filterConstruction('tahap4')" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Tahap 4: Chick-In</button>
+                <div class="w-full md:w-auto flex space-x-2 overflow-x-auto pb-2 scrollbar-hide text-xs font-bold">
+                    <button id="filter-all" onclick="filterConstruction('all')" class="px-4 py-2.5 rounded-xl whitespace-nowrap bg-cyan-500 text-slate-950 font-extrabold shadow-md">Semua (23)</button>
+                    <button id="filter-tahap1" onclick="filterConstruction('tahap1')" class="px-4 py-2.5 rounded-xl whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700">Tahap 1: Struktur</button>
+                    <button id="filter-tahap2" onclick="filterConstruction('tahap2')" class="px-4 py-2.5 rounded-xl whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700">Tahap 2: Dinding/Atap</button>
+                    <button id="filter-tahap3" onclick="filterConstruction('tahap3')" class="px-4 py-2.5 rounded-xl whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700">Tahap 3: Rak Baterai</button>
+                    <button id="filter-tahap4" onclick="filterConstruction('tahap4')" class="px-4 py-2.5 rounded-xl whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700">Tahap 4: Chick-In</button>
                 </div>
             </div>
 
-            <!-- Photo Cards Grid with Lightbox Trigger -->
-            <div id="construction-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Dynamically rendered via JS for 100% offline & local speed -->
-            </div>
-
+            <!-- Photo Cards Grid -->
+            <div id="construction-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
         </div>
     </section>
 
-    <!-- OPERATIONAL GALLERY SECTION -->
-    <section id="gallery" class="py-20 bg-white border-b border-slate-200">
+    <!-- 11. GALLERY SECTION -->
+    <section id="gallery" class="py-20 bg-slate-950 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
-                    <i class="fa-solid fa-feather text-emerald-600"></i> Kandang Aktif
+                <div class="inline-flex items-center gap-2 bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-images text-cyan-400"></i> Kandang Beroperasi
                 </div>
-                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Galeri Operasional Ternak</h2>
-                <p class="mt-3 text-base sm:text-lg text-slate-600">
-                    Dokumentasi nyata kegiatan operasional, sanitasi, dan panen broiler di TFARM Timika.
-                </p>
+                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Galeri Operasional Ternak</h2>
+                <p class="mt-2 text-slate-400 text-sm sm:text-base">Dokumentasi operasional ayam broiler sehat dan higienis di TFARM Timika.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div 
-                    onclick="openOperationsLightbox(0)"
-                    class="relative rounded-3xl overflow-hidden shadow-lg group h-72 sm:h-96 cursor-pointer border border-slate-200 transform hover:-translate-y-1 transition duration-300"
-                >
-                    <img src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/pemasukan%20doc.jpeg" alt="Pemasukan DOC Berkualitas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" loading="lazy" />
+                <div onclick="openOperationsLightbox(0)" class="relative rounded-3xl overflow-hidden shadow-lg group h-72 sm:h-96 cursor-pointer border border-slate-800 transform hover:-translate-y-1 transition duration-300">
+                    <img src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/pemasukan%20doc.jpeg" alt="Pemasukan DOC Berkualitas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent flex flex-col justify-end p-6 sm:p-8">
-                        <span class="text-emerald-400 text-xs font-extrabold uppercase tracking-wider mb-1">Operasional Berjalan</span>
+                        <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">Operasional Berjalan</span>
                         <h3 class="text-white text-2xl font-black">Pemasukan DOC Berkualitas</h3>
                         <p class="text-slate-300 mt-2 text-sm max-w-xl">Bibit ayam broiler strain unggul dengan daya hidup tinggi masuk kandang steril.</p>
                     </div>
                 </div>
 
-                <div 
-                    onclick="openOperationsLightbox(1)"
-                    class="relative rounded-3xl overflow-hidden shadow-lg group h-72 sm:h-96 cursor-pointer border border-slate-200 transform hover:-translate-y-1 transition duration-300"
-                >
-                    <img src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/chckin.jpeg" alt="Masa Chick-In & Brooding" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" loading="lazy" />
+                <div onclick="openOperationsLightbox(1)" class="relative rounded-3xl overflow-hidden shadow-lg group h-72 sm:h-96 cursor-pointer border border-slate-800 transform hover:-translate-y-1 transition duration-300">
+                    <img src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/chckin.jpeg" alt="Masa Chick-In & Brooding" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent flex flex-col justify-end p-6 sm:p-8">
-                        <span class="text-emerald-400 text-xs font-extrabold uppercase tracking-wider mb-1">Operasional Berjalan</span>
+                        <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">Operasional Berjalan</span>
                         <h3 class="text-white text-2xl font-black">Masa Chick-In & Brooding</h3>
                         <p class="text-slate-300 mt-2 text-sm max-w-xl">Fase awal pemeliharaan intensif dengan kontrol pemanas dan suhu akurat.</p>
                     </div>
                 </div>
 
-                <div 
-                    onclick="openOperationsLightbox(2)"
-                    class="relative rounded-3xl overflow-hidden shadow-lg group h-72 sm:h-96 cursor-pointer border border-slate-200 transform hover:-translate-y-1 transition duration-300"
-                >
-                    <img src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/kandang%20rak%20baterai.jpeg" alt="Sistem Kandang Rak Baterai" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" loading="lazy" />
+                <div onclick="openOperationsLightbox(2)" class="relative rounded-3xl overflow-hidden shadow-lg group h-72 sm:h-96 cursor-pointer border border-slate-800 transform hover:-translate-y-1 transition duration-300">
+                    <img src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/kandang%20rak%20baterai.jpeg" alt="Sistem Kandang Rak Baterai" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent flex flex-col justify-end p-6 sm:p-8">
-                        <span class="text-emerald-400 text-xs font-extrabold uppercase tracking-wider mb-1">Operasional Berjalan</span>
-                        <h3 class="text-white text-2xl font-black">Sistem Kandang Rak Baterai</h3>
-                        <p class="text-slate-300 mt-2 text-sm max-w-xl">Higienitas maksimal, kotoran terpisah otomatis, sirkulasi udara merata 2 tingkat.</p>
+                        <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">Operasional Berjalan</span>
+                        <h3 class="text-white text-2xl font-black">Sistem Kandang Rak Baterai 3 Tingkat</h3>
+                        <p class="text-slate-300 mt-2 text-sm max-w-xl">Higienitas maksimal, kotoran terpisah otomatis, sirkulasi udara merata.</p>
                     </div>
                 </div>
 
-                <div 
-                    onclick="openOperationsLightbox(3)"
-                    class="relative rounded-3xl overflow-hidden shadow-lg group h-72 sm:h-96 cursor-pointer border border-slate-200 transform hover:-translate-y-1 transition duration-300"
-                >
-                    <img src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/ayam%20siap%20panen.jpeg" alt="Hasil Panen Prima" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" loading="lazy" />
+                <div onclick="openOperationsLightbox(3)" class="relative rounded-3xl overflow-hidden shadow-lg group h-72 sm:h-96 cursor-pointer border border-slate-800 transform hover:-translate-y-1 transition duration-300">
+                    <img src="https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/ayam%20siap%20panen.jpeg" alt="Hasil Panen Prima" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent flex flex-col justify-end p-6 sm:p-8">
-                        <span class="text-emerald-400 text-xs font-extrabold uppercase tracking-wider mb-1">Operasional Berjalan</span>
-                        <h3 class="text-white text-2xl font-black">Hasil Panen Prima</h3>
-                        <p class="text-slate-300 mt-2 text-sm max-w-xl">Ayam sehat berbobot standar tinggi, bebas antibiotik terlarang, siap suplai pasar.</p>
+                        <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">Operasional Berjalan</span>
+                        <h3 class="text-white text-2xl font-black">Hasil Panen Bobot Prima (2.8 kg)</h3>
+                        <p class="text-slate-300 mt-2 text-sm max-w-xl">Ayam sehat berbobot standar tinggi, bebas antibiotik terlarang, siap suplai pasar Papua.</p>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
-    <!-- LOCATION & CONTACT SECTION -->
-    <section id="location" class="py-20 bg-emerald-950 text-white relative overflow-hidden">
+    <!-- 12. LOCATION SECTION -->
+    <section id="location" class="py-20 bg-slate-900/90 text-white relative overflow-hidden border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                
-                <!-- Location Details -->
                 <div class="lg:col-span-6 space-y-6">
-                    <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-                        <i class="fa-solid fa-location-dot text-emerald-400"></i> Lokasi Strategis
+                    <div class="inline-flex items-center gap-2 bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider">
+                        <i class="fa-solid fa-location-dot text-cyan-400"></i> Lokasi Strategis
                     </div>
-                    
                     <h2 class="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
-                        Kunjungi Lokasi Peternakan TFARM Timika
+                        Peternakan TFARM Timika, Papua
                     </h2>
-                    
-                    <p class="text-slate-300 text-base">
-                        Terletak di kawasan agrobisnis Timika, Papua, dengan akses jalan luas untuk armada pengiriman DOC, pakan, dan panen logistik ayam.
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Terletak di kawasan agrobisnis Timika, Kabupaten Mimika, Provinsi Papua Tengah. Akses jalan luas mendukung mobilisasi armada pengiriman DOC, pakan, dan panen logistik ayam ke pasar lokal.
                     </p>
-
-                    <div class="space-y-4 pt-2">
-                        <div class="flex items-start gap-4 bg-emerald-900/50 p-4 rounded-2xl border border-emerald-800">
-                            <div class="p-3 bg-emerald-800 rounded-xl text-emerald-300 flex-shrink-0">
-                                <i class="fa-solid fa-map-location-dot text-xl"></i>
-                            </div>
+                    
+                    <div class="space-y-4 pt-2 font-mono text-xs">
+                        <div class="flex items-start gap-4 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                            <i class="fa-solid fa-map-pin text-cyan-400 text-lg mt-0.5"></i>
                             <div>
-                                <h4 class="font-bold text-white text-base">Alamat Peternakan</h4>
-                                <p class="text-slate-300 text-sm mt-0.5">Timika, Kabupaten Mimika, Provinsi Papua Tengah, Indonesia</p>
+                                <h4 class="font-sans font-bold text-white text-sm">Alamat Tapak</h4>
+                                <p class="text-slate-400 mt-1">Timika, Kabupaten Mimika, Provinsi Papua Tengah, Indonesia</p>
                             </div>
                         </div>
-
-                        <div class="flex items-start gap-4 bg-emerald-900/50 p-4 rounded-2xl border border-emerald-800">
-                            <div class="p-3 bg-emerald-800 rounded-xl text-emerald-300 flex-shrink-0">
-                                <i class="fa-solid fa-warehouse text-xl"></i>
-                            </div>
+                        <div class="flex items-start gap-4 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                            <i class="fa-solid fa-warehouse text-emerald-400 text-lg mt-0.5"></i>
                             <div>
-                                <h4 class="font-bold text-white text-base">Fasilitas Tapak</h4>
-                                <p class="text-slate-300 text-sm mt-0.5">Kandang 2 Lantai (24x8m), Mess & Kantor (5x12m), Gudang Pakan, Ruang Genset & Tamu.</p>
+                                <h4 class="font-sans font-bold text-white text-sm">Fasilitas Bangunan</h4>
+                                <p class="text-slate-400 mt-1">Kandang Closed House 26x12m, Mess Operator, Ruang Genset Cadangan, Gudang Pakan Kering.</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="flex flex-wrap gap-4 pt-4">
-                        <a 
-                            href="https://maps.app.goo.gl/9bsQuqhotEgjAspY6" 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-bold px-6 py-3.5 rounded-2xl text-sm shadow-xl transition transform hover:-translate-y-1"
-                        >
-                            <i class="fa-solid fa-diamond-turn-right text-slate-950"></i> Buka di Google Maps <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i>
+                        <a href="https://maps.app.goo.gl/9bsQuqhotEgjAspY6" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-teal-400 hover:from-cyan-300 hover:to-teal-300 text-slate-950 font-extrabold px-6 py-3.5 rounded-2xl text-sm shadow-xl transition transform hover:-translate-y-1">
+                            <i class="fa-solid fa-diamond-turn-right text-slate-950"></i> Buka Petunjuk Arah Google Maps
                         </a>
-                        <button 
-                            onclick="copyAddress()" 
-                            class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-3.5 rounded-2xl text-sm border border-slate-700 transition"
-                        >
-                            <i class="fa-solid fa-copy text-emerald-400"></i> Salin Alamat
+                        <button onclick="copyAddress()" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3.5 rounded-2xl text-sm border border-slate-700 transition">
+                            <i class="fa-regular fa-copy text-cyan-400"></i> Salin Alamat
                         </button>
                     </div>
                 </div>
 
-                <!-- Google Maps Embed Card -->
                 <div class="lg:col-span-6">
-                    <div class="relative w-full h-80 sm:h-96 bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border-4 border-emerald-800/80 group">
+                    <div class="rounded-3xl overflow-hidden border border-slate-700 shadow-2xl h-80 sm:h-96 relative">
                         <iframe 
-                            title="TFARM Location Timika" 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127110.82025648835!2d136.81232863486326!3d-4.546376599999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6823791e8e52dbb7%3A0xe54261765c97d627!2sTimika%2C%20Mimika%20Regency%2C%20Central%20Papua!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
                             width="100%" 
                             height="100%" 
-                            frameborder="0" 
-                            scrolling="no" 
-                            marginheight="0" 
-                            marginwidth="0" 
-                            src="https://maps.google.com/maps?q=Timika+Papua&t=k&z=12&ie=UTF8&iwloc=&output=embed" 
-                            class="w-full h-full filter brightness-90 contrast-105 group-hover:brightness-100 transition duration-300"
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Peta Lokasi TFARM Timika"
                         ></iframe>
-                        
-                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none p-4">
-                            <div class="bg-slate-950/90 backdrop-blur-md p-5 rounded-2xl shadow-2xl text-center border border-emerald-500/40 pointer-events-auto transform scale-95 group-hover:scale-100 transition duration-300 max-w-xs">
-                                <p class="font-bold text-white text-sm mb-1">Titik Koordinat Timika</p>
-                                <p class="text-xs text-slate-300 mb-3">Klik tombol untuk panduan navigasi rute lengkap via aplikasi Maps</p>
-                                <a 
-                                    href="https://maps.app.goo.gl/9bsQuqhotEgjAspY6" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
-                                    class="inline-block bg-emerald-500 text-slate-950 px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-400 shadow-md"
-                                >
-                                    Mulai Navigasi GPS
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="bg-slate-950 text-white py-16 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 13. FOOTER -->
+    <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="bg-cyan-500 p-1.5 rounded-xl font-black text-slate-950 text-base">TF</div>
+                <div>
+                    <strong class="text-white text-sm font-extrabold block">TFARM TIMIKA</strong>
+                    <span>Modern Closed House Broiler Farm & Engineering Digital Twin (26×12m)</span>
+                </div>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
-                
-                <!-- Brand Column -->
-                <div class="md:col-span-2 space-y-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-white p-1.5 rounded-2xl shadow">
-                            <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/rcwpt/tfarm/main/logo.png'" alt="Logo TFARM" class="h-8 w-8 object-contain">
-                        </div>
-                        <span class="font-black text-2xl tracking-tight">TFARM TIMIKA</span>
-                    </div>
-                    <p class="text-slate-400 text-sm max-w-md leading-relaxed">
-                        Peternakan ayam broiler modern di Timika, Papua. Menerapkan teknologi Closed House 2 tingkat berstandar nasional untuk ketahanan pangan berkualitas tinggi.
-                    </p>
-                </div>
-
-                <!-- Quick Links -->
-                <div>
-                    <h4 class="font-bold text-white text-sm mb-4 uppercase tracking-wider">Navigasi Halaman</h4>
-                    <ul class="space-y-2.5 text-sm text-slate-400">
-                        <li><a href="#dashboard" class="hover:text-emerald-400 transition">Dashboard Performa IP</a></li>
-                        <li><a href="#calculator" class="hover:text-emerald-400 transition">Kalkulator IP Broiler</a></li>
-                        <li><a href="#about" class="hover:text-emerald-400 transition">Fasilitas & Spesifikasi</a></li>
-                        <li><a href="#blueprint" class="hover:text-emerald-400 transition">Sketsa Teknis 7.000 Ekor</a></li>
-                        <li><a href="#construction" class="hover:text-emerald-400 transition">Jurnal Pembangunan (23 Tahap)</a></li>
-                        <li><a href="#gallery" class="hover:text-emerald-400 transition">Galeri Operasional</a></li>
-                    </ul>
-                </div>
-
-                <!-- Blueprint Links -->
-                <div>
-                    <h4 class="font-bold text-white text-sm mb-4 uppercase tracking-wider">Cetak Biru Khusus</h4>
-                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
-                        <p class="text-xs text-slate-300">
-                            Model kandang skala 12x50m (9.000 ekor) dengan ventilasi 8 exhaust fan:
-                        </p>
-                        <a href="9000.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300">
-                            Buka Blueprint 9.000 Ekor →
-                        </a>
-                    </div>
-                </div>
-
+            <div class="flex flex-wrap justify-center gap-6 font-semibold text-slate-300">
+                <a href="kandang-3d/index.html" class="hover:text-cyan-400 transition">3D Desktop CAD</a>
+                <a href="kandang_broiler_3d.html" class="hover:text-cyan-400 transition">3D Mobile</a>
+                <a href="kandang_broiler_3d_viewer.html" class="hover:text-cyan-400 transition">3D Ringan</a>
+                <a href="sketsa-rab-26x12.html" class="hover:text-cyan-400 transition">Sketsa 2D & RAB</a>
+                <a href="https://github.com/rcwpt/tfarm" target="_blank" class="hover:text-cyan-400 transition"><i class="fa-brands fa-github mr-1"></i> GitHub Repo</a>
             </div>
-
-            <div class="mt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
-                <p>&copy; 2025 TFARM Timika. All rights reserved. Dikembangkan untuk efisiensi agrobisnis peternakan modern.</p>
-                <div class="flex items-center space-x-4">
-                    <a href="index.html" class="hover:text-slate-300 transition">Beranda</a>
-                    <a href="9000.html" class="hover:text-slate-300 transition">Blueprint 9000</a>
-                    <a href="https://maps.app.goo.gl/9bsQuqhotEgjAspY6" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition">Google Maps</a>
-                </div>
-            </div>
-
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-8 border-t border-slate-900 text-center text-slate-500">
+            &copy; 2026 TFARM Timika. Seluruh hak cipta dilindungi. Sumber data geometri: build_kandang_LENGKAP.rb.
         </div>
     </footer>
 
-    <!-- LIGHTBOX MODAL VIEWER -->
-    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl hidden flex-col justify-between p-4 sm:p-8">
-        
-        <!-- Modal Header -->
+    <!-- LIGHTBOX MODAL (FOR JOURNAL & GALLERY PHOTOS) -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex-col justify-between p-4 sm:p-8">
         <div class="flex justify-between items-center text-white pb-4 border-b border-slate-800">
             <div>
-                <h4 id="lb-title" class="text-base sm:text-lg font-bold">Dokumentasi TFARM</h4>
-                <p id="lb-counter" class="text-xs text-slate-400">Foto 1 dari 23</p>
+                <h3 id="lb-title" class="font-bold text-base sm:text-lg text-cyan-400">Judul Foto</h3>
+                <span id="lb-counter" class="text-xs text-slate-400 font-mono">Foto 1 dari 23</span>
             </div>
-            <button 
-                onclick="closeLightboxModal()"
-                class="p-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition cursor-pointer"
-                aria-label="Tutup"
-            >
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
+            <button onclick="closeLightboxModal()" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-white text-lg">✕</button>
         </div>
-
-        <!-- Main Image View -->
+        
         <div class="relative flex-1 flex items-center justify-center my-4 overflow-hidden">
-            <img 
-                id="lb-image"
-                src="" 
-                alt="TFARM Image" 
-                class="max-h-[70vh] max-w-full object-contain rounded-2xl shadow-2xl border border-slate-800"
-            />
-
-            <!-- Navigation Arrows -->
-            <button 
-                id="lb-prev-btn"
-                onclick="navigateLightbox(-1)" 
-                class="absolute left-2 sm:left-6 p-3 bg-slate-900/80 hover:bg-slate-800 text-white rounded-2xl border border-slate-700 transition shadow-xl cursor-pointer"
-                aria-label="Sebelumnya"
-            >
-                <i class="fa-solid fa-chevron-left text-lg"></i>
-            </button>
-            <button 
-                id="lb-next-btn"
-                onclick="navigateLightbox(1)" 
-                class="absolute right-2 sm:right-6 p-3 bg-slate-900/80 hover:bg-slate-800 text-white rounded-2xl border border-slate-700 transition shadow-xl cursor-pointer"
-                aria-label="Selanjutnya"
-            >
-                <i class="fa-solid fa-chevron-right text-lg"></i>
-            </button>
+            <button id="lb-prev-btn" onclick="navigateLightbox(-1)" class="absolute left-2 sm:left-4 z-20 w-12 h-12 rounded-full bg-slate-900/80 hover:bg-cyan-500 hover:text-slate-950 border border-slate-700 text-white flex items-center justify-center text-xl transition">❮</button>
+            <img id="lb-image" src="" alt="Perbesar Foto" class="max-h-full max-w-full object-contain rounded-2xl shadow-2xl">
+            <button id="lb-next-btn" onclick="navigateLightbox(1)" class="absolute right-2 sm:right-4 z-20 w-12 h-12 rounded-full bg-slate-900/80 hover:bg-cyan-500 hover:text-slate-950 border border-slate-700 text-white flex items-center justify-center text-xl transition">❯</button>
         </div>
 
-        <!-- Caption Footer -->
         <div class="text-center text-slate-300 text-xs sm:text-sm bg-slate-900/80 p-4 rounded-2xl border border-slate-800 max-w-2xl mx-auto">
             <p id="lb-desc">Keterangan foto</p>
         </div>
-
     </div>
 
-    <!-- PURE VANILLA JAVASCRIPT ENGINE (No Babel, No React compile overhead, 100% reliable locally) -->
+    <!-- PURE VANILLA JAVASCRIPT ENGINE -->
     <script>
-        // Data construction
         const baseUrl = "https://raw.githubusercontent.com/rcwpt/nbxbroiler/main/";
         const constructionData = [
             { id: 1, desc: "Leveling lahan menggunakan laser presisi", img: "(1).jpg", category: "tahap1" },
             { id: 2, desc: "Pembuatan aliran air / drainase untuk sanitasi", img: "(2).jpg", category: "tahap1" },
-            { id: 3, desc: "Menaikkan tiang utama bangunan", img: "(3).jpg", category: "tahap1" },
+            { id: 3, desc: "Menaikkan tiang utama bangunan komposit", img: "(3).jpg", category: "tahap1" },
             { id: 4, desc: "Proses pemasangan tiang ke tingkat 2", img: "(4).jpg", category: "tahap1" },
             { id: 5, desc: "Pemasangan tulang struktur Lantai 2", img: "(5).jpg", category: "tahap1" },
-            { id: 6, desc: "Kedatangan perlengkapan kandang (Victor)", img: "(6).jpg", category: "tahap1" },
+            { id: 6, desc: "Kedatangan perlengkapan kandang closed house", img: "(6).jpg", category: "tahap1" },
             { id: 7, desc: "Proses menaikkan atap kandang", img: "(7).jpg", category: "tahap2" },
-            { id: 8, desc: "Pemasangan lantai 2", img: "(8).jpg", category: "tahap2" },
+            { id: 8, desc: "Pemasangan lantai slat ulin", img: "(8).jpg", category: "tahap2" },
             { id: 9, desc: "Progress bangunan mencapai 50%", img: "(9).jpg", category: "tahap2" },
             { id: 10, desc: "Tampak luar bangunan (50%)", img: "(10).jpg", category: "tahap2" },
             { id: 11, desc: "Pemasangan dinding bangunan lantai 1", img: "(11).jpg", category: "tahap2" },
             { id: 12, desc: "Instalasi rak baterai dimulai", img: "(12).jpg", category: "tahap3" },
             { id: 13, desc: "Penyusunan rak presisi dengan laser", img: "(13).jpg", category: "tahap3" },
-            { id: 14, desc: "Pemasangan slat alas rak", img: "(14).jpg", category: "tahap3" },
-            { id: 15, desc: "Detail pemasangan slat rak", img: "(15).jpg", category: "tahap3" },
+            { id: 14, desc: "Pemasangan slat alas rak ramah cakar", img: "(14).jpg", category: "tahap3" },
+            { id: 15, desc: "Detail pemasangan slat rak 3 susun", img: "(15).jpg", category: "tahap3" },
             { id: 16, desc: "Rak baterai hampir selesai", img: "(16).jpg", category: "tahap3" },
-            { id: 17, desc: "Rak baterai selesai terpasang", img: "(17).jpg", category: "tahap3" },
+            { id: 17, desc: "Rak baterai selesai terpasang 6 lajur", img: "(17).jpg", category: "tahap3" },
             { id: 18, desc: "Pemasangan plafon untuk suhu stabil", img: "(18).jpg", category: "tahap4" },
-            { id: 19, desc: "Plafon hampir selesai", img: "(19).jpg", category: "tahap4" },
+            { id: 19, desc: "Plafon hampir selesai terpasang", img: "(19).jpg", category: "tahap4" },
             { id: 20, desc: "Bangunan mencapai 80%", img: "(20).jpg", category: "tahap4" },
-            { id: 21, desc: "Rak siap untuk Chick-In", img: "(21).jpg", category: "tahap4" },
-            { id: 22, desc: "Rak terisi ayam (Chick-In)", img: "(22).jpg", category: "tahap4" },
-            { id: 23, desc: "Kondisi kandang dalam fully operational", img: "(23).jpg", category: "tahap4" }
+            { id: 21, desc: "Rak siap untuk Chick-In steril", img: "(21).jpg", category: "tahap4" },
+            { id: 22, desc: "Rak terisi ayam masa brooding (Chick-In)", img: "(22).jpg", category: "tahap4" },
+            { id: 23, desc: "Kondisi kandang fully operational 7.000 ekor", img: "(23).jpg", category: "tahap4" }
         ];
 
         const operationsData = [
             { title: "Pemasukan DOC Berkualitas", img: "pemasukan%20doc.jpeg", desc: "Bibit ayam broiler strain unggul dengan daya hidup tinggi masuk kandang steril." },
             { title: "Masa Chick-In & Brooding", img: "chckin.jpeg", desc: "Fase awal pemeliharaan intensif dengan kontrol pemanas dan suhu akurat." },
-            { title: "Sistem Kandang Rak Baterai", img: "kandang%20rak%20baterai.jpeg", desc: "Higienitas maksimal, kotoran terpisah otomatis, sirkulasi udara merata 2 tingkat." },
-            { title: "Hasil Panen Prima", img: "ayam%20siap%20panen.jpeg", desc: "Ayam sehat berbobot standar tinggi, bebas antibiotik terlarang, siap suplai pasar." }
+            { title: "Sistem Kandang Rak Baterai 3 Tingkat", img: "kandang%20rak%20baterai.jpeg", desc: "Higienitas maksimal, kotoran terpisah otomatis, sirkulasi udara merata 3 tingkat." },
+            { title: "Hasil Panen Bobot Prima", img: "ayam%20siap%20panen.jpeg", desc: "Ayam sehat berbobot standar tinggi (2.8 kg), bebas antibiotik terlarang, siap suplai pasar." }
         ];
 
-        const dashboardData = {
-            1: { ip: 330, fcr: 1.67, deplesi: 5.8, beratRata: 2.4, umurPanen: 40, status: "Sangat Baik", sop: { bio: 92, temp: 90, vac: 98 } },
-            2: { ip: 355, fcr: 1.55, deplesi: 5.1, beratRata: 2.6, umurPanen: 41, status: "Sangat Baik", sop: { bio: 95, temp: 94, vac: 100 } },
-            3: { ip: 385, fcr: 1.46, deplesi: 4.2, beratRata: 2.8, umurPanen: 42, status: "Istimewa", sop: { bio: 98, temp: 97, vac: 100 } }
-        };
-
-        // Render Construction Grid
         let currentFilter = 'all';
         function renderConstructionGrid(category = 'all') {
             currentFilter = category;
@@ -1163,9 +945,9 @@
             grid.innerHTML = filtered.map((item, idx) => `
                 <div 
                     onclick="openConstructionLightbox(${item.id})"
-                    class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-200 flex flex-col cursor-pointer transform hover:-translate-y-1"
+                    class="group bg-slate-900 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-800 flex flex-col cursor-pointer transform hover:-translate-y-1"
                 >
-                    <div class="relative h-52 overflow-hidden bg-slate-200">
+                    <div class="relative h-48 overflow-hidden bg-slate-800">
                         <img 
                             src="${baseUrl + item.img}" 
                             alt="${item.desc}" 
@@ -1173,24 +955,18 @@
                             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" 
                             onerror="this.src='https://via.placeholder.com/400x300?text=TFARM+Tahap+${item.id}'" 
                         />
-                        <div class="absolute top-3 right-3 bg-slate-950/80 text-white text-xs font-mono font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20">
+                        <div class="absolute top-3 right-3 bg-slate-950/80 text-cyan-400 text-xs font-mono font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-cyan-500/30">
                             #${item.id}
                         </div>
-                        <div class="absolute inset-0 bg-slate-950/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span class="bg-white/95 text-slate-900 text-xs font-bold px-3 py-1.5 rounded-xl shadow-lg flex items-center gap-1.5">
-                                <i class="fa-solid fa-magnifying-glass text-emerald-600"></i> Lihat Foto
-                            </span>
-                        </div>
                     </div>
-                    
-                    <div class="p-4 flex-1 flex flex-col justify-between bg-white">
+                    <div class="p-4 flex-1 flex flex-col justify-between">
                         <div class="flex items-start gap-2">
-                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1 flex-shrink-0 text-sm"></i>
-                            <p class="text-xs sm:text-sm font-semibold text-slate-700 leading-snug">${item.desc}</p>
+                            <i class="fa-solid fa-circle-check text-cyan-400 mt-1 flex-shrink-0 text-xs"></i>
+                            <p class="text-xs font-semibold text-slate-200 leading-snug">${item.desc}</p>
                         </div>
-                        <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center text-[11px] text-slate-400">
+                        <div class="mt-3 pt-3 border-t border-slate-800 flex justify-between items-center text-[11px] text-slate-400 font-mono">
                             <span class="capitalize">${item.category.replace('tahap', 'Tahap ')}</span>
-                            <span class="text-emerald-600 font-bold group-hover:underline">Perbesar →</span>
+                            <span class="text-cyan-400 font-bold group-hover:underline">Perbesar →</span>
                         </div>
                     </div>
                 </div>
@@ -1202,48 +978,13 @@
                 const btn = document.getElementById('filter-' + c);
                 if (btn) {
                     if (c === category) {
-                        btn.className = "px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 bg-emerald-600 text-white shadow-md shadow-emerald-600/30";
+                        btn.className = "px-4 py-2.5 rounded-xl whitespace-nowrap bg-cyan-500 text-slate-950 font-extrabold shadow-md";
                     } else {
-                        btn.className = "px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
+                        btn.className = "px-4 py-2.5 rounded-xl whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700";
                     }
                 }
             });
             renderConstructionGrid(category);
-        }
-
-        // Dashboard Period Switcher
-        function setDashboardPeriod(p) {
-            [1, 2, 3].forEach(num => {
-                const btn = document.getElementById('btn-period-' + num);
-                if (btn) {
-                    if (num === p) {
-                        btn.className = "px-5 py-3 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 bg-emerald-600 text-white shadow-md shadow-emerald-600/30";
-                    } else {
-                        btn.className = "px-5 py-3 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50";
-                    }
-                }
-            });
-
-            const data = dashboardData[p];
-            if (!data) return;
-
-            document.getElementById('metric-ip').innerText = data.ip;
-            document.getElementById('metric-status').innerText = data.status;
-            document.getElementById('metric-fcr').innerText = data.fcr;
-            document.getElementById('metric-deplesi').innerText = data.deplesi;
-            document.getElementById('metric-livability').innerText = (100 - data.deplesi).toFixed(1);
-            document.getElementById('metric-weight').innerText = data.beratRata;
-            document.getElementById('metric-age').innerText = data.umurPanen;
-
-            document.getElementById('metric-fcr-bar').style.width = Math.min(100, (2.0 - data.fcr) * 100) + '%';
-            document.getElementById('metric-deplesi-bar').style.width = ((10 - data.deplesi) * 10) + '%';
-
-            document.getElementById('sop-bio-val').innerText = data.sop.bio + '%';
-            document.getElementById('sop-bio-bar').style.width = data.sop.bio + '%';
-            document.getElementById('sop-temp-val').innerText = data.sop.temp + '%';
-            document.getElementById('sop-temp-bar').style.width = data.sop.temp + '%';
-            document.getElementById('sop-vac-val').innerText = data.sop.vac + '%';
-            document.getElementById('sop-vac-bar').style.width = data.sop.vac + '%';
         }
 
         // Live IP Calculator Logic
@@ -1273,16 +1014,16 @@
             const badge = document.getElementById('calc-badge');
             if (ip >= 380) {
                 badge.innerText = "⭐ ISTIMEWA";
-                badge.className = "text-xs px-3 py-1 rounded-full font-extrabold bg-amber-400 text-slate-950";
+                badge.className = "inline-block text-xs px-3 py-1 rounded-full font-extrabold bg-amber-400 text-slate-950 mb-4";
             } else if (ip >= 340) {
                 badge.innerText = "SANGAT BAIK";
-                badge.className = "text-xs px-3 py-1 rounded-full font-extrabold bg-emerald-400 text-slate-950";
+                badge.className = "inline-block text-xs px-3 py-1 rounded-full font-extrabold bg-emerald-400 text-slate-950 mb-4";
             } else if (ip >= 300) {
                 badge.innerText = "BAIK";
-                badge.className = "text-xs px-3 py-1 rounded-full font-extrabold bg-sky-400 text-slate-950";
+                badge.className = "inline-block text-xs px-3 py-1 rounded-full font-extrabold bg-cyan-400 text-slate-950 mb-4";
             } else {
                 badge.innerText = "PERLU EVALUASI";
-                badge.className = "text-xs px-3 py-1 rounded-full font-extrabold bg-rose-400 text-slate-950";
+                badge.className = "inline-block text-xs px-3 py-1 rounded-full font-extrabold bg-rose-400 text-slate-950 mb-4";
             }
         }
 
@@ -1307,8 +1048,8 @@
                 prevBtn.style.display = 'none';
                 nextBtn.style.display = 'none';
             } else {
-                prevBtn.style.display = 'block';
-                nextBtn.style.display = 'block';
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
             }
 
             modal.classList.remove('hidden');
@@ -1336,7 +1077,7 @@
                 : constructionData.filter(x => x.category === currentFilter);
             
             activeLightboxList = filtered.map(x => ({
-                title: `Tahap #${x.id}: Pembangunan TFARM`,
+                title: `Tahap #${x.id}: Pembangunan TFARM 26×12M`,
                 desc: x.desc,
                 img: baseUrl + x.img
             }));
@@ -1356,13 +1097,6 @@
             showLightbox();
         }
 
-        function openSingleImageModal(imgUrl, title, desc) {
-            activeLightboxList = [{ title, desc, img: imgUrl }];
-            currentLbIndex = 0;
-            showLightbox();
-        }
-
-        // Toast & Copy
         function showToastMsg(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
@@ -1373,8 +1107,8 @@
         }
 
         function copyAddress() {
-            navigator.clipboard.writeText("TFARM Timika - Peternakan Ayam Broiler Modern Closed House, Timika, Papua, Indonesia");
-            showToastMsg("Alamat TFARM berhasil disalin ke clipboard!");
+            navigator.clipboard.writeText("TFARM Timika - Peternakan Ayam Broiler Modern Closed House, Timika, Kabupaten Mimika, Papua Tengah");
+            showToastMsg("Alamat TFARM berhasil disalin!");
         }
 
         function toggleMobileMenu() {
@@ -1389,7 +1123,6 @@
             }
         }
 
-        // Keyboard handler for modal
         window.addEventListener('keydown', (e) => {
             const modal = document.getElementById('lightbox-modal');
             if (modal && !modal.classList.contains('hidden')) {
@@ -1399,7 +1132,6 @@
             }
         });
 
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             renderConstructionGrid('all');
             calculateIpLive();

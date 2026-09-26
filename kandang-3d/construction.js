@@ -53,9 +53,9 @@ export class ConstructionManager {
             },
             {
                 num: 6,
-                name: "Exhaust Fan 50in & Mesin Kubota",
+                name: "Exhaust Fan 50in & Mesin Diesel",
                 range: [0.65, 0.77],
-                desc: "6 unit box fan 50 inch (11 louvers, 6 blade propeller stainless) & mesin diesel Kubota RD110TTB + as puli",
+                desc: "6 unit box fan 50 inch (11 louvers, 6 blade propeller stainless) & mesin diesel sentral darurat + as puli",
                 cam: { pos: new THREE.Vector3(-8, 6, 4), target: new THREE.Vector3(0, 6, 2) }
             },
             {

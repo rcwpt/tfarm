@@ -1,7 +1,7 @@
 # TFARM Timika - Peternakan Ayam Broiler Modern Closed House
 ## 3D CAD/BIM Digital Twin & Sketsa Teknis + RAB Material (Model 26 × 12 m, 3 Susun, 7.000 Ekor)
 
-Sistem peternakan ayam broiler modern berbasis teknologi *Closed House* di Timika, Papua. Repositori ini berisi **3D Digital Twin Interaktif**, **Sketsa Teknis 2D CAD**, **Bill of Materials (RAB Material tanpa harga)**, dan **Cetak Biru 9.000 Ekor**, yang dibangun berdasarkan sumber utama file SketchUp Ruby:
+Sistem peternakan ayam broiler modern berbasis teknologi *Closed House* di Timika, Papua. Repositori ini berisi **3D CAD/BIM Digital Twin Interaktif**, **Sketsa Teknis 2D CAD**, dan **Bill of Materials (RAB Material tanpa harga)**, yang dibangun berdasarkan sumber utama file SketchUp Ruby:
 
 ```
 build_kandang_LENGKAP.rb (Source of Truth)
@@ -22,7 +22,7 @@ Aplikasi web 3D berbasis **Three.js (Offline-First)** yang berfungsi sebagai min
 - **Inspektor Objek Interaktif**: Klik objek apa saja di canvas 3D untuk melihat Nama, ID, Kategori, Material, Dimensi (L, W, H), Posisi (X, Y, Z), Volume, Luas, dan **Traceability Baris Kode Ruby (`sourceLine`)**.
 - **Mesin Pencari Objek**: Cari nama/nomor komponen (misal: `Tiang 17`, `Blower A`, `Rak B1`, `Nipple`, `Talang`) -> kamera otomatis fokus ke objek.
 - **Rangka Rak 3 Susun & Slat**: 6 lajur rak 24m (Rak A, B1, B2, C1, C2, D) lengkap dengan lantai slat mesh plastik, pintu galvanis + slot kunci, alas kotoran tripleks, talang pakan profil U terbuka, dan 1.440 unit nipple drinker 360° + drip cup kuning.
-- **6 Unit Exhaust Fan Box 50" & Diesel Kubota**: 11 louver/sirip miring, motor hub, brackets, 6 propeller blade stainless yang berputar dinamis saat ventilasi aktif, grille pelindung, serta mesin Kubota RD110TTB + as transmisi 10.4m.
+- **6 Unit Exhaust Fan Box 50" & Sistem Penggerak Transmisi**: 11 louver/sirip miring, motor hub, brackets, 6 propeller blade stainless yang berputar dinamis saat ventilasi aktif, grille pelindung, serta mesin diesel penggerak + as transmisi 10.4m.
 - **Visualisasi Aliran Udara & Air**: Simulasi partikel udara dari Celldeck menuju exhaust fan dengan kontrol kecepatan aliran, serta tetesan air pada Celldeck cooling pad.
 - **Animasi Pembangunan 8 Tahap**:
   - `[1/8]` Pondasi & Lantai Cor
@@ -30,7 +30,7 @@ Aplikasi web 3D berbasis **Three.js (Offline-First)** yang berfungsi sebagai min
   - `[3/8]` Tiang Komposit Kayu Besi 15x10 (naik dari bawah tanah)
   - `[4/8]` Rangka Dinding Vertikal & Sabuk
   - `[5/8]` Rak 3 Susun, Slat, Pintu & Talang Pakan
-  - `[6/8]` Exhaust Fan 50" & Mesin Kubota
+  - `[6/8]` Exhaust Fan 50" & Sistem Penggerak Transmisi
   - `[7/8]` Terpal Dinding & Celldeck Cooling Pad
   - `[8/8]` Kuda-Kuda, Gording Miring & Spandek Bergelombang
 - **Perekam Video Konstruksi (MediaRecorder API)**: Merekam animasi pembangunan dan kamera sinematik menjadi file video `.webm` (durasi 30s, 60s, 90s).
@@ -47,7 +47,7 @@ Aplikasi mandiri untuk rekayasa teknis, estimasi, dan pengadaan bahan:
   - *Denah Tata Letak (Tampak Atas)*: Grid 8×4 tiang, 6 rak, 3 got drainase, 3 lorong inspeksi (1.0m), celldeck, dan blower.
   - *Potongan Melintang (Bentang 12m)*: Bentang kuda-kuda, monitor roof, 3 tingkat rak ayam, elevasi benchmark.
   - *Tampak Depan*: Celldeck cooling pad 12.0 × 1.7 m dan talang stainless.
-  - *Tampak Belakang*: 6 unit exhaust fan box 50", diesel Kubota, dan as transmisi kinetik.
+  - *Tampak Belakang*: 6 unit exhaust fan box 50", mesin diesel penggerak, dan as transmisi kinetik.
   - *Tampak Samping (26m)*: Dinding vertikal 1.5x6cm spasi 30cm, 3 sabuk dinding, kemiringan atap 16.7°.
 - **Rekapitulasi Kebutuhan Raw Material (Baku) vs Installed Pieces**:
   - Kayu Besi Ulin 10x10 cm: 64 batang @ 3,0 m (netto 2.97m).
@@ -67,8 +67,8 @@ Aplikasi mandiri untuk rekayasa teknis, estimasi, dan pengadaan bahan:
 
 ---
 
-### 3. 🏠 Portal Beranda Utama (`index.html`) & Cetak Biru 9.000 Ekor (`9000.html`)
-- Menghubungkan seluruh sistem TFARM Timika (Dashboard performa IP, kalkulator panen broiler live, jurnal konstruksi 23 foto, blueprint 12x50m 9.000 ekor, dan kedua aplikasi 26x12m di atas).
+### 3. 🏠 Portal Beranda Utama (`index.html`)
+- Menghubungkan seluruh ekosistem teknik TFARM Timika (Dashboard performa IP, kalkulator panen broiler live, jurnal konstruksi 23 foto riil, showcase 3D interaktif, tabel spesifikasi rekayasa, dan kedua aplikasi 26x12m di atas).
 
 ---
 
@@ -78,7 +78,7 @@ Aplikasi mandiri untuk rekayasa teknis, estimasi, dan pengadaan bahan:
 tfarm/
 │
 ├── index.html                      # Portal utama peternakan TFARM Timika
-├── 9000.html                       # Cetak Biru Interaktif 12x50m (Model 9.000 Ekor)
+├── 9000.html                       # Pengalihan resmi ke proyek standar 26x12m
 ├── sketsa-rab-26x12.html            # Sketsa Teknis 2D Interaktif + RAB Material Lengkap
 │
 ├── kandang-3d/                     # Aplikasi Interactive 3D Digital Twin Viewer
@@ -147,7 +147,7 @@ Berdasarkan perbandingan langsung antara hasil eksekusi `build_kandang_LENGKAP.r
 | **Lajur Rak 3 Susun** | 6 Lajur @ 24m (Rak A s.d D) | 6 Lajur (984 elemen kayu) | **VALID (1:1)** |
 | **Elevasi Susun Rak Ayam** | T1=0.25, T2=1.20, T3=2.15m | Z: 0.25, 1.20, 2.15 m | **VALID (1:1)** |
 | **Unit Exhaust Fan 50"** | 6 Unit Box Fan Heavy Duty | 6 Unit (66 louver, 36 blade) | **VALID (1:1)** |
-| **Mesin Penggerak Kinetik** | 1 Unit Kubota RD110TTB | 1 Unit + As Puli 10.4m | **VALID (1:1)** |
+| **Mesin Penggerak Kinetik** | 1 Unit Mesin Diesel | 1 Unit + As Puli 10.4m | **VALID (1:1)** |
 | **Cooling Pad Evaporatif** | Celldeck 7090 (12.0 × 1.7 m) | 12.0 x 1.7 m + Talang SS | **VALID (1:1)** |
 | **Total Objek Geometri** | 8.564 Objek Terurai | 8.564 Objek Terurai | **100% LENGKAP** |
 

@@ -17,7 +17,20 @@ export class AnimationManager {
         this.shaftRotationAngle = 0;
 
         // Exploded View
-        this.explodedProgress = 0.0; // 0.0 to 1.0
+        this.explodedProgress = 0.0;
+        this.explodedAuto = false;
+        this.explodedDir = 1;
+        this.explodedSpeed = 0.35;
+        this.onExplodedUpdate = null;
+        this.explodedGroups = {
+            structure: true,
+            roof: true,
+            rack: true,
+            ventilation: true,
+            coolingPad: true,
+            exhaustFan: true,
+            equipment: true
+        };
 
         // Section Planes
         this.sectionActive = false;
@@ -96,37 +109,42 @@ export class AnimationManager {
         this.scene.add(this.waterParticles);
     }
 
-    setExploded(val) {
+        setExploded(val) {
         this.explodedProgress = Math.max(0.0, Math.min(1.0, val));
         const factor = this.explodedProgress;
+        const g = this.explodedGroups;
 
         for (const item of this.sceneModel.meshList) {
             const mesh = item.mesh;
             const orig = item.origPos;
-            const part = item.metadata.buildingPart;
+            const part = item.metadata.buildingPart || "";
 
             let dz = 0;
             let dy = 0;
             let dx = 0;
 
-            if (part === "06 ATAP") {
-                dz = factor * 7.0; // Roof sheets & ribs fly highest
-            } else if (part === "07 MONITOR") {
-                dz = factor * 8.5; // Monitor roof top
+            if (part === "06 ATAP" || part === "07 MONITOR") {
+                if (g.roof) dz = factor * (part === "07 MONITOR" ? 8.5 : 7.0);
             } else if (part === "05 RANGKA ATAP") {
-                dz = factor * 4.5; // Trusses & gording
-            } else if (part === "08 RAK" || part === "09 SLAT/MESH" || part === "10 PAKAN" || part === "11 NIPPLE" || part === "14 ALAS KOTORAN") {
-                dz = factor * 1.8; // Racks hover slightly
-            } else if (part === "02 DINDING" || part === "15 TERPAL") {
-                // Expand walls outwards
-                if (orig.y < 6.0) dy = -factor * 3.0;
-                else dy = factor * 3.0;
+                if (g.roof) dz = factor * 4.5;
+            } else if (part === "08 RAK" || part === "09 SLAT/MESH") {
+                if (g.rack) {
+                    dz = factor * 1.8;
+                    dy = (orig.y < 6.0 ? -1 : 1) * factor * 0.8;
+                }
+            } else if (part === "10 PAKAN" || part === "11 NIPPLE" || part === "14 ALAS KOTORAN") {
+                if (g.equipment) dz = factor * 2.2;
+            } else if (part === "02 DINDING" || part === "15 TERPAL" || part === "03 STRUKTUR UTAMA") {
+                if (g.structure) {
+                    if (orig.y < 6.0) dy = -factor * 3.0;
+                    else dy = factor * 3.0;
+                }
             } else if (part === "12 VENTILASI" || part === "14 MESIN") {
-                dx = -factor * 3.5; // Blowers pull back
+                if (g.exhaustFan || g.ventilation) dx = -factor * 3.5;
             } else if (part === "13 COOLING PAD") {
-                dx = factor * 3.5; // Celldeck pulls front
+                if (g.coolingPad) dx = factor * 3.5;
             } else if (part === "01 LANTAI") {
-                dz = -factor * 1.5; // Floor lowers
+                if (g.structure) dz = -factor * 1.5;
             }
 
             mesh.position.set(orig.x + dx, orig.y + dy, orig.z + dz);
@@ -167,9 +185,7 @@ export class AnimationManager {
             }
 
             // Rotate transmission pulleys
-            if (this.sceneModel.transmissionShaft) {
-                this.sceneModel.transmissionShaft.rotation.y = this.shaftRotationAngle;
-            }
+            // Transmission shaft strictly static
         }
 
         // 2. Airflow Particles Update
