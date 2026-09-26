@@ -66,9 +66,9 @@
         <i class="fa-solid fa-fan animate-spin text-xs" style="animation-duration: 3s;"></i>
         <span class="hidden sm:inline">Putar Fan</span>
       </button>
-      <button id="btn-toggle-roof" class="px-3 py-1.5 rounded-lg text-xs font-medium glass-panel border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 transition flex items-center gap-1.5 shadow">
-        <i class="fa-solid fa-roof text-xs"></i>
-        <span id="roof-label">Atap: Buka</span>
+      <button id="btn-toggle-roof" class="px-3 py-1.5 rounded-lg text-xs font-medium glass-panel border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20 transition flex items-center gap-1.5 shadow">
+        <i class="fa-solid fa-house-chimney text-xs"></i>
+        <span id="roof-label">Atap: Terpasang</span>
       </button>
       <button id="btn-reset-cam" class="p-2 rounded-lg text-xs font-medium glass-panel border border-slate-700 text-slate-300 hover:bg-slate-800 transition" title="Reset Kamera">
         <i class="fa-solid fa-arrows-rotate"></i>
@@ -114,13 +114,45 @@
       </div>
     </div>
 
-    <!-- Exploded View slider -->
-    <div class="mt-3 pt-2 border-t border-slate-700/60">
-      <div class="flex justify-between text-[11px] mb-1">
-        <span class="text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-cubes text-blue-400"></i> Ledakan Visual (Exploded)</span>
-        <span id="exploded-val" class="font-mono text-cyan-400">0%</span>
+    <!-- Exploded View Suite (Interactive CAD Disassembly) -->
+    <div class="mt-3 pt-2.5 border-t border-slate-700/60">
+      <div class="flex items-center justify-between text-xs mb-1.5">
+        <span class="text-slate-200 font-bold flex items-center gap-1.5">
+          <i class="fa-solid fa-cubes text-cyan-400"></i> Ledakan Visual CAD
+        </span>
+        <span id="exploded-val" class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/60">0%</span>
       </div>
-      <input id="slider-exploded" type="range" min="0" max="100" value="0" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+
+      <!-- Mode Selector: 3D Radial vs Vertikal -->
+      <div class="grid grid-cols-2 gap-1 mb-2 bg-slate-900/80 p-1 rounded-xl border border-slate-800 text-[11px]">
+        <button id="btn-explode-mode-radial" class="px-2 py-1 rounded-lg font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition flex items-center justify-center gap-1">
+          <i class="fa-solid fa-arrows-up-down-left-right text-[10px]"></i> 3D Radial
+        </button>
+        <button id="btn-explode-mode-vertical" class="px-2 py-1 rounded-lg font-medium text-slate-400 hover:text-slate-200 border border-transparent transition flex items-center justify-center gap-1">
+          <i class="fa-solid fa-arrows-up-down text-[10px]"></i> Vertikal
+        </button>
+      </div>
+
+      <!-- Range Slider -->
+      <input id="slider-exploded" type="range" min="0" max="100" value="0" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400 mb-2">
+
+      <!-- Presets and Auto-Play Loop -->
+      <div class="flex items-center justify-between gap-1 text-[11px]">
+        <button data-explode-pct="0" class="btn-explode-preset flex-1 py-1 rounded bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-mono transition text-center border border-slate-700/50">0%</button>
+        <button data-explode-pct="35" class="btn-explode-preset flex-1 py-1 rounded bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-mono transition text-center border border-slate-700/50">35%</button>
+        <button data-explode-pct="70" class="btn-explode-preset flex-1 py-1 rounded bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-mono transition text-center border border-slate-700/50">70%</button>
+        <button data-explode-pct="100" class="btn-explode-preset flex-1 py-1 rounded bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-mono transition text-center border border-slate-700/50">100%</button>
+        <button id="btn-explode-autoplay" class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 font-medium transition flex items-center gap-1" title="Putar Animasi Meledak Otomatis (Loop)">
+          <i id="autoplay-icon" class="fa-solid fa-play text-[10px]"></i>
+          <span id="autoplay-text">Auto</span>
+        </button>
+      </div>
+
+      <!-- Live Displacement HUD -->
+      <div id="explode-hud" class="mt-2 text-[10px] text-slate-400 bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex justify-between items-center hidden">
+        <span><i class="fa-solid fa-arrow-up text-cyan-400 mr-1"></i>Elevasi Atap: <b id="hud-roof-disp" class="text-cyan-300">+0.0m</b></span>
+        <span><i class="fa-solid fa-up-right-and-down-left-from-center text-amber-400 mr-1"></i>Ekspansi: <b id="hud-radial-disp" class="text-amber-300">0.0m</b></span>
+      </div>
     </div>
   </aside>
 
@@ -179,7 +211,7 @@
       { id: 'gording', name: '09. Gording 5x10 Miring', color: '#be8c50', defaultVisible: true, count: '13 Lajur Canted 16.7°' },
       { id: 'blower', name: '12. Exhaust Fan Box 50"', color: '#94a3b8', defaultVisible: true, count: '6 Unit Box + 6 Baling' },
       { id: 'kubota', name: '13. Mesin Kubota & Puli', color: '#dc2626', defaultVisible: true, count: 'Kubota 11 HP + As' },
-      { id: 'atap', name: '14. Atap Spandek (Opsional)', color: '#9bb4cd', defaultVisible: false, count: '88 Lembar 6m + 2m' }
+      { id: 'atap', name: '14. Atap Spandek Galvalum', color: '#9bb4cd', defaultVisible: true, count: '88 Lembar 6m + 2m' }
     ];
 
     // Three.js State Variables
@@ -189,6 +221,11 @@
     let propellerMeshes = [];
     let isFanSpinning = true;
     let explodedFactor = 0;
+    let currentExploded = 0;
+    let targetExploded = 0;
+    let explodeMode = 'radial'; // 'radial' or 'vertical'
+    let isExplodeAutoPlaying = false;
+    let autoPlayTimer = 0;
     let raycaster = new THREE.Raycaster();
     let mouse = new THREE.Vector2();
     let hoverMesh = null;
@@ -267,6 +304,35 @@
       // ThreeJS: X = suX - 13.0, Y = suZ, Z = suY - 6.0
     }
 
+    function createSpandekTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 256;
+      cvs.height = 256;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#9cb6cd';
+      ctx.fillRect(0, 0, 256, 256);
+
+      // Repeating corrugation ribs (gelombang trapesium AZ-100)
+      for (let x = 0; x < 256; x += 16) {
+        ctx.fillStyle = '#6f889f';
+        ctx.fillRect(x, 0, 3, 256);
+        ctx.fillStyle = '#d5e4f2';
+        ctx.fillRect(x + 3, 0, 5, 256);
+        ctx.fillStyle = '#8ea7be';
+        ctx.fillRect(x + 8, 0, 8, 256);
+      }
+      // Sheet overlap seams
+      ctx.fillStyle = '#4a6073';
+      ctx.fillRect(0, 0, 2, 256);
+      ctx.fillRect(128, 0, 2, 256);
+
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(38, 2);
+      return tex;
+    }
+
     // Material library matching exact colors & transparency of the Ruby script
     const MATS = {
       beton: new THREE.MeshStandardMaterial({ color: 0xd7dce1, roughness: 0.85, metalness: 0.05 }),
@@ -289,7 +355,7 @@
       motor: new THREE.MeshStandardMaterial({ color: 0x323c46, roughness: 0.6, metalness: 0.4 }),
       diesel: new THREE.MeshStandardMaterial({ color: 0xd72828, roughness: 0.4, metalness: 0.3 }),
       puli: new THREE.MeshStandardMaterial({ color: 0x282828, roughness: 0.5, metalness: 0.8 }),
-      spandek: new THREE.MeshStandardMaterial({ color: 0x9bb4cd, roughness: 0.35, metalness: 0.65, side: THREE.DoubleSide })
+      spandek: new THREE.MeshStandardMaterial({ color: 0xa8c2d8, map: createSpandekTexture(), roughness: 0.38, metalness: 0.65, side: THREE.DoubleSide })
     };
 
     // Helper: Add solid box matching SketchUp Ruby logic:
@@ -874,48 +940,113 @@
     }
 
     function buildAtapSpandek() {
-      // Sayap Kiri: Panjang miring ~7.1m
-      const roofKiriGeo = new THREE.PlaneGeometry(26.4, 7.15);
+      // 1. Sayap Kiri 6.0m (44 Lembar)
+      // SketchUp: Y from -0.80 to 4.95, Z from 3.06 to 4.85
+      // dY = 5.75m, dZ = 1.79m -> slant = 6.022m
+      // ThreeJS: X length = 26.4m, width along slant = 6.022m
+      // Midpoint: X = 0, Y = (3.06 + 4.85)/2 = 3.955, Z = 2.075 - 6.0 = -3.925
+      const roofKiriGeo = new THREE.PlaneGeometry(26.4, 6.022);
       const roofKiri = new THREE.Mesh(roofKiriGeo, MATS.spandek);
-      roofKiri.position.set(0, 4.05, 2.6 - 6.0);
-      roofKiri.rotation.x = THREE.MathUtils.degToRad(16.7);
+      roofKiri.position.set(0, 3.955, -3.925);
+      roofKiri.rotation.x = -Math.PI / 2 + Math.atan2(1.79, 5.75);
       roofKiri.castShadow = true;
       roofKiri.receiveShadow = true;
       roofKiri.userData = {
         layerId: 'atap',
         basePos: roofKiri.position.clone(),
-        title: "Atap Spandek Galvalum Sayap Kiri",
-        desc: "88 lembar spandek galvalum gelombang trapesium tebal 0.30mm (kombinasi 6m + 2m overlap).",
-        matName: "Spandek Galvalum AZ-100"
+        title: "Atap Spandek Galvalum Sayap Kiri (44 Lembar x 6m)",
+        desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm, tebal 0.30mm (AZ-100). Membentang dari Lisplang Kiri (Z=3.06m) hingga tumpuan monitor (Z=4.85m).",
+        matName: "Spandek Galvalum AZ-100 (6.0m)"
       };
 
-      // Sayap Kanan
-      const roofKananGeo = new THREE.PlaneGeometry(26.4, 7.15);
+      // 2. Sayap Kanan 6.0m (44 Lembar)
+      // SketchUp: Y from 7.05 to 12.80, Z from 4.85 to 3.06
+      // Midpoint: X = 0, Y = 3.955, Z = 9.925 - 6.0 = +3.925
+      const roofKananGeo = new THREE.PlaneGeometry(26.4, 6.022);
       const roofKanan = new THREE.Mesh(roofKananGeo, MATS.spandek);
-      roofKanan.position.set(0, 4.05, 9.4 - 6.0);
-      roofKanan.rotation.x = -THREE.MathUtils.degToRad(16.7);
+      roofKanan.position.set(0, 3.955, 3.925);
+      roofKanan.rotation.x = -Math.PI / 2 - Math.atan2(1.79, 5.75);
       roofKanan.castShadow = true;
       roofKanan.receiveShadow = true;
       roofKanan.userData = {
         layerId: 'atap',
         basePos: roofKanan.position.clone(),
-        title: "Atap Spandek Galvalum Sayap Kanan",
-        desc: "Spandek galvalum gelombang sisi sayap kanan.",
-        matName: "Spandek Galvalum AZ-100"
+        title: "Atap Spandek Galvalum Sayap Kanan (44 Lembar x 6m)",
+        desc: "44 lembar spandek galvalum gelombang trapesium lebar 70cm sisi sayap kanan dari tumpuan monitor (Z=4.85m) hingga lisplang kanan (Z=3.06m).",
+        matName: "Spandek Galvalum AZ-100 (6.0m)"
       };
 
-      // Topi Monitor
-      const roofMonitorKiri = new THREE.Mesh(new THREE.PlaneGeometry(26.4, 2.0), MATS.spandek);
-      roofMonitorKiri.position.set(0, 5.56, 5.1 - 6.0);
-      roofMonitorKiri.rotation.x = THREE.MathUtils.degToRad(16.7);
+      // 3. Topi Monitor Kiri 2.0m (22 Lembar)
+      // SketchUp: Y from 4.20 to 6.00, Z from 5.37 to 5.92
+      // dY = 1.80m, dZ = 0.55m -> slant = 1.882m
+      // Midpoint: X = 0, Y = (5.37 + 5.92)/2 = 5.645, Z = 5.10 - 6.0 = -0.90
+      const roofMonitorKiri = new THREE.Mesh(new THREE.PlaneGeometry(26.4, 1.882), MATS.spandek);
+      roofMonitorKiri.position.set(0, 5.645, -0.90);
+      roofMonitorKiri.rotation.x = -Math.PI / 2 + Math.atan2(0.55, 1.80);
+      roofMonitorKiri.castShadow = true;
+      roofMonitorKiri.receiveShadow = true;
+      roofMonitorKiri.userData = {
+        layerId: 'atap',
+        basePos: roofMonitorKiri.position.clone(),
+        title: "Atap Topi Monitor Kiri (22 Lembar x 2m)",
+        desc: "Penutup ventilasi atap monitor sisi kiri dengan overstek 40cm, kemiringan 17° menuju puncak nok (Z=5.92m).",
+        matName: "Spandek Galvalum AZ-100 (2.0m)"
+      };
 
-      const roofMonitorKanan = new THREE.Mesh(new THREE.PlaneGeometry(26.4, 2.0), MATS.spandek);
-      roofMonitorKanan.position.set(0, 5.56, 6.9 - 6.0);
-      roofMonitorKanan.rotation.x = -THREE.MathUtils.degToRad(16.7);
+      // 4. Topi Monitor Kanan 2.0m (22 Lembar)
+      // SketchUp: Y from 6.00 to 7.80, Z from 5.92 to 5.37
+      // Midpoint: X = 0, Y = 5.645, Z = 6.90 - 6.0 = +0.90
+      const roofMonitorKanan = new THREE.Mesh(new THREE.PlaneGeometry(26.4, 1.882), MATS.spandek);
+      roofMonitorKanan.position.set(0, 5.645, 0.90);
+      roofMonitorKanan.rotation.x = -Math.PI / 2 - Math.atan2(0.55, 1.80);
+      roofMonitorKanan.castShadow = true;
+      roofMonitorKanan.receiveShadow = true;
+      roofMonitorKanan.userData = {
+        layerId: 'atap',
+        basePos: roofMonitorKanan.position.clone(),
+        title: "Atap Topi Monitor Kanan (22 Lembar x 2m)",
+        desc: "Penutup ventilasi atap monitor sisi kanan dari puncak nok (Z=5.92m) ke overstek kanan (Z=5.37m).",
+        matName: "Spandek Galvalum AZ-100 (2.0m)"
+      };
+
+      // 5. Nok Seng Puncak Bubungan Flashing (Ridge Cap)
+      const nokGeo = new THREE.BoxGeometry(26.4, 0.04, 0.35);
+      const nokMesh = new THREE.Mesh(nokGeo, MATS.galvanis);
+      nokMesh.position.set(0, 5.94, 0);
+      nokMesh.castShadow = true;
+      nokMesh.receiveShadow = true;
+      nokMesh.userData = {
+        layerId: 'atap',
+        basePos: nokMesh.position.clone(),
+        title: "Nok Bubungan Seng Plat Galvanis Puncak",
+        desc: "Flashing penutup celah nok puncak topi monitor sepanjang 26.4 meter mencegah tempias dan kebocoran.",
+        matName: "Plat Galvanis Nok Bubungan"
+      };
+
+      // 6. Lisplang Lis Seng Tepi (Gable Trim)
+      const lisKiri = new THREE.Mesh(new THREE.BoxGeometry(26.4, 0.18, 0.03), MATS.galvanis);
+      lisKiri.position.set(0, 3.01, -6.81);
+      lisKiri.userData = {
+        layerId: 'atap',
+        basePos: lisKiri.position.clone(),
+        title: "Lisplang Seng Galvalum Sayap Kiri",
+        desc: "Flashing lisplang tepi ujung terluar atap sayap kiri.",
+        matName: "Plat Galvalum Lisplang"
+      };
+
+      const lisKanan = new THREE.Mesh(new THREE.BoxGeometry(26.4, 0.18, 0.03), MATS.galvanis);
+      lisKanan.position.set(0, 3.01, 6.81);
+      lisKanan.userData = {
+        layerId: 'atap',
+        basePos: lisKanan.position.clone(),
+        title: "Lisplang Seng Galvalum Sayap Kanan",
+        desc: "Flashing lisplang tepi ujung terluar atap sayap kanan.",
+        matName: "Plat Galvalum Lisplang"
+      };
 
       layerGroups['atap'] = new THREE.Group();
-      layerGroups['atap'].add(roofKiri, roofKanan, roofMonitorKiri, roofMonitorKanan);
-      layerGroups['atap'].visible = false; // default off as in ruby script to inspect trusses
+      layerGroups['atap'].add(roofKiri, roofKanan, roofMonitorKiri, roofMonitorKanan, nokMesh, lisKiri, lisKanan);
+      layerGroups['atap'].visible = true; // Set default visible true
       scene.add(layerGroups['atap']);
     }
 
@@ -975,7 +1106,14 @@
             layerGroups[layerId].visible = e.target.checked;
           }
           if (layerId === 'atap') {
-            document.getElementById('roof-label').textContent = e.target.checked ? 'Atap: Tutup' : 'Atap: Buka';
+            document.getElementById('roof-label').textContent = e.target.checked ? 'Atap: Terpasang' : 'Atap: Terbuka';
+            const btnRoof = document.getElementById('btn-toggle-roof');
+            if (btnRoof) {
+              btnRoof.classList.toggle('text-emerald-300', e.target.checked);
+              btnRoof.classList.toggle('text-amber-300', !e.target.checked);
+              btnRoof.classList.toggle('border-emerald-500/30', e.target.checked);
+              btnRoof.classList.toggle('border-amber-500/30', !e.target.checked);
+            }
           }
         });
       });
@@ -987,7 +1125,12 @@
           const lId = input.dataset.layer;
           if (layerGroups[lId]) layerGroups[lId].visible = true;
         });
-        document.getElementById('roof-label').textContent = 'Atap: Tutup';
+        document.getElementById('roof-label').textContent = 'Atap: Terpasang';
+        const btnRoof = document.getElementById('btn-toggle-roof');
+        if (btnRoof) {
+          btnRoof.classList.add('text-emerald-300', 'border-emerald-500/30');
+          btnRoof.classList.remove('text-amber-300', 'border-amber-500/30');
+        }
       });
     }
 
@@ -1020,7 +1163,11 @@
           atapGroup.visible = !atapGroup.visible;
           const chk = document.querySelector('input[data-layer="atap"]');
           if (chk) chk.checked = atapGroup.visible;
-          document.getElementById('roof-label').textContent = atapGroup.visible ? 'Atap: Tutup' : 'Atap: Buka';
+          document.getElementById('roof-label').textContent = atapGroup.visible ? 'Atap: Terpasang' : 'Atap: Terbuka';
+          btnRoof.classList.toggle('text-emerald-300', atapGroup.visible);
+          btnRoof.classList.toggle('text-amber-300', !atapGroup.visible);
+          btnRoof.classList.toggle('border-emerald-500/30', atapGroup.visible);
+          btnRoof.classList.toggle('border-amber-500/30', !atapGroup.visible);
         }
       });
 
@@ -1032,9 +1179,59 @@
       // Exploded View Slider
       const sliderExploded = document.getElementById('slider-exploded');
       sliderExploded.addEventListener('input', (e) => {
-        const val = parseInt(e.target.value) / 100;
+        isExplodeAutoPlaying = false;
+        updateAutoPlayBtn();
+        targetExploded = parseInt(e.target.value) / 100;
         document.getElementById('exploded-val').textContent = `${e.target.value}%`;
-        applyExplodedView(val);
+      });
+
+      // Exploded Preset Buttons (0%, 35%, 70%, 100%)
+      document.querySelectorAll('.btn-explode-preset').forEach(btn => {
+        btn.addEventListener('click', () => {
+          isExplodeAutoPlaying = false;
+          updateAutoPlayBtn();
+          const pct = parseInt(btn.dataset.explodePct);
+          targetExploded = pct / 100;
+          sliderExploded.value = pct;
+          document.getElementById('exploded-val').textContent = `${pct}%`;
+        });
+      });
+
+      // Exploded Auto-Play Loop Toggle
+      const btnAuto = document.getElementById('btn-explode-autoplay');
+      btnAuto.addEventListener('click', () => {
+        isExplodeAutoPlaying = !isExplodeAutoPlaying;
+        updateAutoPlayBtn();
+      });
+
+      function updateAutoPlayBtn() {
+        const icon = document.getElementById('autoplay-icon');
+        const txt = document.getElementById('autoplay-text');
+        if (icon) icon.className = isExplodeAutoPlaying ? 'fa-solid fa-pause text-[10px]' : 'fa-solid fa-play text-[10px]';
+        if (txt) txt.textContent = isExplodeAutoPlaying ? 'Pause' : 'Auto';
+        if (btnAuto) {
+          btnAuto.classList.toggle('bg-amber-500/20', isExplodeAutoPlaying);
+          btnAuto.classList.toggle('text-amber-300', isExplodeAutoPlaying);
+          btnAuto.classList.toggle('border-amber-500/40', isExplodeAutoPlaying);
+        }
+      }
+
+      // Explode Mode Switcher
+      const btnRadial = document.getElementById('btn-explode-mode-radial');
+      const btnVertical = document.getElementById('btn-explode-mode-vertical');
+
+      btnRadial.addEventListener('click', () => {
+        explodeMode = 'radial';
+        btnRadial.className = 'px-2 py-1 rounded-lg font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition flex items-center justify-center gap-1';
+        btnVertical.className = 'px-2 py-1 rounded-lg font-medium text-slate-400 hover:text-slate-200 border border-transparent transition flex items-center justify-center gap-1';
+        applyExplodedView(currentExploded);
+      });
+
+      btnVertical.addEventListener('click', () => {
+        explodeMode = 'vertical';
+        btnVertical.className = 'px-2 py-1 rounded-lg font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition flex items-center justify-center gap-1';
+        btnRadial.className = 'px-2 py-1 rounded-lg font-medium text-slate-400 hover:text-slate-200 border border-transparent transition flex items-center justify-center gap-1';
+        applyExplodedView(currentExploded);
       });
 
       // Mobile Sidebar Toggle
@@ -1114,34 +1311,122 @@
     }
 
     function applyExplodedView(factor) {
-      // Vertical translation offsets based on layer classification
-      const layerElevationOffsets = {
-        'pondasi': 0,
-        'got': 0,
-        'papan_got': 0.8 * factor,
-        'tiang': 1.0 * factor,
-        'dinding_k': 1.5 * factor,
-        'rak': 1.8 * factor,
-        'slat': 2.4 * factor,
-        'pintu_galv': 2.8 * factor,
-        'talang_pakan': 3.2 * factor,
-        'pipa_nipple': 3.6 * factor,
-        'blower': 1.2 * factor,
-        'kubota': 0.5 * factor,
-        'kudakuda': 5.0 * factor,
-        'skur': 5.2 * factor,
-        'gording': 6.5 * factor,
-        'atap': 8.0 * factor
-      };
+      explodedFactor = factor;
+      const isRadial = (explodeMode === 'radial');
 
       Object.entries(layerGroups).forEach(([layerId, group]) => {
-        const offset = layerElevationOffsets[layerId] || 0;
         group.children.forEach(child => {
-          if (child.userData.basePos) {
-            child.position.y = child.userData.basePos.y + offset;
+          if (!child.userData.basePos) return;
+          const base = child.userData.basePos;
+
+          let targetX = base.x;
+          let targetY = base.y;
+          let targetZ = base.z;
+
+          switch (layerId) {
+            case 'atap':
+              targetY = base.y + 8.6 * factor;
+              if (isRadial) {
+                if (base.z < -0.1) targetZ = base.z - 1.2 * factor;
+                else if (base.z > 0.1) targetZ = base.z + 1.2 * factor;
+              }
+              break;
+
+            case 'gording':
+              targetY = base.y + 6.8 * factor;
+              if (isRadial) {
+                if (base.z < -0.1) targetZ = base.z - 0.8 * factor;
+                else if (base.z > 0.1) targetZ = base.z + 0.8 * factor;
+              }
+              break;
+
+            case 'kudakuda':
+            case 'skur':
+              targetY = base.y + 5.0 * factor;
+              break;
+
+            case 'pipa_nipple':
+              targetY = base.y + 3.6 * factor;
+              if (isRadial) {
+                targetZ = base.z + (base.z > 0 ? 0.35 : -0.35) * factor;
+              }
+              break;
+
+            case 'talang_pakan':
+              targetY = base.y + 3.1 * factor;
+              if (isRadial) {
+                targetZ = base.z + (base.z > 0 ? 0.45 : -0.45) * factor;
+              }
+              break;
+
+            case 'pintu_galv':
+              targetY = base.y + 2.7 * factor;
+              if (isRadial) {
+                targetZ = base.z + (base.z > 0 ? 0.55 : -0.55) * factor;
+              }
+              break;
+
+            case 'slat':
+              targetY = base.y + 2.2 * factor;
+              break;
+
+            case 'rak':
+              targetY = base.y + 1.6 * factor;
+              break;
+
+            case 'dinding_k':
+              if (isRadial) {
+                if (base.z < -4.0) {
+                  targetZ = base.z - 2.8 * factor;
+                  targetY = base.y + 0.4 * factor;
+                } else if (base.z > 4.0) {
+                  targetZ = base.z + 2.8 * factor;
+                  targetY = base.y + 0.4 * factor;
+                }
+                if (base.x > 11.0) targetX = base.x + 2.4 * factor;
+                if (base.x < -11.0) targetX = base.x - 2.4 * factor;
+              } else {
+                targetY = base.y + 1.2 * factor;
+              }
+              break;
+
+            case 'blower':
+              targetX = base.x - 3.8 * factor;
+              targetY = base.y + 0.5 * factor;
+              break;
+
+            case 'kubota':
+              targetX = base.x - 2.0 * factor;
+              targetY = base.y + 0.3 * factor;
+              break;
+
+            case 'tiang':
+              targetY = base.y + 0.7 * factor;
+              break;
+
+            case 'papan_got':
+              targetY = base.y + 0.4 * factor;
+              break;
+
+            case 'got':
+            case 'pondasi':
+              targetY = base.y;
+              break;
           }
+
+          child.position.set(targetX, targetY, targetZ);
         });
       });
+
+      // Update Live HUD
+      const hudRoof = document.getElementById('hud-roof-disp');
+      const hudRadial = document.getElementById('hud-radial-disp');
+      const explodeHud = document.getElementById('explode-hud');
+      if (hudRoof && hudRadial && explodeHud) {
+        hudRoof.textContent = `+${(8.6 * factor).toFixed(1)}m`;
+        hudRadial.textContent = `${(isRadial ? 2.8 * factor : 0.0).toFixed(1)}m`;
+        explodeHud.classList.toggle('hidden', factor < 0.01);
+      }
     }
 
     function onWindowResize() {
@@ -1160,6 +1445,21 @@
         propellerMeshes.forEach(prop => {
           prop.rotation.x += 0.28; // High speed RPM
         });
+      }
+
+      // Smooth Exploded View Interpolation & Auto-Play Loop
+      if (isExplodeAutoPlaying) {
+        autoPlayTimer += 0.016;
+        targetExploded = (Math.sin(autoPlayTimer) + 1) / 2;
+        const slider = document.getElementById('slider-exploded');
+        if (slider) slider.value = Math.round(targetExploded * 100);
+        const lbl = document.getElementById('exploded-val');
+        if (lbl) lbl.textContent = `${Math.round(targetExploded * 100)}%`;
+      }
+
+      if (Math.abs(currentExploded - targetExploded) > 0.0005) {
+        currentExploded += (targetExploded - currentExploded) * 0.12;
+        applyExplodedView(currentExploded);
       }
 
       controls.update();
