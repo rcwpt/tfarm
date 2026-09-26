@@ -230,8 +230,47 @@ export class DimensionManager {
         const boxHelper = new THREE.Box3Helper(box, 0x00e5ff);
         this.groups.selected.add(boxHelper);
 
+        const min = box.min;
+        const max = box.max;
+        const center = box.getCenter(new THREE.Vector3());
+        const dx = Math.max(0.01, max.x - min.x);
+        const dy = Math.max(0.01, max.y - min.y);
+        const dz = Math.max(0.01, max.z - min.z);
+
+        const meta = (mesh.userData && mesh.userData.metadata) ? mesh.userData.metadata : { name: mesh.name || "Komponen Terpilih" };
+        const compName = meta.name || mesh.name || "Komponen Terpilih";
+
+        // 1. Primary Dimension Callout Badge directly above component
+        const badgeText = `${compName} | P: ${dx.toFixed(2)}m × L: ${dy.toFixed(2)}m × T: ${dz.toFixed(2)}m (Z=+${min.z.toFixed(2)}m)`;
+        this.createOverlayLabel(
+            new THREE.Vector3(center.x, center.y, max.z + 0.15),
+            badgeText,
+            'selected',
+            10,
+            'tag-selected-dim'
+        );
+
+        // 2. Datum Leader to Ground if component is elevated above floor
+        if (min.z > 0.15) {
+            const datumGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(center.x, center.y, 0),
+                new THREE.Vector3(center.x, center.y, min.z)
+            ]);
+            const datumLine = new THREE.Line(datumGeo, this.lineMatLeader);
+            this.groups.selected.add(datumLine);
+
+            this.createOverlayLabel(
+                new THREE.Vector3(center.x, center.y, min.z * 0.5),
+                `Elevasi Dasar: +${min.z.toFixed(2)}m dari tanah ±0.00`,
+                'selected',
+                8,
+                'tag-selected-datum'
+            );
+        }
+
         this.visibility.selected = true;
         this.groups.selected.visible = true;
+        this.updateLabels();
     }
 
     clearObjectDimensions() {

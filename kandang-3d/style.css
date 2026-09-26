@@ -510,7 +510,10 @@ code {
 }
 
 .cad-dimension-tag {
-    background: rgba(14, 17, 23, 0.9);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(14, 17, 23, 0.92);
     border: 1px solid var(--accent-cyan);
     color: #fff;
     font-family: var(--font-mono);
@@ -524,6 +527,7 @@ code {
     transform: translate(-50%, -50%);
     transition: opacity 0.2s;
     user-select: none;
+    z-index: 10;
 }
 
 .cad-dimension-tag.tag-selected-dim {

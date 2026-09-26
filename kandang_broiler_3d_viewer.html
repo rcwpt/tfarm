@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulasi 3D Kandang Broiler 26x12m (3 Susun, 7.000 Ekor)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+    }
+    #canvas-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      outline: none;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.5);
+      border-radius: 4px;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-screen w-screen overflow-hidden flex flex-col">
+
+  <header class="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 py-2.5 glass-panel border-b border-slate-700/50">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
+        <i class="fa-solid fa-warehouse text-slate-950 text-lg"></i>
+      </div>
+      <div>
+        <h1 class="text-sm md:text-base font-bold text-white flex items-center gap-2">
+          Kandang Broiler 26x12M
+          <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">3 Susun (7.000 Ekor)</span>
+        </h1>
+        <p class="text-xs text-slate-400">SketchUp 3D Ruby Automation Visualizer & Inspector</p>
+      </div>
+    </div>
+
+    <!-- Quick action tooltips & buttons -->
+    <div class="flex items-center gap-2">
+      <button id="btn-toggle-fans" class="px-3 py-1.5 rounded-lg text-xs font-medium glass-panel border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 transition flex items-center gap-1.5 shadow">
+        <i class="fa-solid fa-fan animate-spin text-xs" style="animation-duration: 3s;"></i>
+        <span class="hidden sm:inline">Putar Fan</span>
+      </button>
+      <button id="btn-toggle-roof" class="px-3 py-1.5 rounded-lg text-xs font-medium glass-panel border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 transition flex items-center gap-1.5 shadow">
+        <i class="fa-solid fa-roof text-xs"></i>
+        <span id="roof-label">Atap: Buka</span>
+      </button>
+      <button id="btn-reset-cam" class="p-2 rounded-lg text-xs font-medium glass-panel border border-slate-700 text-slate-300 hover:bg-slate-800 transition" title="Reset Kamera">
+        <i class="fa-solid fa-arrows-rotate"></i>
+      </button>
+      <button id="btn-toggle-layers-ui" class="md:hidden p-2 rounded-lg text-xs glass-panel border border-slate-700 text-slate-200">
+        <i class="fa-solid fa-layer-group"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 3D WebGL Canvas Container -->
+  <div id="canvas-container"></div>
+
+  <aside id="sidebar-layers" class="absolute top-16 left-3 bottom-6 z-10 w-72 max-w-[85vw] glass-panel rounded-2xl p-3 flex flex-col shadow-2xl transition-transform duration-300 custom-scroll overflow-y-auto">
+    <div class="flex items-center justify-between pb-2 border-b border-slate-700/60 mb-2">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-layer-group text-emerald-400 text-sm"></i>
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Layer SketchUp</span>
+      </div>
+      <button id="btn-all-layers" class="text-[11px] text-cyan-400 hover:underline">Semua On</button>
+    </div>
+
+    <!-- Layer toggles list -->
+    <div id="layers-list" class="space-y-1.5 text-xs pr-1">
+      <!-- Dynamic layer checkboxes populated by script -->
+    </div>
+
+    <!-- Structural info panel -->
+    <div class="mt-4 pt-3 border-t border-slate-700/60">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fa-solid fa-circle-info text-amber-400 text-xs"></i>
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Data Struktur Fisik</span>
+      </div>
+      <div class="grid grid-cols-2 gap-1.5 text-[11px] bg-slate-900/60 p-2 rounded-xl border border-slate-800">
+        <div><span class="text-slate-400">Dimensi:</span> <b class="text-white">26 x 12 M</b></div>
+        <div><span class="text-slate-400">Kapasitas:</span> <b class="text-emerald-400">7.000 Ekor</b></div>
+        <div><span class="text-slate-400">Susunan:</span> <b class="text-white">3 Susun Slat</b></div>
+        <div><span class="text-slate-400">Lajur Rak:</span> <b class="text-white">6 Lajur (A-D)</b></div>
+        <div><span class="text-slate-400">Tiang Utama:</span> <b class="text-amber-300">32 Tiang 15x10</b></div>
+        <div><span class="text-slate-400">Kuda-Kuda:</span> <b class="text-white">14 Portal (2m)</b></div>
+        <div><span class="text-slate-400">Blower Fan:</span> <b class="text-cyan-400">6x 50" Box Fan</b></div>
+        <div><span class="text-slate-400">Mesin Diesel:</span> <b class="text-red-400">Kubota 11 HP</b></div>
+      </div>
+    </div>
+
+    <!-- Exploded View slider -->
+    <div class="mt-3 pt-2 border-t border-slate-700/60">
+      <div class="flex justify-between text-[11px] mb-1">
+        <span class="text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-cubes text-blue-400"></i> Ledakan Visual (Exploded)</span>
+        <span id="exploded-val" class="font-mono text-cyan-400">0%</span>
+      </div>
+      <input id="slider-exploded" type="range" min="0" max="100" value="0" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+    </div>
+  </aside>
+
+  <!-- Floating bottom camera viewpoints -->
+  <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 glass-panel rounded-full px-3 py-1.5 flex items-center gap-1.5 border border-slate-700 shadow-xl overflow-x-auto max-w-[95vw]">
+    <span class="text-[11px] text-slate-400 font-semibold px-2 hidden sm:inline"><i class="fa-solid fa-camera mr-1"></i>Sudut:</span>
+    <button data-cam="iso" class="cam-preset-btn px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition">Iso 3D</button>
+    <button data-cam="front" class="cam-preset-btn px-2.5 py-1 rounded-full text-xs font-medium text-slate-300 hover:bg-slate-800 transition">Depan (X=26m)</button>
+    <button data-cam="rear" class="cam-preset-btn px-2.5 py-1 rounded-full text-xs font-medium text-slate-300 hover:bg-slate-800 transition">Blower (X=0m)</button>
+    <button data-cam="side" class="cam-preset-btn px-2.5 py-1 rounded-full text-xs font-medium text-slate-300 hover:bg-slate-800 transition">Samping</button>
+    <button data-cam="top" class="cam-preset-btn px-2.5 py-1 rounded-full text-xs font-medium text-slate-300 hover:bg-slate-800 transition">Atas</button>
+    <button data-cam="aisle" class="cam-preset-btn px-2.5 py-1 rounded-full text-xs font-medium text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition">Lorong Dalam</button>
+  </div>
+
+  <!-- Inspector floating card when clicking elements -->
+  <div id="inspector-card" class="hidden absolute top-16 right-4 z-10 w-80 glass-panel rounded-2xl p-4 shadow-2xl border border-cyan-500/40">
+    <div class="flex items-start justify-between">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-cyan-500/20 text-cyan-400"><i class="fa-solid fa-microscope text-sm"></i></span>
+        <div>
+          <h3 id="inspect-title" class="text-xs font-bold text-white uppercase tracking-wider">Komponen Kandang</h3>
+          <p id="inspect-layer" class="text-[11px] text-cyan-300 font-mono">Layer: 04_Tiang_Komposit</p>
+        </div>
+      </div>
+      <button id="btn-close-inspect" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="inspect-desc" class="mt-3 text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
+      Keterangan komponen detail...
+    </div>
+    <div class="mt-2.5 pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+      <span id="inspect-mat">Material: Kayu Ulin 10x10</span>
+      <span class="text-emerald-400 font-mono font-semibold">Tersinkronisasi SketchUp</span>
+    </div>
+  </div>
+
+  <!-- Instruction badge top right -->
+  <div class="absolute top-16 right-4 hidden md:block text-[11px] text-slate-400 bg-slate-900/70 backdrop-blur px-3 py-1.5 rounded-xl border border-slate-800 pointer-events-none">
+    <i class="fa-solid fa-mouse-pointer text-cyan-400 mr-1.5"></i>Klik elemen 3D untuk inspeksi teknis
+  </div>
+
+  <script>
+    // --- Application Constants & Material Definitions matching SketchUp script ---
+    const SKETCHUP_LAYERS = [
+      { id: 'pondasi', name: '01. Pondasi & Lantai Cor', color: '#cbd5e1', defaultVisible: true, count: 'Lantai + 32 Umpak' },
+      { id: 'got', name: '02. Parit Got Drainase', color: '#64748b', defaultVisible: true, count: '3 Jalur x 25m' },
+      { id: 'papan_got', name: '03. Papan Penutup Got Ulin', color: '#966432', defaultVisible: true, count: '3 Jalur Papan 20cm' },
+      { id: 'tiang', name: '04. Tiang Komposit 15x10', color: '#502d14', defaultVisible: true, count: '32 Unit Kolom' },
+      { id: 'dinding_k', name: '05. Rangka Dinding Vertikal', color: '#af7d4b', defaultVisible: true, count: 'Spasi 30cm & Kusen' },
+      { id: 'rak', name: '06. Rangka Rak 3 Susun', color: '#a06e3c', defaultVisible: true, count: '6 Lajur x 24m' },
+      { id: 'slat', name: '07. Lantai Slat Mesh Hijau', color: '#2ea050', defaultVisible: true, count: '3 Tingkat 24m' },
+      { id: 'pintu_galv', name: '07A. Pintu Galvanis Koloni', color: '#cbd5e1', defaultVisible: true, count: 'Pintu & Selot Kunci' },
+      { id: 'talang_pakan', name: '07B. Talang Pakan Lorong', color: '#f1f5f9', defaultVisible: true, count: 'Profil U Terbuka 24m' },
+      { id: 'pipa_nipple', name: '07C. Pipa Nipple & Regulator', color: '#ef4444', defaultVisible: true, count: 'Nipple 30cm + Cup' },
+      { id: 'kudakuda', name: '08. Kuda-Kuda Atap Monitor', color: '#a06e3c', defaultVisible: true, count: '14 Portal Kuda-Kuda' },
+      { id: 'skur', name: '08B. Skur Penahan 5x10', color: '#8c5a2d', defaultVisible: true, count: 'Bracing Web Struts' },
+      { id: 'gording', name: '09. Gording 5x10 Miring', color: '#be8c50', defaultVisible: true, count: '13 Lajur Canted 16.7°' },
+      { id: 'blower', name: '12. Exhaust Fan Box 50"', color: '#94a3b8', defaultVisible: true, count: '6 Unit Box + 6 Baling' },
+      { id: 'kubota', name: '13. Mesin Kubota & Puli', color: '#dc2626', defaultVisible: true, count: 'Kubota 11 HP + As' },
+      { id: 'atap', name: '14. Atap Spandek (Opsional)', color: '#9bb4cd', defaultVisible: false, count: '88 Lembar 6m + 2m' }
+    ];
+
+    // Three.js State Variables
+    let scene, camera, renderer, controls;
+    let container = document.getElementById('canvas-container');
+    let layerGroups = {};
+    let propellerMeshes = [];
+    let isFanSpinning = true;
+    let explodedFactor = 0;
+    let raycaster = new THREE.Raycaster();
+    let mouse = new THREE.Vector2();
+    let hoverMesh = null;
+    let originalMaterials = new Map();
+
+    function initScene() {
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x090d16);
+      scene.fog = new THREE.FogExp2(0x090d16, 0.012);
+
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+      setCameraPreset('iso');
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      container.appendChild(renderer.domElement);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2 + 0.02; // Don't go deep under ground
+      controls.minDistance = 2;
+      controls.maxDistance = 80;
+      controls.target.set(0, 2.5, 0);
+
+      // Lights
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+      scene.add(ambientLight);
+
+      const sunLight = new THREE.DirectionalLight(0xfff7ed, 1.25);
+      sunLight.position.set(25, 45, 20);
+      sunLight.castShadow = true;
+      sunLight.shadow.mapSize.width = 2048;
+      sunLight.shadow.mapSize.height = 2048;
+      sunLight.shadow.camera.near = 0.5;
+      sunLight.shadow.camera.far = 120;
+      const d = 28;
+      sunLight.shadow.camera.left = -d;
+      sunLight.shadow.camera.right = d;
+      sunLight.shadow.camera.top = d;
+      sunLight.shadow.camera.bottom = -d;
+      sunLight.shadow.bias = -0.0005;
+      scene.add(sunLight);
+
+      const fillLight = new THREE.DirectionalLight(0x93c5fd, 0.4);
+      fillLight.position.set(-25, 20, -20);
+      scene.add(fillLight);
+
+      // Architectural Ground Grid
+      const groundGeo = new THREE.PlaneGeometry(120, 120);
+      const groundMat = new THREE.MeshStandardMaterial({
+        color: 0x0f172a,
+        roughness: 0.9,
+        metalness: 0.1
+      });
+      const ground = new THREE.Mesh(groundGeo, groundMat);
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.y = -0.45;
+      ground.receiveShadow = true;
+      scene.add(ground);
+
+      const grid = new THREE.GridHelper(100, 50, 0x38bdf8, 0x1e293b);
+      grid.position.y = -0.44;
+      scene.add(grid);
+
+      // Coordinate converter helper:
+      // SketchUp Model Center: X goes 0..26 (Length), Y goes 0..12 (Width), Z goes Up (Height)
+      // ThreeJS: X = suX - 13.0, Y = suZ, Z = suY - 6.0
+    }
+
+    // Material library matching exact colors & transparency of the Ruby script
+    const MATS = {
+      beton: new THREE.MeshStandardMaterial({ color: 0xd7dce1, roughness: 0.85, metalness: 0.05 }),
+      got: new THREE.MeshStandardMaterial({ color: 0x64696e, roughness: 0.9, metalness: 0.1 }),
+      papan_got: new THREE.MeshStandardMaterial({ color: 0x966432, roughness: 0.7, metalness: 0.1 }),
+      kayu_besi: new THREE.MeshStandardMaterial({ color: 0x502d14, roughness: 0.65, metalness: 0.05 }),
+      kayu_kuda: new THREE.MeshStandardMaterial({ color: 0xa06e3c, roughness: 0.7, metalness: 0.05 }),
+      kayu_skur: new THREE.MeshStandardMaterial({ color: 0x8c5a2d, roughness: 0.75, metalness: 0.05 }),
+      kayu_gording: new THREE.MeshStandardMaterial({ color: 0xbe8c50, roughness: 0.6, metalness: 0.05 }),
+      kayu_dinding: new THREE.MeshStandardMaterial({ color: 0xaf7d4b, roughness: 0.7, metalness: 0.05 }),
+      slat: new THREE.MeshStandardMaterial({ color: 0x2ea050, roughness: 0.4, metalness: 0.1, transparent: true, opacity: 0.92 }),
+      galvanis: new THREE.MeshStandardMaterial({ color: 0xcdd2d7, roughness: 0.35, metalness: 0.7 }),
+      talang: new THREE.MeshStandardMaterial({ color: 0xf2f4f7, roughness: 0.3, metalness: 0.1 }),
+      pipa_air: new THREE.MeshStandardMaterial({ color: 0xfafafc, roughness: 0.25, metalness: 0.2 }),
+      nipple: new THREE.MeshStandardMaterial({ color: 0xe11e1e, roughness: 0.3, metalness: 0.4 }),
+      drip_cup: new THREE.MeshStandardMaterial({ color: 0xf5be23, roughness: 0.4, metalness: 0.2 }),
+      box_fan: new THREE.MeshStandardMaterial({ color: 0xb4b9be, roughness: 0.4, metalness: 0.6 }),
+      louver: new THREE.MeshStandardMaterial({ color: 0x969ba0, roughness: 0.5, metalness: 0.5 }),
+      blade: new THREE.MeshStandardMaterial({ color: 0xdce1e6, roughness: 0.2, metalness: 0.85 }),
+      motor: new THREE.MeshStandardMaterial({ color: 0x323c46, roughness: 0.6, metalness: 0.4 }),
+      diesel: new THREE.MeshStandardMaterial({ color: 0xd72828, roughness: 0.4, metalness: 0.3 }),
+      puli: new THREE.MeshStandardMaterial({ color: 0x282828, roughness: 0.5, metalness: 0.8 }),
+      spandek: new THREE.MeshStandardMaterial({ color: 0x9bb4cd, roughness: 0.35, metalness: 0.65, side: THREE.DoubleSide })
+    };
+
+    // Helper: Add solid box matching SketchUp Ruby logic:
+    // Ruby: add_solid_box(parent, x, y, z, w, d, h, material, layer, name)
+    // Here: X is length, Y is width, Z is height
+    function addBox(layerId, suX, suY, suZ, w, d, h, mat, info = {}) {
+      const geo = new THREE.BoxGeometry(w, h, d);
+      const mesh = new THREE.Mesh(geo, mat);
+      
+      // Calculate center in ThreeJS coords:
+      const cx = (suX + w / 2) - 13.0;
+      const cy = (suZ + h / 2);
+      const cz = (suY + d / 2) - 6.0;
+
+      mesh.position.set(cx, cy, cz);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.userData = {
+        layerId: layerId,
+        basePos: new THREE.Vector3(cx, cy, cz),
+        title: info.title || 'Komponen Kayu/Struktur',
+        desc: info.desc || `Dimensi: ${w.toFixed(2)}m x ${d.toFixed(2)}m x ${h.toFixed(2)}m`,
+        matName: info.matName || 'Standar Spesifikasi'
+      };
+
+      if (!layerGroups[layerId]) {
+        layerGroups[layerId] = new THREE.Group();
+        scene.add(layerGroups[layerId]);
+      }
+      layerGroups[layerId].add(mesh);
+      return mesh;
+    }
+
+    // Helper: Sloped Beam matching Ruby add_sloped_beam
+    function addSlopedBeam(layerId, suX, w_x, y1, z1, y2, z2, depth, mat, info = {}) {
+      const dy = y2 - y1;
+      const dz = z2 - z1;
+      const length = Math.sqrt(dy * dy + dz * dz);
+      if (length < 0.001) return;
+
+      const geo = new THREE.BoxGeometry(w_x, depth, length);
+      const mesh = new THREE.Mesh(geo, mat);
+
+      const midX = (suX + w_x / 2) - 13.0;
+      const midY = (z1 + z2) / 2 + depth / 2;
+      const midZ = (y1 + y2) / 2 - 6.0;
+
+      mesh.position.set(midX, midY, midZ);
+      const angle = Math.atan2(dz, dy);
+      mesh.rotation.x = -angle;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.userData = {
+        layerId: layerId,
+        basePos: new THREE.Vector3(midX, midY, midZ),
+        title: info.title || 'Balok Miring / Kuda-Kuda',
+        desc: info.desc || `Panjang: ${length.toFixed(2)}m, Kemiringan: ${(angle * 180 / Math.PI).toFixed(1)}°`,
+        matName: info.matName || 'Kayu Kuda-Kuda'
+      };
+
+      if (!layerGroups[layerId]) {
+        layerGroups[layerId] = new THREE.Group();
+        scene.add(layerGroups[layerId]);
+      }
+      layerGroups[layerId].add(mesh);
+      return mesh;
+    }
+
+    function buildPondasiDanGot() {
+      // 1. Lantai Cor Beton
+      addBox('pondasi', 0.0, 0.0, 0.0, 26.0, 2.0, 0.03, MATS.beton, {
+        title: "Lantai Cor Beton (Utara)",
+        desc: "Lantai beton tebal 3cm sisi utara kandang untuk penopang rak dan lorong kontrol.",
+        matName: "Beton Lantai Cor K-225"
+      });
+      addBox('pondasi', 0.0, 2.2, 0.0, 26.0, 3.8, 0.03, MATS.beton, {
+        title: "Lantai Cor Beton (Lorong Aisle 1-2)",
+        desc: "Lantai kerja beton cor semen halus, rata dan mudah disemprot saat sanitasi.",
+        matName: "Beton Lantai Cor K-225"
+      });
+      addBox('pondasi', 0.0, 6.2, 0.0, 26.0, 3.8, 0.03, MATS.beton, {
+        title: "Lantai Cor Beton (Lorong Aisle 2-3)",
+        desc: "Lantai kerja beton cor semen halus penghubung blok kandang tengah.",
+        matName: "Beton Lantai Cor K-225"
+      });
+      addBox('pondasi', 0.0, 10.2, 0.0, 26.0, 1.8, 0.03, MATS.beton, {
+        title: "Lantai Cor Beton (Selatan)",
+        desc: "Lantai cor semen sisi selatan kandang dekat dinding tirai.",
+        matName: "Beton Lantai Cor K-225"
+      });
+
+      // 2. Parit Got Drainase & Papan Penutup Kayu Ulin
+      const gotPositions = [2.0, 6.0, 10.0];
+      gotPositions.forEach((gy, gi) => {
+        // Dinding kiri & kanan got
+        addBox('got', 1.0, gy - 0.05, -0.25, 25.0, 0.05, 0.25, MATS.beton, {
+          title: `Dinding Kiri Parit Got #${gi+1}`,
+          desc: "Dinding beton tebal 5cm kedalaman bersih got 25cm untuk drainase pembuangan.",
+          matName: "Beton Cor Kedap Air"
+        });
+        addBox('got', 1.0, gy + 0.20, -0.25, 25.0, 0.05, 0.25, MATS.beton, {
+          title: `Dinding Kanan Parit Got #${gi+1}`,
+          desc: "Dinding penahan parit got drainase sisi kanan.",
+          matName: "Beton Cor Kedap Air"
+        });
+        // Dasar got
+        addBox('got', 1.0, gy, -0.25, 25.0, 0.20, 0.05, MATS.got, {
+          title: `Dasar Saluran Parit Got #${gi+1}`,
+          desc: "Dasar parit got semen licin dengan kemiringan mengalir ke kolam sedimentasi.",
+          matName: "Semen Acian Halus"
+        });
+        // Ujung-ujung dinding got
+        addBox('got', 0.95, gy - 0.05, -0.25, 0.05, 0.30, 0.25, MATS.beton);
+        addBox('got', 26.0, gy - 0.05, -0.25, 0.05, 0.30, 0.25, MATS.beton);
+
+        // Papan Penutup Kayu Ulin Removable
+        addBox('papan_got', 1.0, gy, 0.005, 25.0, 0.20, 0.025, MATS.papan_got, {
+          title: `Papan Kayu Ulin Penutup Got #${gi+1}`,
+          desc: "Papan kayu ulin tebal 2.5cm removable (bisa diangkat) untuk pembersihan parit got berkala saat panen.",
+          matName: "Kayu Besi Ulin Tahan Air"
+        });
+      });
+    }
+
+    function buildTiangKomposit() {
+      const x_coords = [0.0, 2.0, 6.0, 10.0, 14.0, 18.0, 22.0, 26.0];
+      const y_coords = [0.0, 4.0, 8.0, 12.0];
+      let tiangIdx = 1;
+
+      x_coords.forEach((x, r_idx) => {
+        y_coords.forEach((y, c_idx) => {
+          let px = (x === 0.0) ? 0.00 : (x === 26.0 ? 25.85 : x - 0.075);
+          let py = (c_idx === 0) ? 0.00 : (c_idx === 3 ? 11.90 : y - 0.05);
+
+          // 1. Pondasi Umpak Beton Bertulang
+          addBox('pondasi', px - 0.075, py - 0.10, -0.40, 0.30, 0.30, 0.40, MATS.beton, {
+            title: `Pondasi Umpak Cor Tiang #${tiangIdx}`,
+            desc: "Umpak beton cor bertulang 30x30x40 cm angkur besi untuk tumpuan kokoh tiang.",
+            matName: "Beton Cor Bertulang K-250"
+          });
+
+          // 2 & 3. Bilah Luar 1 & 2: Kayu Besi 5x10 x 2.97m
+          addBox('tiang', px, py, 0.03, 0.05, 0.10, 2.97, MATS.kayu_besi, {
+            title: `Tiang Komposit #${tiangIdx} (Bilah Luar 1 - Kayu Ulin)`,
+            desc: "Bilah kayu besi/ulin 5x10cm sistem komposit ganda anti rayap dan jamur amonia.",
+            matName: "Kayu Besi Ulin 5x10"
+          });
+          addBox('tiang', px + 0.10, py, 0.03, 0.05, 0.10, 2.97, MATS.kayu_besi, {
+            title: `Tiang Komposit #${tiangIdx} (Bilah Luar 2 - Kayu Ulin)`,
+            desc: "Bilah kayu besi/ulin 5x10cm penjepit sisi muka.",
+            matName: "Kayu Besi Ulin 5x10"
+          });
+
+          // 4. Spacer Jepitan Tengah
+          addBox('tiang', px + 0.05, py, 0.03, 0.05, 0.10, 0.20, MATS.kayu_kuda, {
+            title: `Spacer Jepit Bawah Tiang #${tiangIdx}`,
+            desc: "Blok spacer kayu jepit 5x10 cm tinggi 20 cm.",
+            matName: "Kayu Kelas II (Merah/Putih)"
+          });
+          addBox('tiang', px + 0.05, py, 1.40, 0.05, 0.10, 0.20, MATS.kayu_kuda, {
+            title: `Spacer Jepit Tengah Tiang #${tiangIdx}`,
+            desc: "Blok spacer kayu jepit tengah tiang komposit.",
+            matName: "Kayu Kelas II"
+          });
+
+          // 4c. Peninggi Tiang Kolom Dalam (B & C) untuk atap monitor
+          if (c_idx === 0 || c_idx === 3) {
+            addBox('tiang', px + 0.05, py, 2.80, 0.05, 0.10, 0.20, MATS.kayu_kuda);
+          } else {
+            addBox('tiang', px + 0.05, py, 2.80, 0.05, 0.10, 1.50, MATS.kayu_kuda, {
+              title: `Tiang Peninggi Kap Atas Monitor (Tiang #${tiangIdx})`,
+              desc: "Tiang kayu 5x10 menjulur ke atas hingga Z=4.30m menopang kap atap monitor ventilasi.",
+              matName: "Kayu Kelas II 5x10"
+            });
+          }
+          tiangIdx++;
+        });
+      });
+    }
+
+    function buildRangkaDinding() {
+      // Dinding Vertikal Utara (Y ~ 0)
+      for (let i = 0; i <= 86; i++) {
+        let wx = i * 0.30;
+        if (wx > 26.0) continue;
+        let px = (wx >= 25.94) ? 25.94 : wx;
+        addBox('dinding_k', px, -0.015, 0.03, 0.06, 0.015, 2.97, MATS.kayu_dinding, {
+          title: "Rangka Dinding Vertikal 1.5x6cm",
+          desc: "Kaso papan vertikal spasi 30 cm sebagai penahan terpal tirai luar.",
+          matName: "Kayu Papan 1.5x6"
+        });
+      }
+      addBox('dinding_k', 0.0, -0.03, 0.10, 26.0, 0.03, 0.05, MATS.kayu_dinding);
+      addBox('dinding_k', 0.0, -0.03, 1.50, 26.0, 0.03, 0.05, MATS.kayu_dinding);
+      addBox('dinding_k', 0.0, -0.03, 2.95, 26.0, 0.03, 0.05, MATS.kayu_dinding);
+
+      // Dinding Vertikal Selatan (Y ~ 12)
+      for (let i = 0; i <= 86; i++) {
+        let wx = i * 0.30;
+        if (wx > 26.0) continue;
+        if ((wx >= 0.0 && wx < 1.0) || (wx > 25.0 && wx <= 26.0)) continue; // door openings
+        let px = (wx >= 25.94) ? 25.94 : wx;
+        addBox('dinding_k', px, 12.00, 0.03, 0.06, 0.015, 2.97, MATS.kayu_dinding);
+      }
+      addBox('dinding_k', 1.0, 12.00, 0.10, 24.0, 0.03, 0.05, MATS.kayu_dinding);
+      addBox('dinding_k', 1.0, 12.00, 1.50, 24.0, 0.03, 0.05, MATS.kayu_dinding);
+      addBox('dinding_k', 1.0, 12.00, 2.95, 24.0, 0.03, 0.05, MATS.kayu_dinding);
+
+      // Kusen Pintu Belakang & Depan
+      addBox('dinding_k', 0.0, 11.95, 0.03, 1.0, 0.05, 2.00, MATS.kayu_dinding, {
+        title: "Kusen Pintu Masuk Belakang",
+        desc: "Pintu akses personil dan pemantauan kandang bagian belakang (X=0 s.d 1.0m).",
+        matName: "Kayu Kusen 5x10"
+      });
+      addBox('dinding_k', 25.0, 11.95, 0.03, 1.0, 0.05, 2.00, MATS.kayu_dinding, {
+        title: "Kusen Pintu Masuk Depan",
+        desc: "Pintu utama inlet dan penanganan DOC/panen (X=25.0 s.d 26.0m).",
+        matName: "Kayu Kusen 5x10"
+      });
+    }
+
+    function buildRakSlatDanPeralatan() {
+      const lajur_configs = [
+        { name: "Rak A (Utara)", y_s: 0.00, y_e: 1.50, aisle_y: 1.50, sign: 1, yn: 0.75 },
+        { name: "Rak B1 (Tengah-Kiri)", y_s: 2.50, y_e: 4.00, aisle_y: 2.50, sign: -1, yn: 3.25 },
+        { name: "Rak B2 (Tengah-Kanan)", y_s: 4.00, y_e: 5.50, aisle_y: 5.50, sign: 1, yn: 4.75 },
+        { name: "Rak C1 (Tengah-Kiri)", y_s: 6.50, y_e: 8.00, aisle_y: 6.50, sign: -1, yn: 7.25 },
+        { name: "Rak C2 (Tengah-Kanan)", y_s: 8.00, y_e: 9.50, aisle_y: 9.50, sign: 1, yn: 8.75 },
+        { name: "Rak D (Selatan)", y_s: 10.50, y_e: 12.00, aisle_y: 10.50, sign: -1, yn: 11.25 }
+      ];
+
+      const layers_elev = [
+        { num: 1, z: 0.25, type: 'ayam', label: "Lantai Ayam Susun 1" },
+        { num: 2, z: 0.95, type: 'kotoran', label: "Alas Kotoran Susun 2" },
+        { num: 3, z: 1.20, type: 'ayam', label: "Lantai Ayam Susun 2" },
+        { num: 4, z: 1.90, type: 'kotoran', label: "Alas Kotoran Susun 3" },
+        { num: 5, z: 2.15, type: 'ayam', label: "Lantai Ayam Susun 3" }
+      ];
+
+      const x_rak_posts = [];
+      for (let i = 0; i <= 12; i++) x_rak_posts.push(1.0 + i * 2.0);
+
+      lajur_configs.forEach(lajur => {
+        const ys = lajur.y_s;
+        const ye = lajur.y_e;
+        const w = ye - ys;
+
+        // Post-post tiang vertikal rak
+        x_rak_posts.forEach(px => {
+          addBox('rak', px - 0.025, ys, 0.03, 0.05, 0.05, 2.94, MATS.kayu_kuda);
+          addBox('rak', px - 0.025, ye - 0.05, 0.03, 0.05, 0.05, 2.94, MATS.kayu_kuda);
+          layers_elev.forEach(le => {
+            addBox('rak', px - 0.025, ys, le.z, 0.05, w, 0.05, MATS.kayu_kuda);
+          });
+          addBox('rak', px - 0.025, ys, 2.85, 0.05, w, 0.05, MATS.kayu_kuda);
+        });
+
+        // Balok memanjang rangka rak
+        layers_elev.forEach(le => {
+          addBox('rak', 1.0, ys, le.z, 24.0, 0.05, 0.05, MATS.kayu_kuda);
+          addBox('rak', 1.0, ye - 0.05, le.z, 24.0, 0.05, 0.05, MATS.kayu_kuda);
+        });
+
+        // Tiap tingkat rak ayam
+        layers_elev.forEach(le => {
+          // Cross support slats
+          for (let s_idx = 0; s_idx < 10; s_idx++) {
+            let sy = ys + 0.05 + s_idx * 0.15;
+            addBox('rak', 1.0, sy, le.z + 0.05, 24.0, 0.06, 0.015, MATS.kayu_kuda);
+          }
+
+          if (le.type === 'ayam') {
+            // Slat Mesh Plastik Hijau
+            addBox('slat', 1.0, ys, le.z + 0.065, 24.0, w, 0.008, MATS.slat, {
+              title: `${lajur.name} - ${le.label}`,
+              desc: "Lantai slat plastik berpori warna hijau higienis, ramah cakar ayam dan kotoran langsung jatuh ke alas.",
+              matName: "Slat Mesh Polypropylene Hijau"
+            });
+
+            // Pembatas belakang slat
+            let y_back = (lajur.sign === 1 ? ys : ye - 0.005);
+            addBox('slat', 1.0, y_back, le.z + 0.065, 24.0, 0.005, 0.50, MATS.slat);
+
+            // Pintu Galvanis Koloni Sisi Lorong Aisle
+            let y_aisle = lajur.aisle_y;
+            addBox('pintu_galv', 1.0, y_aisle - 0.01, le.z + 0.065, 24.0, 0.02, 0.02, MATS.galvanis, {
+              title: "Bingkai Pintu Galvanis Koloni",
+              desc: "Bingkai kawat galvanis anti karat untuk penutup koloni per sekat lorong.",
+              matName: "Kawat Galvanis Hot-Dip"
+            });
+            addBox('pintu_galv', 1.0, y_aisle - 0.01, le.z + 0.545, 24.0, 0.02, 0.02, MATS.galvanis);
+
+            // Kisi-kisi tegak kawat pintu
+            for (let wi = 0; wi <= 60; wi++) {
+              let wx = 1.0 + wi * 0.40;
+              if (wx > 25.0) continue;
+              addBox('pintu_galv', wx, y_aisle - 0.003, le.z + 0.065, 0.006, 0.006, 0.48, MATS.galvanis);
+            }
+
+            // Talang Pakan Profil U Sisi Lorong
+            let y_tr = (lajur.sign === 1 ? y_aisle + 0.02 : y_aisle - 0.14);
+            let z_t = le.z + 0.07;
+            addBox('talang_pakan', 1.0, y_tr, z_t, 24.0, 0.12, 0.01, MATS.talang, {
+              title: `Talang Pakan PVC 24M (${lajur.name} Susun ${le.num})`,
+              desc: "Talang pakan menerus sepanjang 24 meter dengan bibir anti-tumpah, kapasitas pakan merata sepanjang lorong.",
+              matName: "PVC Feed Trough Food Grade"
+            });
+            // Dinding luar & bibir talang
+            let y_outer = (lajur.sign === 1 ? y_tr + 0.11 : y_tr);
+            addBox('talang_pakan', 1.0, y_outer, z_t + 0.01, 24.0, 0.01, 0.09, MATS.talang);
+            let y_inner = (lajur.sign === 1 ? y_tr : y_tr + 0.11);
+            addBox('talang_pakan', 1.0, y_inner, z_t + 0.01, 24.0, 0.01, 0.065, MATS.talang);
+
+            // Jalur Pipa Minum Nipple 3/4"
+            let yn = lajur.yn;
+            let zn = le.z + 0.40;
+            for (let seg_i = 0; seg_i <= 5; seg_i++) {
+              let seg_x = 1.0 + seg_i * 4.0;
+              addBox('pipa_nipple', seg_x, yn - 0.013, zn, 4.0, 0.026, 0.026, MATS.pipa_air, {
+                title: "Pipa Air Nipple 3/4 Inchi (Segmen 4M)",
+                desc: "Pipa PVC pipa kotak anti-lumut dengan regulator tekanan untuk aliran air minum konsisten.",
+                matName: "PVC Nipple Pipe 3/4 inch"
+              });
+            }
+
+            // Nipple & Drip Cup setiap 60cm
+            for (let ni = 0; ni <= 39; ni++) {
+              let nx = 1.05 + ni * 0.60;
+              if (nx > 24.95) continue;
+              addBox('pipa_nipple', nx - 0.01, yn - 0.01, zn - 0.03, 0.02, 0.02, 0.03, MATS.nipple, {
+                title: "Nipple Drinker 360 Derajat Merah",
+                desc: "Katup pin stainless steel 360° yang mudah dipatuk ayam dari segala sudut.",
+                matName: "Stainless Steel & ABS Merah"
+              });
+              addBox('pipa_nipple', nx - 0.02, yn - 0.02, zn - 0.06, 0.04, 0.04, 0.015, MATS.drip_cup, {
+                title: "Drip Cup Penampung Tetesan",
+                desc: "Mangkuk kuning untuk menampung percikan air agar kotoran dan slat tetap kering.",
+                matName: "PP Kuning Elastis"
+              });
+            }
+          }
+        });
+      });
+
+      // Pipa Header Distribusi Air & Regulator
+      addBox('pipa_nipple', 25.20, 0.50, 2.85, 0.05, 11.0, 0.05, MATS.box_fan, {
+        title: "Pipa Header Distribusi Air Utama 1-1/4\"",
+        desc: "Pipa induk pembagi aliran air tandon ke 6 lajur kandang broiler.",
+        matName: "Pipa Galvanis / PVC Tekanan Tinggi"
+      });
+      lajur_configs.forEach(lajur => {
+        let yn = lajur.yn;
+        addBox('pipa_nipple', 25.20, yn - 0.015, 0.60, 0.03, 0.03, 2.25, MATS.pipa_air);
+        [0.65, 1.60, 2.55].forEach(zn => {
+          addBox('pipa_nipple', 25.02, yn - 0.06, zn - 0.04, 0.12, 0.12, 0.12, MATS.box_fan, {
+            title: "Water Pressure Regulator",
+            desc: "Pengatur tekanan air nipple lengkap dengan selang indikator bola apung.",
+            matName: "Box Regulator Plastik ABS"
+          });
+          addBox('pipa_nipple', 0.90, yn - 0.02, zn - 0.01, 0.08, 0.04, 0.05, MATS.box_fan, {
+            title: "Flush Valve Pembersih Belakang",
+            desc: "Keran kuras flushing di ujung belakang untuk pengurasan kotoran pipa berkala.",
+            matName: "Ball Valve Kuningan"
+          });
+        });
+      });
+    }
+
+    function buildBlowerDanKubota() {
+      // Penopang struktur exhaust fan belakang
+      [0.0, 4.0, 8.0, 12.0].forEach(by => {
+        let py = (by === 12.0 ? by - 0.10 : by);
+        addBox('blower', -0.45, py, 0.03, 0.05, 0.10, 2.97, MATS.kayu_kuda);
+      });
+      addBox('blower', -0.05, 0.0, 0.80, 0.05, 12.0, 0.05, MATS.kayu_kuda);
+      addBox('blower', -0.45, 0.0, 0.80, 0.05, 12.0, 0.05, MATS.kayu_kuda);
+
+      const blowerList = [
+        { y: 11.0, label: "Blower A 50in Box Fan (Diesel Kinetik)" },
+        { y: 9.0, label: "Blower B 50in Box Fan (Motor Listrik)" },
+        { y: 7.0, label: "Blower C 50in Box Fan (Diesel Kinetik)" },
+        { y: 5.0, label: "Blower D 50in Box Fan (Diesel Kinetik)" },
+        { y: 3.0, label: "Blower E 50in Box Fan (Motor Listrik)" },
+        { y: 1.0, label: "Blower F 50in Box Fan (Diesel Kinetik)" }
+      ];
+
+      blowerList.forEach((bl, idx) => {
+        const cx = (-0.20) - 13.0; // Ruby: -0.40m to 0.0m
+        const cy = 1.50;           // center height
+        const cz = bl.y - 6.0;      // center width
+
+        const fanGroup = new THREE.Group();
+        fanGroup.position.set(cx, cy, cz);
+
+        // 1. Box Frame 50" (1.37 x 1.37 x 0.40 m)
+        const frameBox = new THREE.Mesh(new THREE.BoxGeometry(0.40, 1.37, 1.37), MATS.box_fan);
+        frameBox.castShadow = true;
+        frameBox.receiveShadow = true;
+        fanGroup.add(frameBox);
+
+        // 2. Sirip Louver Belakang (11 Louvers)
+        for (let li = 0; li < 11; li++) {
+          const louverY = -0.6 + (li + 0.5) * (1.2 / 11);
+          const louverMesh = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.02, 1.30), MATS.louver);
+          louverMesh.position.set(-0.21, louverY, 0);
+          louverMesh.rotation.z = Math.PI / 6; // slightly open
+          fanGroup.add(louverMesh);
+        }
+
+        // 3. Central Motor Dinamo Hub
+        const hubMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.20, 16), MATS.motor);
+        hubMesh.rotation.z = Math.PI / 2;
+        hubMesh.position.set(0.05, 0, 0);
+        fanGroup.add(hubMesh);
+
+        // 4. Propeller Group with 6 Stainless Blades
+        const propGroup = new THREE.Group();
+        propGroup.position.set(0.05, 0, 0);
+        for (let bi = 0; bi < 6; bi++) {
+          const angle = (bi / 6) * Math.PI * 2;
+          const bladeGeo = new THREE.BoxGeometry(0.02, 0.48, 0.12);
+          const bladeMesh = new THREE.Mesh(bladeGeo, MATS.blade);
+          bladeMesh.position.set(0, Math.sin(angle) * 0.26, Math.cos(angle) * 0.26);
+          bladeMesh.rotation.x = angle;
+          bladeMesh.rotation.y = 0.22; // pitch angle
+          propGroup.add(bladeMesh);
+        }
+        fanGroup.add(propGroup);
+        propellerMeshes.push(propGroup);
+
+        fanGroup.userData = {
+          layerId: 'blower',
+          basePos: new THREE.Vector3(cx, cy, cz),
+          title: bl.label,
+          desc: "Exhaust Fan 50 Inch Box Galvanis (Kapasitas debit udara ~44.000 CFM). Dilengkapi 11 sirip louver otomatis dan 6 baling stainless steel.",
+          matName: "Baja Galvanis G90 & Baling Stainless Krupp 430"
+        };
+
+        if (!layerGroups['blower']) {
+          layerGroups['blower'] = new THREE.Group();
+          scene.add(layerGroups['blower']);
+        }
+        layerGroups['blower'].add(fanGroup);
+      });
+
+      // Mesin Diesel Kubota & Puli Transmisi
+      addBox('kubota', -1.25, 5.65, 0.03, 0.70, 0.70, 0.75, MATS.diesel, {
+        title: "Mesin Diesel Kubota RD110TTB (11 HP)",
+        desc: "Mesin penggerak darurat sistem kinetik transmisi puli panjang untuk memutar blower saat pemadaman listrik PLN.",
+        matName: "Besi Cor Merah Kubota Diesel"
+      });
+      addBox('kubota', -0.65, 0.80, 0.50, 0.06, 10.4, 0.06, MATS.puli, {
+        title: "As Transmisi Baja & Puli Blower Menerus",
+        desc: "Batang as transmisi mekanikal 10.4 meter penghubung tenaga diesel ke puli exhaust fan.",
+        matName: "Baja Karbon ST-41"
+      });
+    }
+
+    function buildKudaKudaDanGording() {
+      // 14 Portal Kuda-Kuda (tx = 0, 2, 4, ..., 26m)
+      for (let ti = 0; ti <= 13; ti++) {
+        let tx = ti * 2.0;
+        let px = (tx === 26.0) ? tx - 0.05 : tx;
+
+        // Balok Tarik Bawah 12m (Z=3.00, h=0.10)
+        addBox('kudakuda', px, 0.0, 3.00, 0.05, 12.0, 0.10, MATS.kayu_kuda, {
+          title: `Balok Tarik Horizontal 12M (Kuda-Kuda #${ti+1})`,
+          desc: "Balok tarik bentang 12 meter kayu 5x10 cm penyerap gaya tarik horizontal atap.",
+          matName: "Kayu 5x10 Kuda-Kuda"
+        });
+
+        // Kaki Kuda-Kuda Utama (Sayap Kiri: Y -0.80 s.d 6.00, Z 2.86 s.d 4.90)
+        addSlopedBeam('kudakuda', px, 0.05, -0.80, 2.86, 6.00, 4.90, 0.10, MATS.kayu_kuda, {
+          title: "Kaki Kuda Utama Sayap Kiri",
+          desc: "Rafter kemiringan 16.7° sudut atap spandek.",
+          matName: "Kayu 5x10"
+        });
+        // Sayap Kanan: Y 6.00 s.d 12.80, Z 4.90 s.d 2.86
+        addSlopedBeam('kudakuda', px, 0.05, 6.00, 4.90, 12.80, 2.86, 0.10, MATS.kayu_kuda, {
+          title: "Kaki Kuda Utama Sayap Kanan",
+          desc: "Rafter sayap kanan bentang 6 meter.",
+          matName: "Kayu 5x10"
+        });
+
+        // Skur Penahan Luar Overstek
+        addSlopedBeam('skur', px, 0.05, -0.60, 2.92, 0.00, 2.00, 0.10, MATS.kayu_skur);
+        addSlopedBeam('skur', px, 0.05, 12.00, 2.00, 12.60, 2.92, 0.10, MATS.kayu_skur);
+
+        // Tiang Penopang Vertikal Dalam Kuda-Kuda
+        addBox('kudakuda', px, 3.95, 3.10, 0.05, 0.10, 1.20, MATS.kayu_kuda);
+        addBox('kudakuda', px, 7.95, 3.10, 0.05, 0.10, 1.20, MATS.kayu_kuda);
+
+        // Web Diagonal Skur
+        addSlopedBeam('skur', px, 0.05, 0.00, 3.10, 2.00, 3.70, 0.10, MATS.kayu_skur);
+        addSlopedBeam('skur', px, 0.05, 2.00, 3.70, 4.00, 3.10, 0.10, MATS.kayu_skur);
+        addSlopedBeam('skur', px, 0.05, 8.00, 3.10, 10.00, 3.70, 0.10, MATS.kayu_skur);
+        addSlopedBeam('skur', px, 0.05, 10.00, 3.70, 12.00, 3.10, 0.10, MATS.kayu_skur);
+        addSlopedBeam('skur', px, 0.05, 4.00, 3.10, 5.85, 4.80, 0.10, MATS.kayu_skur);
+        addSlopedBeam('skur', px, 0.05, 6.15, 4.80, 8.00, 3.10, 0.10, MATS.kayu_skur);
+
+        // Kuda-Kuda Topi Ventilasi Monitor (Puncak Z=5.76)
+        addBox('kudakuda', px, 4.75, 4.64, 0.05, 0.10, 0.76, MATS.kayu_kuda);
+        addBox('kudakuda', px, 7.15, 4.64, 0.05, 0.10, 0.76, MATS.kayu_kuda);
+        addSlopedBeam('kudakuda', px, 0.05, 4.20, 5.22, 6.00, 5.76, 0.10, MATS.kayu_kuda, {
+          title: "Kaki Kuda Topi Monitor Kiri",
+          desc: "Struktur atap monitor ventilasi udara panas alami.",
+          matName: "Kayu 5x10"
+        });
+        addSlopedBeam('kudakuda', px, 0.05, 6.00, 5.76, 7.80, 5.22, 0.10, MATS.kayu_kuda, {
+          title: "Kaki Kuda Topi Monitor Kanan",
+          desc: "Struktur topi monitor ventilasi atap.",
+          matName: "Kayu 5x10"
+        });
+      }
+
+      // 13 Lajur Gording 5x10 Miring (Canted Purlins 16.7°)
+      // Helper function to build canted gording beam
+      function addCantedGording(y, z, angleDeg, sign, name) {
+        const rad = angleDeg * Math.PI / 180;
+        const depth = 0.05; // 5cm alas
+        const height = 0.10; // 10cm tegak lurus bidang atap
+        const length = 26.0;
+
+        const geo = new THREE.BoxGeometry(length, height, depth);
+        const mesh = new THREE.Mesh(geo, MATS.kayu_gording);
+
+        const cx = 0; // centered in X
+        const cy = z + (height / 2) * Math.cos(rad);
+        const cz = y - 6.0;
+
+        mesh.position.set(cx, cy, cz);
+        mesh.rotation.x = rad * sign;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
+        mesh.userData = {
+          layerId: 'gording',
+          basePos: new THREE.Vector3(cx, cy, cz),
+          title: name,
+          desc: `Gording kayu 5x10 cm miring mengikuti kemiringan atap 16.7°. Alas 5cm menempel pada rafter, tinggi 10cm berdiri tegak lurus atap.`,
+          matName: "Kayu Gording 5x10 Terpilih"
+        };
+
+        if (!layerGroups['gording']) {
+          layerGroups['gording'] = new THREE.Group();
+          scene.add(layerGroups['gording']);
+        }
+        layerGroups['gording'].add(mesh);
+      }
+
+      // Sayap Kiri
+      const sayapKiri = [
+        { y: -0.80, z: 2.96, name: "Gording 1 Lisplang Kiri (5x10 Miring)" },
+        { y: 1.10, z: 3.53, name: "Gording 2 Sayap Kiri (5x10 Miring)" },
+        { y: 3.00, z: 4.10, name: "Gording 3 Sayap Kiri (5x10 Miring)" },
+        { y: 4.80, z: 4.64, name: "Gording 4 Tumpuan Monitor Kiri" },
+        { y: 5.80, z: 4.94, name: "Gording 5 Puncak Sayap Kiri" }
+      ];
+      sayapKiri.forEach(g => addCantedGording(g.y, g.z, 16.7, 1, g.name));
+
+      // Sayap Kanan
+      const sayapKanan = [
+        { y: 6.20, z: 4.94, name: "Gording 6 Puncak Sayap Kanan" },
+        { y: 7.20, z: 4.64, name: "Gording 7 Tumpuan Monitor Kanan" },
+        { y: 9.00, z: 4.10, name: "Gording 8 Sayap Kanan (5x10 Miring)" },
+        { y: 10.90, z: 3.53, name: "Gording 9 Sayap Kanan (5x10 Miring)" },
+        { y: 12.80, z: 2.96, name: "Gording 10 Lisplang Kanan (5x10 Miring)" }
+      ];
+      sayapKanan.forEach(g => addCantedGording(g.y, g.z, 16.7, -1, g.name));
+
+      // Monitor Roof Purlins
+      addCantedGording(4.20, 5.32, 16.7, 1, "Gording 11 Overstek Monitor Kiri");
+      addBox('gording', 0.0, 5.95, 5.86, 26.0, 0.10, 0.05, MATS.kayu_gording, {
+        title: "Gording 12 Puncak Topi Monitor",
+        desc: "Gording nok bubungan puncak topi monitor tertinggi (Z=5.86m).",
+        matName: "Kayu 5x10 Puncak"
+      });
+      addCantedGording(7.80, 5.32, 16.7, -1, "Gording 13 Overstek Monitor Kanan");
+
+      // Optional: Atap Spandek Galvalum Bergelombang
+      buildAtapSpandek();
+    }
+
+    function buildAtapSpandek() {
+      // Sayap Kiri: Panjang miring ~7.1m
+      const roofKiriGeo = new THREE.PlaneGeometry(26.4, 7.15);
+      const roofKiri = new THREE.Mesh(roofKiriGeo, MATS.spandek);
+      roofKiri.position.set(0, 4.05, 2.6 - 6.0);
+      roofKiri.rotation.x = THREE.MathUtils.degToRad(16.7);
+      roofKiri.castShadow = true;
+      roofKiri.receiveShadow = true;
+      roofKiri.userData = {
+        layerId: 'atap',
+        basePos: roofKiri.position.clone(),
+        title: "Atap Spandek Galvalum Sayap Kiri",
+        desc: "88 lembar spandek galvalum gelombang trapesium tebal 0.30mm (kombinasi 6m + 2m overlap).",
+        matName: "Spandek Galvalum AZ-100"
+      };
+
+      // Sayap Kanan
+      const roofKananGeo = new THREE.PlaneGeometry(26.4, 7.15);
+      const roofKanan = new THREE.Mesh(roofKananGeo, MATS.spandek);
+      roofKanan.position.set(0, 4.05, 9.4 - 6.0);
+      roofKanan.rotation.x = -THREE.MathUtils.degToRad(16.7);
+      roofKanan.castShadow = true;
+      roofKanan.receiveShadow = true;
+      roofKanan.userData = {
+        layerId: 'atap',
+        basePos: roofKanan.position.clone(),
+        title: "Atap Spandek Galvalum Sayap Kanan",
+        desc: "Spandek galvalum gelombang sisi sayap kanan.",
+        matName: "Spandek Galvalum AZ-100"
+      };
+
+      // Topi Monitor
+      const roofMonitorKiri = new THREE.Mesh(new THREE.PlaneGeometry(26.4, 2.0), MATS.spandek);
+      roofMonitorKiri.position.set(0, 5.56, 5.1 - 6.0);
+      roofMonitorKiri.rotation.x = THREE.MathUtils.degToRad(16.7);
+
+      const roofMonitorKanan = new THREE.Mesh(new THREE.PlaneGeometry(26.4, 2.0), MATS.spandek);
+      roofMonitorKanan.position.set(0, 5.56, 6.9 - 6.0);
+      roofMonitorKanan.rotation.x = -THREE.MathUtils.degToRad(16.7);
+
+      layerGroups['atap'] = new THREE.Group();
+      layerGroups['atap'].add(roofKiri, roofKanan, roofMonitorKiri, roofMonitorKanan);
+      layerGroups['atap'].visible = false; // default off as in ruby script to inspect trusses
+      scene.add(layerGroups['atap']);
+    }
+
+    function setCameraPreset(mode) {
+      if (!controls) return;
+      controls.target.set(0, 2.2, 0);
+
+      switch (mode) {
+        case 'iso':
+          camera.position.set(24, 18, 22);
+          break;
+        case 'front': // X = +26m (depan)
+          camera.position.set(24, 4, 0);
+          break;
+        case 'rear': // X = -1m (belakang exhaust fans)
+          camera.position.set(-25, 4, 0);
+          break;
+        case 'side': // Y = 12m
+          camera.position.set(0, 5, 24);
+          break;
+        case 'top':
+          camera.position.set(0, 36, 0.1);
+          break;
+        case 'aisle': // Inside central walkway
+          controls.target.set(3, 1.2, 0);
+          camera.position.set(-8, 1.4, 0);
+          break;
+      }
+      controls.update();
+    }
+
+    // Populate Sidebar Layers UI
+    function initLayersUI() {
+      const container = document.getElementById('layers-list');
+      container.innerHTML = '';
+
+      SKETCHUP_LAYERS.forEach(lay => {
+        const item = document.createElement('label');
+        item.className = 'flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/60 cursor-pointer transition';
+
+        const isChecked = lay.defaultVisible ? 'checked' : '';
+        item.innerHTML = `
+          <div class="flex items-center gap-2 overflow-hidden">
+            <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${lay.color};"></span>
+            <span class="truncate text-slate-200">${lay.name}</span>
+          </div>
+          <input type="checkbox" data-layer="${lay.id}" ${isChecked} class="layer-toggle rounded bg-slate-800 border-slate-700 text-cyan-500 focus:ring-0 cursor-pointer">
+        `;
+        container.appendChild(item);
+      });
+
+      // Event listeners for layer checkboxes
+      document.querySelectorAll('.layer-toggle').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const layerId = e.target.dataset.layer;
+          if (layerGroups[layerId]) {
+            layerGroups[layerId].visible = e.target.checked;
+          }
+          if (layerId === 'atap') {
+            document.getElementById('roof-label').textContent = e.target.checked ? 'Atap: Tutup' : 'Atap: Buka';
+          }
+        });
+      });
+
+      // Quick All Layers On button
+      document.getElementById('btn-all-layers').addEventListener('click', () => {
+        document.querySelectorAll('.layer-toggle').forEach(input => {
+          input.checked = true;
+          const lId = input.dataset.layer;
+          if (layerGroups[lId]) layerGroups[lId].visible = true;
+        });
+        document.getElementById('roof-label').textContent = 'Atap: Tutup';
+      });
+    }
+
+    function setupEventListeners() {
+      // Camera preset buttons
+      document.querySelectorAll('.cam-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.cam-preset-btn').forEach(b => {
+            b.classList.remove('bg-emerald-500/20', 'text-emerald-300');
+            b.classList.add('text-slate-300');
+          });
+          btn.classList.add('bg-emerald-500/20', 'text-emerald-300');
+          setCameraPreset(btn.dataset.cam);
+        });
+      });
+
+      // Fan Animation Toggle
+      const btnFans = document.getElementById('btn-toggle-fans');
+      btnFans.addEventListener('click', () => {
+        isFanSpinning = !isFanSpinning;
+        btnFans.classList.toggle('text-cyan-300', isFanSpinning);
+        btnFans.classList.toggle('text-slate-400', !isFanSpinning);
+      });
+
+      // Roof Toggle
+      const btnRoof = document.getElementById('btn-toggle-roof');
+      btnRoof.addEventListener('click', () => {
+        const atapGroup = layerGroups['atap'];
+        if (atapGroup) {
+          atapGroup.visible = !atapGroup.visible;
+          const chk = document.querySelector('input[data-layer="atap"]');
+          if (chk) chk.checked = atapGroup.visible;
+          document.getElementById('roof-label').textContent = atapGroup.visible ? 'Atap: Tutup' : 'Atap: Buka';
+        }
+      });
+
+      // Reset Camera
+      document.getElementById('btn-reset-cam').addEventListener('click', () => {
+        setCameraPreset('iso');
+      });
+
+      // Exploded View Slider
+      const sliderExploded = document.getElementById('slider-exploded');
+      sliderExploded.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value) / 100;
+        document.getElementById('exploded-val').textContent = `${e.target.value}%`;
+        applyExplodedView(val);
+      });
+
+      // Mobile Sidebar Toggle
+      const btnMobileSidebar = document.getElementById('btn-toggle-layers-ui');
+      const sidebar = document.getElementById('sidebar-layers');
+      btnMobileSidebar.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+      });
+
+      // Close Inspector Card
+      document.getElementById('btn-close-inspect').addEventListener('click', () => {
+        document.getElementById('inspector-card').classList.add('hidden');
+        if (hoverMesh && originalMaterials.has(hoverMesh)) {
+          hoverMesh.material = originalMaterials.get(hoverMesh);
+          hoverMesh = null;
+        }
+      });
+
+      // Raycaster Click Inspector
+      window.addEventListener('pointerdown', (e) => {
+        // Ignore if clicking on UI
+        if (e.target.closest('aside, header, #inspector-card, button, input')) return;
+
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+
+        // Gather all visible meshes
+        const candidateMeshes = [];
+        Object.values(layerGroups).forEach(grp => {
+          if (grp.visible) {
+            grp.traverse(child => {
+              if (child.isMesh && child.userData.title) {
+                candidateMeshes.push(child);
+              }
+            });
+          }
+        });
+
+        const intersects = raycaster.intersectObjects(candidateMeshes);
+        if (intersects.length > 0) {
+          const hit = intersects[0].object;
+          showInspection(hit);
+        }
+      });
+
+      // Window resize adaptation
+      window.addEventListener('resize', onWindowResize);
+    }
+
+    function showInspection(mesh) {
+      // Revert previous highlight
+      if (hoverMesh && originalMaterials.has(hoverMesh)) {
+        hoverMesh.material = originalMaterials.get(hoverMesh);
+      }
+
+      hoverMesh = mesh;
+      if (!originalMaterials.has(mesh)) {
+        originalMaterials.set(mesh, mesh.material);
+      }
+
+      // Flash highlight
+      mesh.material = new THREE.MeshStandardMaterial({
+        color: 0x38bdf8,
+        emissive: 0x0284c7,
+        emissiveIntensity: 0.6,
+        roughness: 0.3
+      });
+
+      const card = document.getElementById('inspector-card');
+      card.classList.remove('hidden');
+      document.getElementById('inspect-title').textContent = mesh.userData.title || 'Elemen Rangka';
+      document.getElementById('inspect-layer').textContent = `Layer: ${mesh.userData.layerId.toUpperCase()}`;
+      document.getElementById('inspect-desc').textContent = mesh.userData.desc || 'Spesifikasi dimensi standar sesuai skrip Ruby SketchUp.';
+      document.getElementById('inspect-mat').textContent = `Material: ${mesh.userData.matName || 'Kayu/Galvanis'}`;
+    }
+
+    function applyExplodedView(factor) {
+      // Vertical translation offsets based on layer classification
+      const layerElevationOffsets = {
+        'pondasi': 0,
+        'got': 0,
+        'papan_got': 0.8 * factor,
+        'tiang': 1.0 * factor,
+        'dinding_k': 1.5 * factor,
+        'rak': 1.8 * factor,
+        'slat': 2.4 * factor,
+        'pintu_galv': 2.8 * factor,
+        'talang_pakan': 3.2 * factor,
+        'pipa_nipple': 3.6 * factor,
+        'blower': 1.2 * factor,
+        'kubota': 0.5 * factor,
+        'kudakuda': 5.0 * factor,
+        'skur': 5.2 * factor,
+        'gording': 6.5 * factor,
+        'atap': 8.0 * factor
+      };
+
+      Object.entries(layerGroups).forEach(([layerId, group]) => {
+        const offset = layerElevationOffsets[layerId] || 0;
+        group.children.forEach(child => {
+          if (child.userData.basePos) {
+            child.position.y = child.userData.basePos.y + offset;
+          }
+        });
+      });
+    }
+
+    function onWindowResize() {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Rotate Blower Fan Propellers
+      if (isFanSpinning && propellerMeshes.length > 0) {
+        propellerMeshes.forEach(prop => {
+          prop.rotation.x += 0.28; // High speed RPM
+        });
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    window.onload = function () {
+      initScene();
+      buildPondasiDanGot();
+      buildTiangKomposit();
+      buildRangkaDinding();
+      buildRakSlatDanPeralatan();
+      buildBlowerDanKubota();
+      buildKudaKudaDanGording();
+      initLayersUI();
+      setupEventListeners();
+      animate();
+    };
+  </script>
+</body>
+</html>
