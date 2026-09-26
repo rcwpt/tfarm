@@ -130,10 +130,94 @@ export class UIManager {
             this.matMgr.setMode(e.target.value);
         });
 
-        // Dimension Toggle
-        document.getElementById('toggle-dimensions').addEventListener('change', (e) => {
-            this.dimMgr.toggle(e.target.checked);
+        // Dimension Layer Controls & Dropdown
+        const dimToggleBtn = document.getElementById('btn-toggle-dim-menu');
+        const dimDropdown = document.getElementById('dim-dropdown-menu');
+        if (dimToggleBtn && dimDropdown) {
+            dimToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isShown = dimDropdown.style.display !== 'none';
+                dimDropdown.style.display = isShown ? 'none' : 'flex';
+            });
+            document.addEventListener('click', (e) => {
+                if (!dimDropdown.contains(e.target) && e.target !== dimToggleBtn) {
+                    dimDropdown.style.display = 'none';
+                }
+            });
+        }
+
+        const dimCheckboxes = [
+            { id: 'chk-dim-selected', cat: 'selected' },
+            { id: 'chk-dim-main', cat: 'main' },
+            { id: 'chk-dim-elevations', cat: 'elevations' },
+            { id: 'chk-dim-grid', cat: 'grid' },
+            { id: 'chk-dim-racks', cat: 'racks' }
+        ];
+
+        dimCheckboxes.forEach(({ id, cat }) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('change', (e) => {
+                    this.dimMgr.setCategoryVisible(cat, e.target.checked);
+                });
+            }
         });
+
+        const hideAllDimsBtn = document.getElementById('btn-dim-hide-all');
+        if (hideAllDimsBtn) {
+            hideAllDimsBtn.addEventListener('click', () => {
+                const areAnyVisible = Object.values(this.dimMgr.visibility).some(v => v);
+                const nextState = !areAnyVisible;
+                this.dimMgr.toggleAll(nextState);
+                dimCheckboxes.forEach(({ id, cat }) => {
+                    const el = document.getElementById(id);
+                    if (el) el.checked = nextState;
+                });
+                hideAllDimsBtn.innerText = nextState ? 'Sembunyikan' : 'Tampilkan Semua';
+            });
+        }
+
+        // Mobile Navigation & Panel Drawers
+        const mobileBtns = document.querySelectorAll('.mobile-nav-btn');
+        mobileBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.dataset.target;
+                mobileBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                if (target === 'canvas') {
+                    this.leftPanel.classList.remove('mobile-open');
+                    this.rightPanel.classList.remove('mobile-open');
+                } else if (target === 'denah') {
+                    this.toggleDenahModal();
+                } else if (target === 'dims') {
+                    if (dimDropdown) {
+                        dimDropdown.style.display = (dimDropdown.style.display === 'none') ? 'flex' : 'none';
+                    }
+                } else if (target === 'left-panel') {
+                    this.leftPanel.classList.toggle('mobile-open');
+                    this.rightPanel.classList.remove('mobile-open');
+                } else if (target === 'right-panel') {
+                    this.rightPanel.classList.toggle('mobile-open');
+                    this.leftPanel.classList.remove('mobile-open');
+                }
+            });
+        });
+
+        const closeLeft = document.getElementById('btn-close-left-panel');
+        if (closeLeft) {
+            closeLeft.addEventListener('click', () => {
+                this.leftPanel.classList.remove('mobile-open');
+                document.getElementById('m-btn-orbit')?.classList.add('active');
+            });
+        }
+        const closeRight = document.getElementById('btn-close-right-panel');
+        if (closeRight) {
+            closeRight.addEventListener('click', () => {
+                this.rightPanel.classList.remove('mobile-open');
+                document.getElementById('m-btn-orbit')?.classList.add('active');
+            });
+        }
 
         // Measure Tool Button
         const measureBtn = document.getElementById('btn-measure');
@@ -650,9 +734,21 @@ export class UIManager {
         this.highlightBox = new THREE.BoxHelper(mesh, 0x00e5ff);
         this.sceneModel.scene.add(this.highlightBox);
 
+        // Show interactive 3D dimension arrows ("Dari Mana ke Mana")
+        if (this.dimMgr) {
+            this.dimMgr.showObjectDimensions(mesh);
+        }
+
         // Switch right panel to Inspector tab
         const inspTab = document.querySelector('[data-tab="inspector"]');
         if (inspTab) inspTab.click();
+
+        // On mobile: auto slide up inspector drawer
+        if (window.innerWidth <= 850) {
+            this.rightPanel.classList.add('mobile-open');
+            document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('m-btn-inspect')?.classList.add('active');
+        }
 
         const g = meta.geom;
         const q = meta.quantity;
@@ -660,6 +756,15 @@ export class UIManager {
         // Count identical and layer objects
         const exactMatches = this.sceneModel.meshList.filter(item => item.metadata.name === meta.name).length;
         const layerMatches = this.sceneModel.meshList.filter(item => item.metadata.layer === meta.layer).length;
+
+        // Bounding box from-to coordinates
+        const bMinX = (g.cx - (q.length || 0.1) / 2).toFixed(2);
+        const bMaxX = (g.cx + (q.length || 0.1) / 2).toFixed(2);
+        const bMinY = (g.cy - (q.width || 0.1) / 2).toFixed(2);
+        const bMaxY = (g.cy + (q.width || 0.1) / 2).toFixed(2);
+        const hVal = (q.height || (g.h !== undefined ? g.h : 0.1));
+        const bMinZ = (g.cz - hVal / 2).toFixed(2);
+        const bMaxZ = (g.cz + hVal / 2).toFixed(2);
 
         this.inspectorContent.innerHTML = `
             <div class="meta-card">
@@ -676,16 +781,16 @@ export class UIManager {
                     <div class="meta-row"><span>Jumlah Sejenis (Model):</span> <strong style="color:var(--accent-cyan);font-size:13px;">${exactMatches} unit</strong></div>
                     <div class="meta-row"><span>Total Objek di Layer:</span> <strong style="color:var(--accent-gold);">${layerMatches} objek</strong></div>
                     <hr>
-                    <div class="meta-subtitle">📍 KOORDINAT & ELEVASI (Ruby)</div>
-                    <div class="meta-row"><span>Posisi X (Panjang):</span> <strong>${g.cx.toFixed(3)} m</strong></div>
-                    <div class="meta-row"><span>Posisi Y (Lebar):</span> <strong>${g.cy.toFixed(3)} m</strong></div>
-                    <div class="meta-row"><span>Posisi Z (Elevasi):</span> <strong>${g.cz.toFixed(3)} m</strong></div>
-                    <hr>
-                    <div class="meta-subtitle">📏 DIMENSI & GEOMETRI</div>
-                    <div class="meta-row"><span>Panjang (L):</span> <strong>${q.length.toFixed(3)} m</strong></div>
-                    <div class="meta-row"><span>Lebar (W):</span> <strong>${q.width.toFixed(3)} m</strong></div>
+                    <div class="meta-subtitle" style="color:var(--accent-cyan);">📐 UKURAN BAHAN (DARI MANA KE MANA)</div>
+                    <div class="meta-row"><span>Panjang (X):</span> <strong>${q.length.toFixed(3)} m</strong> <small style="color:var(--accent-gold);">(${bMinX}m ➜ ${bMaxX}m)</small></div>
+                    <div class="meta-row"><span>Lebar (Y):</span> <strong>${q.width.toFixed(3)} m</strong> <small style="color:var(--accent-gold);">(${bMinY}m ➜ ${bMaxY}m)</small></div>
+                    <div class="meta-row"><span>Tinggi (Z):</span> <strong>${hVal.toFixed(3)} m</strong> <small style="color:var(--accent-gold);">(Z: +${bMinZ}m ➜ +${bMaxZ}m)</small></div>
+                    <div class="meta-row"><span>Elevasi Dasar:</span> <strong>+${bMinZ} m dari tanah (±0.00)</strong></div>
                     <div class="meta-row"><span>Luas Permukaan:</span> <strong>${q.area.toFixed(3)} m²</strong></div>
                     <div class="meta-row"><span>Volume Bahan:</span> <strong>${q.volume.toFixed(5)} m³</strong></div>
+                    <hr>
+                    <div class="meta-subtitle">📍 TITIK PUSAT (Ruby)</div>
+                    <div class="meta-row"><span>Center X, Y, Z:</span> <strong>(${g.cx.toFixed(3)}, ${g.cy.toFixed(3)}, ${g.cz.toFixed(3)}) m</strong></div>
                     <hr>
                     <div class="meta-subtitle">🔍 SOURCE TRACEABILITY</div>
                     <div class="meta-row"><span>File Sumber:</span> <code>build_kandang_LENGKAP.rb</code></div>

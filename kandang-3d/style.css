@@ -459,19 +459,106 @@ code {
 }
 
 /* ==============================================================================
-   CAD Dimension Tags (Overlay)
+   CAD Dimension Tags (Overlay) & Dropdown
    ============================================================================== */
+.dim-dropdown-wrap {
+    position: relative;
+}
+
+.dim-dropdown-menu {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    width: 320px;
+    background: rgba(14, 17, 23, 0.96);
+    border: 1px solid var(--accent-cyan);
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dim-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-cyan);
+}
+
+.dim-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-main);
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.dim-menu-item:hover {
+    background: rgba(0, 229, 255, 0.1);
+}
+
 .cad-dimension-tag {
-    background: rgba(14, 17, 23, 0.88);
+    background: rgba(14, 17, 23, 0.9);
     border: 1px solid var(--accent-cyan);
     color: #fff;
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 600;
-    padding: 2px 6px;
-    border-radius: 3px;
+    padding: 2px 7px;
+    border-radius: 4px;
     white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.2s;
+    user-select: none;
+}
+
+.cad-dimension-tag.tag-selected-dim {
+    background: rgba(30, 25, 10, 0.95);
+    border: 1.5px solid var(--accent-gold);
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    box-shadow: 0 0 12px rgba(255, 179, 0, 0.5);
+    z-index: 10;
+}
+
+.cad-dimension-tag.tag-selected-datum {
+    background: rgba(10, 25, 15, 0.95);
+    border: 1px dashed var(--accent-green);
+    color: var(--accent-green);
+    font-size: 11px;
+}
+
+.cad-dimension-tag.tag-elevation {
+    border-color: #f59e0b;
+    color: #fef08a;
+    font-size: 10px;
+}
+
+.cad-dimension-tag.tag-grid {
+    border-color: #0288d1;
+    color: #bae6fd;
+    font-size: 10px;
+}
+
+.cad-dimension-tag.tag-rack {
+    border-color: #10b981;
+    color: #a7f3d0;
+    font-size: 10px;
 }
 
 .cad-measure-info {
@@ -888,4 +975,180 @@ body.presentation-mode #presentation-badge {
     gap: 5px;
     align-items: center;
 }
+
+/* ==============================================================================
+   Mobile Navigation Bar & Responsive Layout
+   ============================================================================== */
+.panel-header-mobile {
+    display: none;
+}
+
+.panel-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--panel-border);
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.mobile-nav-bar {
+    display: none;
+}
+
+/* Tablet & Mobile Breakpoint (<= 850px) */
+@media (max-width: 850px) {
+    #top-header {
+        height: 48px;
+        padding: 0 10px;
+        overflow-x: auto;
+    }
+
+    .brand-section {
+        gap: 8px;
+    }
+
+    .brand-title {
+        font-size: 12px;
+    }
+
+    .badge-tag {
+        display: none;
+    }
+
+    .header-center-tools {
+        gap: 4px;
+        overflow-x: auto;
+    }
+
+    .header-center-tools button,
+    .header-center-tools select {
+        padding: 4px 8px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+    .header-right-tools {
+        display: none; /* Secondary tools accessible via Mobile Bar */
+    }
+
+    /* Panels become sliding bottom sheets */
+    .cad-panel {
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 56px !important;
+        top: auto !important;
+        width: 100% !important;
+        max-height: 72vh !important;
+        border-radius: 16px 16px 0 0 !important;
+        border-bottom: none !important;
+        z-index: 500 !important;
+        transform: translateY(120%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.8) !important;
+    }
+
+    .cad-panel.mobile-open {
+        transform: translateY(0) !important;
+    }
+
+    .panel-header-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--panel-border);
+        background: rgba(14, 17, 23, 0.95);
+    }
+
+    /* Bottom Timeline Toolbar */
+    #bottom-toolbar {
+        bottom: 56px;
+        padding: 6px 10px;
+        height: auto;
+        flex-direction: column;
+        gap: 6px;
+        background: rgba(14, 17, 23, 0.92);
+    }
+
+    .timeline-module {
+        width: 100%;
+    }
+
+    .quick-tools {
+        display: none; /* Hidden on compact view to keep canvas unobstructed */
+    }
+
+    /* Fixed Mobile Bottom Nav Bar */
+    .mobile-nav-bar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 56px;
+        background: rgba(10, 14, 20, 0.97);
+        border-top: 1px solid var(--panel-border);
+        z-index: 600;
+        justify-content: space-around;
+        align-items: center;
+        backdrop-filter: blur(12px);
+        padding: 0 4px;
+    }
+
+    .mobile-nav-btn {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        font-size: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 6px 0;
+        gap: 3px;
+        transition: color 0.2s;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-nav-btn .m-icon {
+        font-size: 18px;
+    }
+
+    .mobile-nav-btn.active {
+        color: var(--accent-cyan);
+    }
+
+    /* Dimension dropdown adapts to full width */
+    .dim-dropdown-menu {
+        left: auto;
+        right: 0;
+        width: 290px;
+        max-width: 90vw;
+    }
+
+    /* Denah Modal on Mobile */
+    .denah-modal-window {
+        width: 96vw;
+        height: 82vh;
+        max-width: 100%;
+    }
+
+    .denah-modal-overlay.pip-mode .denah-modal-window {
+        bottom: 60px;
+        right: 10px;
+        width: 260px;
+        height: 180px;
+    }
+}
+
 

@@ -72,9 +72,38 @@
                 <option value="transparent">Mode Transparan</option>
             </select>
 
-            <label style="display:flex;align-items:center;gap:6px;font-size:11px;cursor:pointer;margin-left:8px;">
-                <input type="checkbox" id="toggle-dimensions" checked> Dimensi CAD
-            </label>
+            <!-- Dimension Layer Controls Dropdown -->
+            <div class="dim-dropdown-wrap">
+                <button class="btn-secondary" id="btn-toggle-dim-menu" title="Pengaturan Tampilan Dimensi CAD">
+                    📐 Ukuran / Dimensi ▾
+                </button>
+                <div class="dim-dropdown-menu" id="dim-dropdown-menu" style="display:none;">
+                    <div class="dim-menu-header">
+                        <span>PILIH LAYER DIMENSI CAD</span>
+                        <button class="btn-micro" id="btn-dim-hide-all">Sembunyikan</button>
+                    </div>
+                    <label class="dim-menu-item">
+                        <input type="checkbox" id="chk-dim-selected" checked>
+                        <span>🎯 Ukuran Bahan Terpilih (Dari-Ke Otomatis)</span>
+                    </label>
+                    <label class="dim-menu-item">
+                        <input type="checkbox" id="chk-dim-main" checked>
+                        <span>📐 Dimensi Utama Bangunan (26.0m × 12.0m)</span>
+                    </label>
+                    <label class="dim-menu-item">
+                        <input type="checkbox" id="chk-dim-elevations">
+                        <span>📊 Elevasi Bertingkat Datum Z (Lantai, Nok)</span>
+                    </label>
+                    <label class="dim-menu-item">
+                        <input type="checkbox" id="chk-dim-grid">
+                        <span>📏 Jarak Antar As Tiang (Grid X & As Y)</span>
+                    </label>
+                    <label class="dim-menu-item">
+                        <input type="checkbox" id="chk-dim-racks">
+                        <span>🐔 Dimensi Rak 3 Susun & Aisle Lorong 1.0m</span>
+                    </label>
+                </div>
+            </div>
             <button class="btn-secondary" id="btn-measure" title="Ukur Jarak Titik ke Titik">📏 Ukur</button>
         </div>
 
@@ -96,6 +125,10 @@
 
     <!-- Left Panel: Layers, Components, Tree, Construction Steps -->
     <aside class="cad-panel" id="left-panel">
+        <div class="panel-header-mobile">
+            <span style="font-size:12px;font-weight:700;color:var(--accent-cyan);">KONTROL STRUKTUR & KOMPONEN</span>
+            <button class="panel-close-btn" id="btn-close-left-panel" title="Tutup Panel">✕</button>
+        </div>
         <div class="panel-tabs">
             <button class="tab-btn active" data-tab="layers">LAYERS</button>
             <button class="tab-btn" data-tab="components">KOMPONEN & JUMLAH</button>
@@ -181,6 +214,10 @@
 
     <!-- Right Panel: Inspector, Simulation, BOM / Technical Report, Validation -->
     <aside class="cad-panel" id="right-panel">
+        <div class="panel-header-mobile">
+            <span style="font-size:12px;font-weight:700;color:var(--accent-cyan);">DETAIL TEKNIK & INSPEKSI</span>
+            <button class="panel-close-btn" id="btn-close-right-panel" title="Tutup Panel">✕</button>
+        </div>
         <div class="panel-tabs">
             <button class="tab-btn active" data-tab="inspector">INSPEKTOR</button>
             <button class="tab-btn" data-tab="simulation">SIMULASI</button>
@@ -314,6 +351,33 @@
     <div id="presentation-badge">
         <div style="font-weight:800;font-size:14px;color:var(--accent-cyan);">KANDANG BROILER 26×12M (3 SUSUN, 7.000 EKOR)</div>
         <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Closed House System • Source: build_kandang_LENGKAP.rb</div>
+        <div style="font-size:10px;color:var(--accent-gold);margin-top:4px;">Tekan [P] atau [ESC] untuk keluar dari Mode Presentasi</div>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar (Visible only on mobile <= 850px) -->
+    <nav id="mobile-nav-bar" class="mobile-nav-bar">
+        <button class="mobile-nav-btn active" id="m-btn-orbit" data-target="canvas">
+            <span class="m-icon">🔄</span>
+            <span>3D View</span>
+        </button>
+        <button class="mobile-nav-btn" id="m-btn-denah" data-target="denah">
+            <span class="m-icon">🗺️</span>
+            <span>Denah</span>
+        </button>
+        <button class="mobile-nav-btn" id="m-btn-dims" data-target="dims">
+            <span class="m-icon">📐</span>
+            <span>Ukuran</span>
+        </button>
+        <button class="mobile-nav-btn" id="m-btn-layers" data-target="left-panel">
+            <span class="m-icon">📑</span>
+            <span>Struktur</span>
+        </button>
+        <button class="mobile-nav-btn" id="m-btn-inspect" data-target="right-panel">
+            <span class="m-icon">ℹ️</span>
+            <span>Detail</span>
+        </button>
+    </nav>
+
     <!-- Interactive 2D Visual Denah (Floor Plan Modal & Mini-Map) -->
     <div id="denah-modal" class="denah-modal-overlay" style="display:none;">
         <div class="denah-modal-window">
